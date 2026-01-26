@@ -30,7 +30,6 @@ class ConfiguratorDialog(Dialog):
         self.prompt_editor = PromptEditor(preferences_config)
         self.layout.addWidget(self.prompt_editor)
 
-        # TODO: Удалить toggler-ы
         label = QLabel("Концепт")
         self.layout.addWidget(label)
         row = QHBoxLayout()
@@ -41,7 +40,6 @@ class ConfiguratorDialog(Dialog):
         self.should_generate_concept_editor.setChecked(
             self.preferences_config.should_generate_concept
         )
-        # self.should_generate_concept_editor.toggled.connect(self.toggle_concept_editor)
         row.addWidget(self.should_generate_concept_editor)
         row.addStretch()
         self.concept_editor = QTextEdit()
@@ -59,17 +57,11 @@ class ConfiguratorDialog(Dialog):
         self.should_generate_metadata_editor.setChecked(
             self.preferences_config.should_generate_metadata
         )
-        # self.should_generate_metadata_editor.toggled.connect(
-        #     self.toggle_metadata_editor
-        # )
         row.addWidget(self.should_generate_metadata_editor)
         row.addStretch()
         self.metadata_editor = QTextEdit()
         self.metadata_editor.setPlainText(self.preferences_config.metadata_default)
         self.metadata_editor.setMinimumHeight(constants_config.metadata_height)
-        # self.metadata_editor.setReadOnly(
-        #     not self.preferences_config.should_generate_metadata
-        # )
         self.layout.addWidget(self.metadata_editor, constants_config.metadata_stretch)
 
         label = QLabel("Промпт иконки")
@@ -82,7 +74,6 @@ class ConfiguratorDialog(Dialog):
         self.should_generate_icon_editor.setChecked(
             self.preferences_config.should_generate_icon
         )
-        # self.should_generate_icon_editor.toggled.connect(self.toggle_icon_prompt_editor)
         row.addWidget(self.should_generate_icon_editor)
         row.addStretch()
         self.icon_prompt_editor = QTextEdit()
@@ -90,21 +81,9 @@ class ConfiguratorDialog(Dialog):
             self.preferences_config.icon_prompt_default
         )
         self.icon_prompt_editor.setMinimumHeight(constants_config.editor_height)
-        # self.icon_prompt_editor.setReadOnly(
-        #     not self.preferences_config.should_generate_icon
-        # )
         self.layout.addWidget(self.icon_prompt_editor, constants_config.editor_stretch)
 
         self.add_close_buttons()
-
-    def toggle_concept_editor(self, flag: bool) -> None:
-        self.concept_editor.setReadOnly(not flag)
-
-    def toggle_metadata_editor(self, flag: bool) -> None:
-        self.metadata_editor.setReadOnly(not flag)
-
-    def toggle_icon_prompt_editor(self, flag: bool) -> None:
-        self.icon_prompt_editor.setReadOnly(not flag)
 
     def add_close_buttons(self) -> None:
         row = QHBoxLayout()
