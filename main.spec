@@ -1,24 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-from PyInstaller.utils.hooks import collect_all
-
-transformers_datas, transformers_binaries, transformers_hiddenimports = collect_all(
-    'transformers'
-)
-
 a = Analysis(
     ['src\\main.py'],
     pathex=[],
-    binaries=[
-        *transformers_binaries,
-    ],
+    binaries=[],
     datas=[
         ('resource', 'resource'),
-        *transformers_datas,
     ],
-    hiddenimports=[
-        *transformers_hiddenimports,
-    ],
+    hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

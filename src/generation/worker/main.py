@@ -1,9 +1,6 @@
 ﻿import json
-from diffusers.schedulers import DPMSolverMultistepScheduler
 from openai import APIConnectionError, APIError
-import torch
 from deep_translator import GoogleTranslator
-from diffusers import StableDiffusionXLPipeline
 from loguru import logger
 from PIL import Image
 from PySide6.QtCore import QThread, Signal
@@ -175,46 +172,6 @@ class Worker(QThread):
 
     @log_execution
     def create_icon_records(self, icon_prompt: str) -> IconRecords | None:
-        self.status_update.emit("Генерация иконки")
-
-        model = StableDiffusionXLPipeline.from_pretrained(
-            "stabilityai/stable-diffusion-xl-base-1.0",
-            variant="fp16",
-            torch_dtype=torch.float16,
-        ).to("cuda")
-
-        model.enable_attention_slicing()
-        # model.enable_sequential_cpu_offload()
-
-        model.scheduler = DPMSolverMultistepScheduler.from_config(
-            model.scheduler.config
-        )
-
-        negative_prompt = "blurry, text, watermark, low quality"
-
-        def stop_callback(p, i, t, callback_kwargs):
-            if self.isInterruptionRequested():
-                raise KeyboardInterrupt
-            return callback_kwargs
-
-        try:
-            icon = model(
-                icon_prompt,
-                negative_prompt=negative_prompt,
-                num_inference_steps=30,
-                guidance_scale=8.0,
-                callback_on_step_end=stop_callback,
-            ).images[0]
-        except KeyboardInterrupt:
-            return
-
-        icon_soc = SoCObjectFactory.create_icon(icon)
-        icon_records = IconRecords(icon, icon_soc)
-        self.icon_ready.emit(icon_soc)
-        return icon_records
-
-    @log_execution
-    def create_icon_records_comfy(self, icon_prompt: str) -> IconRecords | None:
         self.status_update.emit("Генерация иконки")
 
         kit = ComfyKit(comfyui_url="http://127.0.0.1:8188")
