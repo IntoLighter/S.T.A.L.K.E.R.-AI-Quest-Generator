@@ -39,30 +39,12 @@ class MainWidget(QWidget):
         self.prompt_editor = PromptEditor(preferences_config)
         self.layout.addWidget(self.prompt_editor)
 
-        self.add_buttons()
-        self.add_output_editors()
-
-    def add_buttons(self) -> None:
-        # TODO: Удалить кнопки
-        # row = QHBoxLayout()
-        # self.layout.addLayout(row)
-        #
-        # self.save_prompt_button = QPushButton(text_config.save_prompt)
-        # self.save_prompt_button.clicked.connect(self.save_prompt)
-        # row.addWidget(self.save_prompt_button, stretch=1)
-        #
-        # self.reset_button = QPushButton(text_config.reset_text)
-        # self.reset_button.clicked.connect(self.reset)
-        # row.addWidget(self.reset_button, stretch=1)
-
-        row = QHBoxLayout()
-        self.layout.addLayout(row)
-
         self.generate_button = QPushButton(text_config.generate_text)
         self.generate_button.clicked.connect(self.generate_quest_normal)
-        row.addWidget(self.generate_button, stretch=1)
+        self.layout.addWidget(self.generate_button)
 
-    @Slot()
+        self.add_output_editors()
+
     def save_prompt(self) -> None:
         self.preferences_config.prompt_message = self.prompt_editor.prompt
         self.preferences_config.save()
