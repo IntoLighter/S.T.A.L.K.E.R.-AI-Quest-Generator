@@ -51,7 +51,7 @@ curl http://localhost:11434/api/tags
 
 ## Удалённая генерация текста
 
-### Установка LLM-API-Key-Proxy
+### Установка LLM API Key Proxy
 
 Скачать и распаковать:
 
