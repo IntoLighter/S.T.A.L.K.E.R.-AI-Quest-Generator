@@ -33,7 +33,7 @@ class ConstantsConfig(BaseSettings):
     def config_path(self) -> Path:
         path = Path(
             QStandardPaths.writableLocation(
-                QStandardPaths.StandardLocation.AppConfigLocation
+                QStandardPaths.StandardLocation.AppDataLocation
             )
         )
         path.mkdir(parents=True, exist_ok=True)

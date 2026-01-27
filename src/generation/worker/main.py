@@ -1,5 +1,4 @@
 ﻿import json
-from openai import APIConnectionError, APIError
 from deep_translator import GoogleTranslator
 from loguru import logger
 from PIL import Image
@@ -7,6 +6,7 @@ from PySide6.QtCore import QThread, Signal
 import asyncio
 from io import BytesIO
 from comfykit import ComfyKit
+import openai
 import requests
 
 from config.constants import get_resource_path
@@ -15,6 +15,7 @@ from generation.engine.soc import SoCObjectFactory
 from generation.entity import GameRecords, GenerationResult, IconRecords, Metadata
 from generation.model.main import Model
 from misc import (
+    AppError,
     get_unique_counter_name_path,
     get_unique_name_path,
     log_execution,
@@ -52,15 +53,17 @@ class Worker(QThread):
 
     def handle_exception_perform_work(self, e: Exception) -> None:
         match e:
-            case APIConnectionError():
+            case openai.APIConnectionError():
                 self.handle_exception(
                     e,
                     "Ошибка подключения. Проверьте запущена ли программа генерации текста.",
                 )
-            case APIError():
+            case openai.APIError():
                 self.handle_exception(
                     e, "Ошибка генерации текста. Проверьте вывод программы генерации."
                 )
+            case AppError():
+                self.handle_exception(e, str(e))
             case _:
                 self.handle_exception(e, "Возникла непредвиденная ошибка.")
 
@@ -176,6 +179,9 @@ class Worker(QThread):
 
         kit = ComfyKit(comfyui_url="http://127.0.0.1:8188")
         result = asyncio.run(kit.execute(get_resource_path("resource/generation/icon.json"), {"prompt": icon_prompt}))
+
+        if result.status == "error":
+            raise AppError(f"Возникла ошибка генерации изображения: {result.msg}.")
 
         response = requests.get(result.images[0])
         response.raise_for_status()

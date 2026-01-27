@@ -67,10 +67,11 @@ def get_layout_with_scroll(parent: QWidget):
 def log_execution(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        logger.info(f'{func.__name__} started')
+        logger.info(f"{func.__name__} started")
         result = func(*args, **kwargs)
-        logger.info(f'{func.__name__} completed')
+        logger.info(f"{func.__name__} completed")
         return result
+
     return wrapper
 
 
@@ -80,3 +81,7 @@ def show_parameters_error(parent: QWidget, text: str) -> None:
 
 def show_settings_error(parent: QWidget, text: str) -> None:
     QMessageBox.warning(parent, "Ошибка настроек", text)
+
+
+class AppError(Exception):
+    pass
