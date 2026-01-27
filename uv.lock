@@ -1025,7 +1025,7 @@ wheels = [
 ]
 
 [[package]]
-name = "saqg"
+name = "s-t-a-l-k-e-r-ai-quest-generator"
 version = "1.0.0"
 source = { virtual = "." }
 dependencies = [
