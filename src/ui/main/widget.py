@@ -10,12 +10,16 @@ from generation.model.local import LocalModel
 from generation.model.remote import RemoteModel
 from generation.worker.configurator import ConfiguratorWorker
 from generation.worker.normal import NormalWorker
-from misc import get_layout_with_scroll, get_pixmap, show_parameters_error
+from misc import (
+    get_layout_with_scroll,
+    get_pixmap,
+    show_parameters_error,
+    show_settings_error,
+)
 from PIL import Image
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import (
-    QHBoxLayout,
     QLabel,
     QMessageBox,
     QPushButton,
@@ -27,12 +31,10 @@ from ui.editor.prompt import PromptEditor
 
 
 class MainWidget(QWidget):
-    def __init__(
-        self, preferences_config: PreferencesConfig, show_status: Callable[[str], None]
-    ) -> None:
+    def __init__(self, preferences_config: PreferencesConfig, main_window) -> None:
         super().__init__()
         self.preferences_config = preferences_config
-        self.show_status = show_status
+        self.main_window = main_window
 
         self.layout = get_layout_with_scroll(self)
 
@@ -56,10 +58,16 @@ class MainWidget(QWidget):
 
     @Slot()
     def generate_quest_normal(self) -> None:
+        if not self.preferences_config.current_model:
+            show_settings_error(
+                self, "Невозможно запустить генерацию. Текстовая модель не задана."
+            )
+            return
+
         if not self.preferences_config.should_generate_concept:
             show_parameters_error(
                 self,
-                "Невозможно запустить генерацию с отключенной генерацией концепта.",
+                "Невозможно запустить генерацию. Отключенна генерация концепта.",
             )
             return
 
@@ -96,7 +104,7 @@ class MainWidget(QWidget):
             editor.clear()
         self.icon_editor.clear()
 
-        self.worker.status_update.connect(self.show_status)
+        self.worker.status_update.connect(self.main_window.show_status)
         self.worker.concept_chunk_ready.connect(self.show_concept_chunk)
         self.worker.metadata_chunk_ready.connect(self.show_metadata_chunk)
         self.worker.game_records_ready.connect(self.show_game_records)
@@ -181,6 +189,7 @@ class MainWidget(QWidget):
         self.set_generate_button_generate()
         self.worker.deleteLater()
         self.worker = None
+        self.main_window.set_parameters_unspecified_restrictions()
 
     def add_output_editors(self) -> None:
         label = QLabel("Концепт")

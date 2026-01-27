@@ -22,13 +22,12 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(text_config.app_name)
         self.preferences_config = preferences_config
 
-        self.main_widget = MainWidget(self.preferences_config, self.show_status)
+        self.main_widget = MainWidget(self.preferences_config, self)
         self.setCentralWidget(self.main_widget)
 
         self.status_label = QLabel()
         self.statusBar().addWidget(self.status_label)
-        self.was_model_unspecified = False
-        self.set_models_unspecified_restrictions()
+        self.set_parameters_unspecified_restrictions()
 
         self.set_menubar()
 
@@ -51,7 +50,11 @@ class MainWindow(QMainWindow):
     @Slot()
     def show_configurator(self) -> None:
         if not self.preferences_config.current_model:
-            QMessageBox.warning(self, "Ошибка настроек", "Невозможно запустить конфигуратор пока текстовая модель не задана.")
+            QMessageBox.warning(
+                self,
+                "Ошибка настроек",
+                "Невозможно запустить конфигуратор. Текстовая модель не задана.",
+            )
             return
 
         dialog = ConfiguratorDialog(self, self.preferences_config)
@@ -71,16 +74,14 @@ class MainWindow(QMainWindow):
         dialog = PreferencesDialog(self, self.preferences_config)
         result = dialog.exec()
         if result == QDialog.DialogCode.Accepted:
-            self.set_models_unspecified_restrictions()
+            self.set_parameters_unspecified_restrictions()
 
-    def set_models_unspecified_restrictions(self) -> None:
+    def set_parameters_unspecified_restrictions(self) -> None:
         if not self.preferences_config.current_model:
-            self.was_model_unspecified = True
-            self.main_widget.generate_button.setEnabled(False)
             self.show_status("Текстовая модель не задана")
-        elif self.was_model_unspecified:
-            self.was_model_unspecified = False
-            self.main_widget.generate_button.setEnabled(True)
+        elif not self.preferences_config.save_path:
+            self.show_status("Путь сохранения не задан")
+        else:
             self.show_status("")
 
     @Slot(str)

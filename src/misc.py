@@ -76,3 +76,7 @@ def log_execution(func):
 
 def show_parameters_error(parent: QWidget, text: str) -> None:
     QMessageBox.warning(parent, "Ошибка параметров", text)
+
+
+def show_settings_error(parent: QWidget, text: str) -> None:
+    QMessageBox.warning(parent, "Ошибка настроек", text)
