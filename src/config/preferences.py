@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from config.constants import constants_config
 from config.text import text_config
-from misc import get_prompt_from_file
+from misc import get_prompt_from_file, get_resource_file_content
 
 
 class ModelType(Enum):
@@ -44,6 +44,17 @@ class PreferencesConfig(BaseSettings):
 
     concept_temperature: float = constants_config.concept_temperature
     concept_top_p: float = constants_config.concept_top_p
+
+    icon_workflow_value: str = Field(
+        default=get_resource_file_content(constants_config.icon_workflow_path), alias="icon_workflow"
+    )
+    
+    @property
+    def icon_workflow(self) -> str:
+        if __debug__:
+            return get_resource_file_content(constants_config.icon_workflow_path)
+        else:
+            return self.icon_workflow_value
 
     concept_default: str = ""
     metadata_default: str = ""

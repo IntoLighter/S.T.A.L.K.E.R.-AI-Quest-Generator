@@ -26,8 +26,12 @@ class ConstantsConfig(BaseSettings):
     concept_height: int = editor_height * concept_stretch
     metadata_height: int = editor_height * metadata_stretch
 
+    icon_workflow_stretch: int = 4
+    icon_workflow_height: int = editor_height * icon_workflow_stretch
+
     icon_path: Path = get_resource_path("resource/icon.ico")
     prompt_path: Path = get_resource_path("resource/prompt")
+    icon_workflow_path: Path = get_resource_path("resource/generation/icon.json")
 
     concept_temperature: float = 0.7
     concept_top_p: float = 0.9

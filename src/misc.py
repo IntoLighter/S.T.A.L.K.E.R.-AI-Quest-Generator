@@ -20,6 +20,10 @@ def get_prompt_from_file(filename: str):
     return path.read_text(encoding="utf-8")
 
 
+def get_resource_file_content(path: Path):
+    return path.read_text(encoding="utf-8")
+
+
 def get_unique_name_path(path: Path) -> Path:
     new_path = path
     counter = 1

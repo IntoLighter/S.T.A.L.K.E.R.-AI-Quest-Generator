@@ -1,3 +1,4 @@
+from multiprocessing import get_all_start_methods
 from PySide6.QtCore import Slot, Qt
 
 from config.constants import constants_config
@@ -12,9 +13,11 @@ from PySide6.QtWidgets import (
     QPushButton,
     QLabel,
     QSlider,
+    QTextEdit,
 )
 
 from config.text import text_config
+from misc import get_layout_with_scroll, get_resource_file_content
 from ui.preferences.tab import Tab
 
 
@@ -23,8 +26,7 @@ class ModelTab(Tab):
         super().__init__()
         self.preferences_config = preferences_config
 
-        self.layout = QVBoxLayout(self)
-
+        self.layout = get_layout_with_scroll(self)
         label = QLabel("Модель текста")
         self.layout.addWidget(label)
 
@@ -83,7 +85,7 @@ class ModelTab(Tab):
         self.concept_temperature_slider.setValue(
             int(self.preferences_config.concept_temperature * 100)
         )
-        row.addWidget(self.concept_temperature_slider, stretch=1)
+        row.addWidget(self.concept_temperature_slider)
         self.concept_temperature_label = QLabel(
             f"{self.preferences_config.concept_temperature:.2f}"
         )
@@ -106,7 +108,7 @@ class ModelTab(Tab):
         self.concept_top_p_slider.setValue(
             int(self.preferences_config.concept_top_p * 100)
         )
-        row.addWidget(self.concept_top_p_slider, stretch=1)
+        row.addWidget(self.concept_top_p_slider)
         self.concept_top_p_label = QLabel(
             f"{self.preferences_config.concept_top_p:.2f}"
         )
@@ -116,6 +118,21 @@ class ModelTab(Tab):
         )
         reset_button = QPushButton("Сбросить")
         reset_button.clicked.connect(self.reset_concept_top_p)
+        row.addWidget(reset_button)
+
+        label = QLabel("Модель иконки")
+        self.layout.addWidget(label)
+        
+        label = QLabel("Workflow")
+        self.layout.addWidget(label)
+        row = QHBoxLayout()
+        self.layout.addLayout(row)
+        self.icon_workflow_editor = QTextEdit()
+        self.icon_workflow_editor.setPlainText(self.preferences_config.icon_workflow)
+        self.icon_workflow_editor.setMinimumHeight(constants_config.icon_workflow_height)
+        row.addWidget(self.icon_workflow_editor, constants_config.icon_workflow_stretch)
+        reset_button = QPushButton("Сбросить")
+        reset_button.clicked.connect(self.reset_icon_workflow)
         row.addWidget(reset_button)
 
         self.layout.addStretch()
@@ -160,6 +177,10 @@ class ModelTab(Tab):
             int(constants_config.concept_top_p * 100)
         )
 
+    @Slot()
+    def reset_icon_workflow(self) -> None:
+        self.icon_workflow_editor.setPlainText(get_resource_file_content(constants_config.icon_workflow_path))
+
     def save(self) -> None:
         button_to_type = {
             self.local_model_button: ModelType.Local,
@@ -177,3 +198,5 @@ class ModelTab(Tab):
         self.preferences_config.concept_top_p = (
             self.concept_top_p_slider.value() / 100
         )
+
+        self.preferences_config.icon_workflow_value = self.icon_workflow_editor.toPlainText()
