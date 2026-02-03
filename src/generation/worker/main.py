@@ -1,4 +1,4 @@
-﻿import json
+import json
 from deep_translator import GoogleTranslator
 from loguru import logger
 from PIL import Image
@@ -88,7 +88,11 @@ class Worker(QThread):
 
         concept = ""
 
-        for token in self.text_model.generate(messages, temperature=1, top_p=1):
+        for token in self.text_model.generate(
+            messages,
+            temperature=self.preferences_config.concept_temperature,
+            top_p=1,
+        ):
             if self.isInterruptionRequested():
                 return
 

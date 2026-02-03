@@ -14,6 +14,8 @@ def get_resource_path(relative_path: str) -> Path:
 
 
 class ConstantsConfig(BaseSettings):
+    app_version: str = "1.0"
+
     window_dims: tuple[int, int] = (800, 600)
 
     editor_stretch: int = 1
@@ -27,7 +29,7 @@ class ConstantsConfig(BaseSettings):
     icon_path: Path = get_resource_path("resource/icon.ico")
     prompt_path: Path = get_resource_path("resource/prompt")
 
-    app_version: str = "1.0"
+    concept_temperature: float = 1.0
 
     @computed_field
     def config_path(self) -> Path:

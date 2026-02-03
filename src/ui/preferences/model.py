@@ -1,5 +1,6 @@
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, Qt
 
+from config.constants import constants_config
 from config.preferences import PreferencesConfig, ModelType
 from PySide6.QtWidgets import (
     QVBoxLayout,
@@ -10,6 +11,7 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QPushButton,
     QLabel,
+    QSlider,
 )
 
 from config.text import text_config
@@ -23,8 +25,8 @@ class ModelTab(Tab):
 
         self.layout = QVBoxLayout(self)
 
-        self.text_model_label = QLabel("Модель текста")
-        self.layout.addWidget(self.text_model_label)
+        label = QLabel("Модель текста")
+        self.layout.addWidget(label)
 
         self.group = QButtonGroup(self)
         row = QHBoxLayout()
@@ -70,6 +72,29 @@ class ModelTab(Tab):
         self.group.buttonToggled.connect(self.update_parameters)
         self.update_parameters()
 
+        label = QLabel("Температура концепта")
+        self.layout.addWidget(label)
+        row = QHBoxLayout()
+        self.layout.addLayout(row)
+        self.concept_temperature_slider = QSlider(Qt.Horizontal)
+        self.concept_temperature_slider.setRange(0, 200)
+        self.concept_temperature_slider.setSingleStep(5)
+        self.concept_temperature_slider.setPageStep(10)
+        self.concept_temperature_slider.setValue(
+            int(self.preferences_config.concept_temperature * 100)
+        )
+        row.addWidget(self.concept_temperature_slider, stretch=1)
+        self.concept_temperature_value_label = QLabel(
+            f"{self.preferences_config.concept_temperature:.2f}"
+        )
+        row.addWidget(self.concept_temperature_value_label)
+        self.concept_temperature_slider.valueChanged.connect(
+            self.update_concept_temperature_label
+        )
+        reset_button = QPushButton("Сбросить")
+        reset_button.clicked.connect(self.reset_concept_temperature)
+        row.addWidget(reset_button)
+
         self.layout.addStretch()
 
     @Slot()
@@ -79,6 +104,16 @@ class ModelTab(Tab):
     @Slot()
     def reset_remote_model(self):
         self.remote_model_editor.setText(text_config.default_remote_model)
+
+    @Slot(int)
+    def update_concept_temperature_label(self, value: int) -> None:
+        self.concept_temperature_value_label.setText(f"{value / 100:.2f}")
+
+    @Slot()
+    def reset_concept_temperature(self) -> None:
+        self.concept_temperature_slider.setValue(
+            int(constants_config.concept_temperature * 100)
+        )
 
     @Slot()
     def update_parameters(self):
@@ -101,4 +136,8 @@ class ModelTab(Tab):
 
         self.preferences_config.local_model = self.local_model_editor.text()
         self.preferences_config.remote_model = self.remote_model_editor.text()
+
+        self.preferences_config.concept_temperature = (
+            self.concept_temperature_slider.value() / 100
+        )
 
