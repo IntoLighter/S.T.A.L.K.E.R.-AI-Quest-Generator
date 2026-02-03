@@ -29,7 +29,8 @@ class ConstantsConfig(BaseSettings):
     icon_path: Path = get_resource_path("resource/icon.ico")
     prompt_path: Path = get_resource_path("resource/prompt")
 
-    concept_temperature: float = 1.0
+    concept_temperature: float = 0.7
+    concept_top_p: float = 0.9
 
     @computed_field
     def config_path(self) -> Path:

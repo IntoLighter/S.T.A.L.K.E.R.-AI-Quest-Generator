@@ -84,15 +84,38 @@ class ModelTab(Tab):
             int(self.preferences_config.concept_temperature * 100)
         )
         row.addWidget(self.concept_temperature_slider, stretch=1)
-        self.concept_temperature_value_label = QLabel(
+        self.concept_temperature_label = QLabel(
             f"{self.preferences_config.concept_temperature:.2f}"
         )
-        row.addWidget(self.concept_temperature_value_label)
+        row.addWidget(self.concept_temperature_label)
         self.concept_temperature_slider.valueChanged.connect(
             self.update_concept_temperature_label
         )
         reset_button = QPushButton("Сбросить")
         reset_button.clicked.connect(self.reset_concept_temperature)
+        row.addWidget(reset_button)
+
+        label = QLabel("Top-p концепта")
+        self.layout.addWidget(label)
+        row = QHBoxLayout()
+        self.layout.addLayout(row)
+        self.concept_top_p_slider = QSlider(Qt.Horizontal)
+        self.concept_top_p_slider.setRange(0, 100)
+        self.concept_top_p_slider.setSingleStep(5)
+        self.concept_top_p_slider.setPageStep(10)
+        self.concept_top_p_slider.setValue(
+            int(self.preferences_config.concept_top_p * 100)
+        )
+        row.addWidget(self.concept_top_p_slider, stretch=1)
+        self.concept_top_p_label = QLabel(
+            f"{self.preferences_config.concept_top_p:.2f}"
+        )
+        row.addWidget(self.concept_top_p_label)
+        self.concept_top_p_slider.valueChanged.connect(
+            self.update_concept_top_p_label
+        )
+        reset_button = QPushButton("Сбросить")
+        reset_button.clicked.connect(self.reset_concept_top_p)
         row.addWidget(reset_button)
 
         self.layout.addStretch()
@@ -105,16 +128,6 @@ class ModelTab(Tab):
     def reset_remote_model(self):
         self.remote_model_editor.setText(text_config.default_remote_model)
 
-    @Slot(int)
-    def update_concept_temperature_label(self, value: int) -> None:
-        self.concept_temperature_value_label.setText(f"{value / 100:.2f}")
-
-    @Slot()
-    def reset_concept_temperature(self) -> None:
-        self.concept_temperature_slider.setValue(
-            int(constants_config.concept_temperature * 100)
-        )
-
     @Slot()
     def update_parameters(self):
         button_to_parameters = {
@@ -126,6 +139,26 @@ class ModelTab(Tab):
         other_parameters = next(v for v in button_to_parameters.values() if v != current_parameters)
         current_parameters.show()
         other_parameters.hide()
+
+    @Slot(int)
+    def update_concept_temperature_label(self, value: int) -> None:
+        self.concept_temperature_label.setText(f"{value / 100:.2f}")
+
+    @Slot()
+    def reset_concept_temperature(self) -> None:
+        self.concept_temperature_slider.setValue(
+            int(constants_config.concept_temperature * 100)
+        )
+
+    @Slot(int)
+    def update_concept_top_p_label(self, value: int) -> None:
+        self.concept_top_p_label.setText(f"{value / 100:.2f}")
+
+    @Slot()
+    def reset_concept_top_p(self) -> None:
+        self.concept_top_p_slider.setValue(
+            int(constants_config.concept_top_p * 100)
+        )
 
     def save(self) -> None:
         button_to_type = {
@@ -141,3 +174,6 @@ class ModelTab(Tab):
             self.concept_temperature_slider.value() / 100
         )
 
+        self.preferences_config.concept_top_p = (
+            self.concept_top_p_slider.value() / 100
+        )

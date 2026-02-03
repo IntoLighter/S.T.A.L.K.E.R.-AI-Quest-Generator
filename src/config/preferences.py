@@ -43,6 +43,7 @@ class PreferencesConfig(BaseSettings):
         return type_to_value[self.model_type]
 
     concept_temperature: float = constants_config.concept_temperature
+    concept_top_p: float = constants_config.concept_top_p
 
     concept_default: str = ""
     metadata_default: str = ""

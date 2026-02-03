@@ -91,7 +91,7 @@ class Worker(QThread):
         for token in self.text_model.generate(
             messages,
             temperature=self.preferences_config.concept_temperature,
-            top_p=1,
+            top_p=self.preferences_config.concept_top_p,
         ):
             if self.isInterruptionRequested():
                 return
