@@ -227,7 +227,7 @@ class MainWidget(QWidget):
         self.infoportions_editor.setMinimumHeight(constants_config.editor_height)
         self.layout.addWidget(self.infoportions_editor, constants_config.editor_stretch)
 
-        label = QLabel("Промпт для генерации иконки")
+        label = QLabel("Промпт иконки")
         self.layout.addWidget(label)
         self.icon_prompt_editor = QTextEdit()
         self.icon_prompt_editor.setReadOnly(True)

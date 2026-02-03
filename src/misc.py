@@ -4,7 +4,6 @@ from pathlib import Path
 
 from loguru import logger
 
-from config.constants import constants_config
 from PIL import Image
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import (
@@ -15,13 +14,17 @@ from PySide6.QtWidgets import (
 )
 
 
-def get_prompt_from_file(filename: str):
-    path = constants_config.prompt_path / filename
-    return path.read_text(encoding="utf-8")
+def get_resource_path(relative_path: str) -> Path:
+    relative_path = f"resource/{relative_path}"
+
+    if hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / relative_path
+    else:
+        return Path(relative_path)
 
 
-def get_resource_file_content(path: Path):
-    return path.read_text(encoding="utf-8")
+def get_resource_file_content(file: Path):
+    return file.read_text(encoding="utf-8")
 
 
 def get_unique_name_path(path: Path) -> Path:

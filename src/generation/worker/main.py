@@ -9,7 +9,6 @@ from comfykit import ComfyKit
 import openai
 import requests
 
-from config.constants import get_resource_path
 from config.preferences import PreferencesConfig
 from generation.engine.soc import SoCObjectFactory
 from generation.entity import GameRecords, GenerationResult, IconRecords, Metadata

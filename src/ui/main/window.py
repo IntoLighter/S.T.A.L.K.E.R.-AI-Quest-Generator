@@ -1,6 +1,6 @@
+from config.app import app_config
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
-from config.text import text_config
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import (
@@ -19,7 +19,7 @@ class MainWindow(QMainWindow):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.resize(*constants_config.window_dims)  # noqa
-        self.setWindowTitle(text_config.app_name)
+        self.setWindowTitle(app_config.name)
         self.preferences_config = preferences_config
 
         self.main_widget = MainWidget(self.preferences_config, self)
@@ -99,8 +99,8 @@ class MainWindow(QMainWindow):
             self,
             "О программе",
             f"""
-<h3>{text_config.app_name}</h3>
-<p>Версия {constants_config.app_version}</p>
-<p>Путь до конфигов {str(constants_config.config_path)}</p>
+<h3>{app_config.name}</h3>
+<p>Версия {app_config.version}</p>
+<p>Github: <a href="{app_config.repository}">{app_config.repository}</a></p>
             """,
         )

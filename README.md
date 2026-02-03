@@ -32,7 +32,7 @@ ollama --version
 Пример загрузки:
 
 ```bash
-ollama pull llama3.1:8b
+ollama pull qwen3:8b
 ```
 
 ### Запуск Ollama

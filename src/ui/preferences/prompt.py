@@ -1,6 +1,6 @@
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
-from misc import get_layout_with_scroll, get_prompt_from_file
+from misc import get_layout_with_scroll
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -56,15 +56,15 @@ class PromptTab(Tab):
 
     @Slot()
     def reset_concept(self) -> None:
-        self.concept_editor.setPlainText(get_prompt_from_file("concept.txt"))
+        self.concept_editor.setPlainText(constants_config.default_concept_prompt)
 
     @Slot()
     def reset_metadata(self) -> None:
-        self.metadata_editor.setPlainText(get_prompt_from_file("metadata.txt"))
+        self.metadata_editor.setPlainText(constants_config.default_metadata_prompt)
 
     @Slot()
     def reset_icon(self) -> None:
-        self.icon_editor.setPlainText(get_prompt_from_file("icon.txt"))
+        self.icon_editor.setPlainText(constants_config.default_icon_prompt)
 
     def save(self) -> None:
         self.preferences_config.concept_prompt = self.concept_editor.toPlainText()

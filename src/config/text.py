@@ -2,8 +2,6 @@ from pydantic_settings import BaseSettings
 
 
 class TextConfig(BaseSettings):
-    app_name: str = "S.T.A.L.K.E.R. AI Quest Generator"
-
     default_prompt: str = """
 Тип: исследование
 Квестодатель: Сидорович

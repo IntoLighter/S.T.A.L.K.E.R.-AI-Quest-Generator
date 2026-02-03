@@ -7,7 +7,6 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from config.constants import constants_config
 from config.text import text_config
-from misc import get_prompt_from_file, get_resource_file_content
 
 
 class ModelType(Enum):
@@ -42,38 +41,38 @@ class PreferencesConfig(BaseSettings):
 
         return type_to_value[self.model_type]
 
-    concept_temperature: float = constants_config.concept_temperature
-    concept_top_p: float = constants_config.concept_top_p
+    concept_temperature: float = constants_config.default_concept_temperature
+    concept_top_p: float = constants_config.default_concept_top_p
 
     icon_workflow_value: str = Field(
-        default=get_resource_file_content(constants_config.icon_workflow_path), alias="icon_workflow"
+        default=constants_config.default_icon_workflow, alias="icon_workflow"
     )
-    
+
     @property
     def icon_workflow(self) -> str:
         if __debug__:
-            return get_resource_file_content(constants_config.icon_workflow_path)
+            return constants_config.default_icon_workflow
         else:
             return self.icon_workflow_value
 
-    concept_default: str = ""
-    metadata_default: str = ""
-    icon_prompt_default: str = ""
+    @icon_workflow.setter
+    def icon_workflow(self, value: str) -> None:
+        self.icon_workflow_value = value
 
     concept_prompt_value: str = Field(
-        default=get_prompt_from_file("concept.txt"), alias="concept_prompt"
+        default=constants_config.default_concept_prompt, alias="concept_prompt"
     )
     metadata_prompt_value: str = Field(
-        default=get_prompt_from_file("metadata.txt"), alias="metadata_prompt"
+        default=constants_config.default_metadata_prompt, alias="metadata_prompt"
     )
     icon_prompt_value: str = Field(
-        default=get_prompt_from_file("icon.txt"), alias="icon_prompt"
+        default=constants_config.default_icon_prompt, alias="icon_prompt"
     )
 
     @property
     def concept_prompt(self) -> str:
         if __debug__:
-            return get_prompt_from_file("concept.txt")
+            return constants_config.default_concept_prompt
         else:
             return self.concept_prompt_value
 
@@ -84,7 +83,7 @@ class PreferencesConfig(BaseSettings):
     @property
     def metadata_prompt(self) -> str:
         if __debug__:
-            return get_prompt_from_file("metadata.txt")
+            return constants_config.default_metadata_prompt
         else:
             return self.metadata_prompt_value
 
@@ -95,13 +94,17 @@ class PreferencesConfig(BaseSettings):
     @property
     def icon_prompt(self) -> str:
         if __debug__:
-            return get_prompt_from_file("icon.txt")
+            return constants_config.default_icon_prompt
         else:
             return self.icon_prompt_value
 
     @icon_prompt.setter
     def icon_prompt(self, value: str) -> None:
         self.icon_prompt_value = value
+
+    configurator_concept: str = ""
+    configurator_metadata: str = ""
+    configurator_icon_prompt: str = ""
 
     @classmethod
     def load(cls) -> Self:

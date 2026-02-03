@@ -2,9 +2,9 @@ import signal
 import sys
 import traceback
 
+from config.app import app_config
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
-from config.text import text_config
 from loguru import logger
 from PySide6.QtCore import QLibraryInfo, QTranslator
 from PySide6.QtGui import QIcon
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     sys.excepthook = exception_hook
 
     app = QApplication(sys.argv)
-    app.setApplicationName(text_config.app_name)
+    app.setApplicationName(app_config.name)
     app.setWindowIcon(QIcon(str(constants_config.icon_path)))
     app.aboutToQuit.connect(on_app_stopped)
 
