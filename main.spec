@@ -27,7 +27,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     options,
-    name='S.T.A.L.K.E.R. AI Quest Generator',
+    name='S.T.A.L.K.E.R.-AI-Quest-Generator',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
