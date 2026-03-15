@@ -1,0 +1,37 @@
+name: Bug report
+description: File a bug report.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to file a bug report.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checked other resources
+      options:
+        - label: The bug is not resolved by updating to the latest stable version of the software.
+          required: true
+        - label: I used the GitHub search to find a similar question and didn't find it.
+          required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Write what happened, steps to reproduce and what you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: stacktrace
+    attributes:
+      label: Stacktrace
+   - type: textarea
+    id: system-info
+    attributes:
+      label: System Info
+  - type: upload
+    id: logs
+    attributes:
+      label: Upload logs
+    validations:
+      accept: .log
