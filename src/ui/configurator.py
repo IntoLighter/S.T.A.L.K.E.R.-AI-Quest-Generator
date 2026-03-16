@@ -3,7 +3,7 @@
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
 from generation.entity import ConfiguratorParameters
-from misc import get_layout_with_scroll, show_parameters_error, show_settings_error
+from misc import get_layout_with_scroll, show_parameters_error
 from PySide6.QtWidgets import (
     QCheckBox,
     QHBoxLayout,
@@ -13,11 +13,11 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ui.dialog import Dialog
+from ui.dialog import QWindowDialog
 from ui.editor.prompt import PromptEditor
 
 
-class ConfiguratorDialog(Dialog):
+class ConfiguratorDialog(QWindowDialog):
     def __init__(self, parent: QWidget, preferences_config: PreferencesConfig) -> None:
         super().__init__(parent)
         self.resize(*constants_config.window_dims)  # noqa

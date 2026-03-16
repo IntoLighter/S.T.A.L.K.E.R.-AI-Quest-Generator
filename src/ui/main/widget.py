@@ -1,5 +1,3 @@
-from typing import Callable
-
 from loguru import logger
 
 from config.constants import constants_config
@@ -28,6 +26,7 @@ from PySide6.QtWidgets import (
 )
 
 from ui.editor.prompt import PromptEditor
+from ui.exception.main import ExceptionDialog
 
 
 class MainWidget(QWidget):
@@ -111,6 +110,7 @@ class MainWidget(QWidget):
         self.worker.icon_prompt_chunk_ready.connect(self.show_icon_prompt_chunk)
         self.worker.icon_ready.connect(self.show_icon)
         self.worker.error_occurred.connect(self.show_generation_error)
+        self.worker.unknown_error_occured.connect(self.show_generation_unknown_error)
         self.worker.finished.connect(self.worker_complete)
         self.worker.start()
 
@@ -182,6 +182,11 @@ class MainWidget(QWidget):
     @Slot(str)
     def show_generation_error(self, error: str) -> None:
         QMessageBox.warning(self, "Ошибка генерации", error)
+
+    @Slot(str)
+    def show_generation_unknown_error(self, stacktrace: str) -> None:
+        dialog = ExceptionDialog(stacktrace, self)
+        dialog.exec()
 
     @Slot()
     def worker_complete(self) -> None:

@@ -101,6 +101,6 @@ class MainWindow(QMainWindow):
             f"""
 <h3>{app_config.name}</h3>
 <p>Версия {app_config.version}</p>
-<p>Github: <a href="{app_config.repository}">{app_config.repository}</a></p>
+<p>Repository: <a href="{app_config.repository}">{app_config.repository}</a></p>
             """,
         )

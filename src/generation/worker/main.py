@@ -1,4 +1,5 @@
 import json
+import traceback
 from deep_translator import GoogleTranslator
 from loguru import logger
 from PIL import Image
@@ -29,6 +30,7 @@ class Worker(QThread):
     icon_ready = Signal(Image.Image)
     status_update = Signal(str)
     error_occurred = Signal(str)
+    unknown_error_occured = Signal(str)
 
     def __init__(
         self, preferences_config: PreferencesConfig, text_model: Model, prompt: str
@@ -43,13 +45,14 @@ class Worker(QThread):
             result = self.perform_work()
             self.save_on_disk(result)
         except Exception as e:
-            self.handle_exception(e, "Возникла непредвиденная ошибка.")
+            self.handle_unknown_exception(e)
         finally:
             self.status_update.emit("")
 
     def perform_work(self) -> GenerationResult:
         return GenerationResult()
 
+    # TODO: Доработать обработку исключений
     def handle_exception_perform_work(self, e: Exception) -> None:
         match e:
             case openai.APIConnectionError():
@@ -64,11 +67,15 @@ class Worker(QThread):
             case AppError():
                 self.handle_exception(e, str(e))
             case _:
-                self.handle_exception(e, "Возникла непредвиденная ошибка.")
+                self.handle_unknown_exception(e)
 
     def handle_exception(self, e: Exception, msg: str) -> None:
         logger.exception(e)
         self.error_occurred.emit(msg)
+
+    def handle_unknown_exception(self, e: Exception) -> None:
+        logger.exception(e)
+        self.unknown_error_occured.emit(traceback.format_exc())
 
     @log_execution
     def create_concept(self) -> str | None:
@@ -142,7 +149,7 @@ class Worker(QThread):
             title_english = GoogleTranslator(source="ru", target="en").translate(title)
         except Exception as e:
             self.handle_exception(
-                e, "Неизвестная ошибка перевода названия. Название не будет переведено."
+                e, "Ошибка гугл переводчика. Название не будет переведено."
             )
             title_english = title
 

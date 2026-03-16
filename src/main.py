@@ -1,4 +1,3 @@
-import platform
 import signal
 import sys
 import traceback
@@ -13,40 +12,15 @@ from PySide6.QtWidgets import (
     QApplication,
     QMessageBox,
 )
+from ui.exception.main import ExceptionDialog
 from ui.main.window import MainWindow
-from urllib.parse import urlencode
-import webbrowser
 
 
-def exception_hook(exc_type, exc_value, exc_traceback):
+def exception_hook(exc_type, exc_value, exc_traceback) -> None:
     stacktrace = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
     logger.exception(stacktrace)
-    show_error(stacktrace)
-
-
-def show_error(stacktrace: str) -> None:
-    msg = QMessageBox(
-        icon=QMessageBox.Icon.Warning,
-        title="Ошибка",
-        text="Произошла непредвиденная ошибка",
-        detailedText=stacktrace,
-    )
-    button = msg.exec()
-
-    system_info = {
-        "OS": platform.system(),
-        "OS Version": platform.version(),
-    }
-
-    url = "https://github.com/IntoLighter/Main/issues/new?" + urlencode(
-        {
-            "template": "bug.yaml",
-            "stacktrace": stacktrace,
-            "system-info": system_info
-        }
-    )
-
-    webbrowser.open(url)
+    dialog = ExceptionDialog(stacktrace)
+    dialog.exec()
 
 
 def on_app_stopped() -> None:
