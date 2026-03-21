@@ -8,7 +8,8 @@ from misc import get_resource_file_content, get_resource_path
 
 
 class ConstantsConfig(BaseSettings):
-    window_dims: tuple[int, int] = (800, 600)
+    window_size: tuple[int, int] = (1280, 720)
+    dialog_size: tuple[int, int] = (1024, 576)
 
     editor_stretch: int = 1
     concept_stretch: int = 4

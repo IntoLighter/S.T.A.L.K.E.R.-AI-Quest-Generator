@@ -18,7 +18,7 @@ from ui.preferences.main import PreferencesDialog
 class MainWindow(QMainWindow):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
-        self.resize(*constants_config.window_dims)  # noqa
+        self.resize(*constants_config.window_size)  # noqa
         self.setWindowTitle(app_config.name)
         self.preferences_config = preferences_config
 

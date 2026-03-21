@@ -1,6 +1,5 @@
 from loguru import logger
 
-from config.constants import constants_config
 from config.preferences import PreferencesConfig
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -21,7 +20,6 @@ from ui.preferences.tab import Tab
 class PreferencesDialog(QWindowDialog):
     def __init__(self, parent: QWidget, preferences_config: PreferencesConfig) -> None:
         super().__init__(parent)
-        self.resize(*constants_config.window_dims)  # noqa
         self.setWindowTitle("Настройки")
         self.preferences_config = preferences_config
         logger.info("Window 'Settings' opened")
@@ -66,7 +64,12 @@ class PreferencesDialog(QWindowDialog):
 
     @property
     def tabs(self) -> list[Tab]:
-        return [self.general_tab, self.model_tab, self.configurator_tab, self.prompt_tab]
+        return [
+            self.general_tab,
+            self.model_tab,
+            self.configurator_tab,
+            self.prompt_tab,
+        ]
 
     def reject(self) -> None:
         logger.info("Window 'Settings' rejected")
