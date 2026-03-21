@@ -1,5 +1,4 @@
 from config.app import app_config
-from config.constants import constants_config
 from config.preferences import PreferencesConfig
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QAction, QKeySequence
@@ -18,7 +17,8 @@ from ui.preferences.main import PreferencesDialog
 class MainWindow(QMainWindow):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
-        self.resize(*constants_config.window_dims)  # noqa
+        self.resize(*preferences_config.window_dims)  # noqa
+        self.move(*preferences_config.window_pos)  # noqa
         self.setWindowTitle(app_config.name)
         self.preferences_config = preferences_config
 
@@ -104,3 +104,13 @@ class MainWindow(QMainWindow):
 <p>Repository: <a href="{app_config.repository}">{app_config.repository}</a></p>
             """,
         )
+
+    def resizeEvent(self, event) -> None:
+        super().resizeEvent(event)
+        self.preferences_config.window_dims = (self.width(), self.height())
+        self.preferences_config.save()
+
+    def moveEvent(self, event):
+        super().moveEvent(event)
+        self.preferences_config.window_pos = (self.x(), self.y())
+        self.preferences_config.save()
