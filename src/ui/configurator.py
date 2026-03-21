@@ -1,4 +1,4 @@
-from loguru import logger
+﻿from loguru import logger
 
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
@@ -19,7 +19,8 @@ from ui.editor.prompt import PromptEditor
 
 class ConfiguratorDialog(QWindowDialog):
     def __init__(self, parent: QWidget, preferences_config: PreferencesConfig) -> None:
-        super().__init__(parent, preferences_config)
+        super().__init__(parent)
+        self.resize(*constants_config.window_dims)  # noqa
         self.setWindowTitle("Конфигуратор")
         self.preferences_config = preferences_config
         logger.info("Window 'Configurator' created")

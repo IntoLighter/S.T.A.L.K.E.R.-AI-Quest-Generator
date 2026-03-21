@@ -2,16 +2,13 @@
 from functools import wraps
 from pathlib import Path
 
-from PySide6.QtCore import QSize, QTimer
 from loguru import logger
 
 from PIL import Image
-from PySide6.QtGui import QImage, QPixmap, Qt
+from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import (
-    QApplication,
     QMessageBox,
     QScrollArea,
-    QStyle,
     QVBoxLayout,
     QWidget,
 )
@@ -72,17 +69,6 @@ def get_layout_with_scroll(parent: QWidget):
     scroll.setWidget(scroll_widget)
 
     return layout
-
-
-def resize_and_center_window(window: QWidget, dims: tuple[int, int]):
-    def center_on_screen():
-        fg = window.frameGeometry()
-        screen = QApplication.primaryScreen().availableGeometry()
-        fg.moveCenter(screen.center())
-        window.move(fg.topLeft())
-
-    window.resize(*dims)
-    # QTimer.singleShot(0, center_on_screen)
 
 
 def log_execution(func):

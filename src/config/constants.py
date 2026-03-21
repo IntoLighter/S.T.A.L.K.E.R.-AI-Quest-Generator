@@ -8,17 +8,7 @@ from misc import get_resource_file_content, get_resource_path
 
 
 class ConstantsConfig(BaseSettings):
-    default_window_dims: tuple[int, int] = (800, 600)
-    available_window_dims: list[tuple[int, int]] = [
-        default_window_dims,
-        (1024, 768),
-        (1280, 720),
-        (1366, 768),
-        (1600, 900),
-        (1920, 1080),
-        (2560, 1440),
-        (2560, 1600),
-    ]
+    window_dims: tuple[int, int] = (800, 600)
 
     editor_stretch: int = 1
     concept_stretch: int = 4

@@ -2,12 +2,10 @@ import os
 import pathlib
 
 from config.preferences import PreferencesConfig
-from config.constants import constants_config
 from config.text import text_config
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QCheckBox,
-    QComboBox,
     QFileDialog,
     QHBoxLayout,
     QLabel,
@@ -26,29 +24,9 @@ class GeneralTab(Tab):
         self.preferences_config = preferences_config
 
         self.layout = QVBoxLayout(self)
-        self.add_window_resolution_editor()
         self.add_should_generate_editors()
         self.add_prompt_template_editor()
         self.add_save_path_editor()
-
-    def add_window_resolution_editor(self) -> None:
-        row = QHBoxLayout()
-        self.layout.addLayout(row)
-        label = QLabel("Разрешение окон")
-        row.addWidget(label)
-
-        self.window_resolution_editor = QComboBox()
-        current_index = 0
-
-        for index, dims in enumerate(constants_config.available_window_dims):
-            resolution = f"{dims[0]}x{dims[1]}"
-            self.window_resolution_editor.addItem(resolution, dims)
-            if dims == self.preferences_config.window_dims:
-                current_index = index
-
-        self.window_resolution_editor.setCurrentIndex(current_index)
-        row.addWidget(self.window_resolution_editor)
-        row.addStretch()
 
     def add_should_generate_editors(self) -> None:
         row = QHBoxLayout()
@@ -142,9 +120,6 @@ class GeneralTab(Tab):
             self.save_path_editor.setText(folder)
 
     def save(self) -> None:
-        selected_dims = self.window_resolution_editor.currentData()
-        self.preferences_config.window_dims = tuple(selected_dims)
-
         self.preferences_config.should_generate_concept = (
             self.should_generate_concept_editor.isChecked()
         )

@@ -25,8 +25,6 @@ class PreferencesConfig(BaseSettings):
     should_generate_metadata: bool = True
     should_generate_icon: bool = True
 
-    window_dims: tuple[int, int] = constants_config.default_window_dims
-
     prompt_message: str = text_config.default_prompt
     save_path: Path | None = None
 
