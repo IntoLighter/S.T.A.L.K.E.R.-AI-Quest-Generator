@@ -21,9 +21,6 @@ class PreferencesConfig(BaseSettings):
         validate_by_name=True,
     )
 
-    window_dims: tuple[int, int] = Field(default_factory=lambda: constants_config.default_window_dims)
-    window_pos: tuple[int, int] = Field(default_factory=lambda: constants_config.default_window_pos)
-
     should_generate_concept: bool = True
     should_generate_metadata: bool = True
     should_generate_icon: bool = True

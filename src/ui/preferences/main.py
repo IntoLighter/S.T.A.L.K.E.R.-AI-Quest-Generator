@@ -21,6 +21,7 @@ from ui.preferences.tab import Tab
 class PreferencesDialog(QWindowDialog):
     def __init__(self, parent: QWidget, preferences_config: PreferencesConfig) -> None:
         super().__init__(parent)
+        self.resize(*constants_config.window_dims)  # noqa
         self.setWindowTitle("Настройки")
         self.preferences_config = preferences_config
         logger.info("Window 'Settings' opened")

@@ -1,6 +1,5 @@
 from pathlib import Path
 
-from PySide6.QtWidgets import QApplication
 from pydantic import computed_field
 from pydantic_settings import BaseSettings
 from PySide6.QtCore import QStandardPaths
@@ -9,14 +8,7 @@ from misc import get_resource_file_content, get_resource_path
 
 
 class ConstantsConfig(BaseSettings):
-    @computed_field
-    def default_window_dims(self) -> tuple[int, int]:
-        screen_geometry = QApplication.primaryScreen().availableGeometry()
-        return (screen_geometry.width(), screen_geometry.height())
-
-    @computed_field
-    def default_window_pos(self) -> tuple[int, int]:
-        return (0, 0)
+    window_dims: tuple[int, int] = (800, 600)
 
     editor_stretch: int = 1
     concept_stretch: int = 4
