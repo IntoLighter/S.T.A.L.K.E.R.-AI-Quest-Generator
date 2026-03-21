@@ -1,5 +1,4 @@
 from config.app import app_config
-from config.constants import constants_config
 from config.preferences import PreferencesConfig
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QAction, QKeySequence
@@ -13,12 +12,13 @@ from PySide6.QtWidgets import (
 from ui.configurator import ConfiguratorDialog
 from ui.main.widget import MainWidget
 from ui.preferences.main import PreferencesDialog
+from misc import resize_and_center_window
 
 
 class MainWindow(QMainWindow):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
-        self.resize(*constants_config.window_dims)  # noqa
+        self.resize(*preferences_config.window_dims)  # noqa
         self.setWindowTitle(app_config.name)
         self.preferences_config = preferences_config
 
@@ -74,6 +74,7 @@ class MainWindow(QMainWindow):
         dialog = PreferencesDialog(self, self.preferences_config)
         result = dialog.exec()
         if result == QDialog.DialogCode.Accepted:
+            resize_and_center_window(self, self.preferences_config.window_dims)
             self.set_parameters_unspecified_restrictions()
 
     def set_parameters_unspecified_restrictions(self) -> None:
