@@ -22,17 +22,16 @@ ollama --version
 
 ### Загрузка модели
 
-Рекомендуемые модели:
+Рекомендую использовать лучшие модели из leaderboard-ов:
 
-* `llama3.1:8b` — универсальная
-* `mistral:7b` — быстрая и атмосферная
-* `qwen3:8b` — хорошо держит инструкции
-* `gpt-oss:20b` - продвинутая
+https://artificialanalysis.ai/leaderboards/models?weights=open
+
+https://llm-stats.com/leaderboards/open-llm-leaderboard
 
 Пример загрузки:
 
 ```bash
-ollama pull qwen3:8b
+ollama pull qwen3.6:35b
 ```
 
 ### Запуск Ollama
