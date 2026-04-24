@@ -16,3 +16,6 @@ class Model(openai.OpenAI):
         )
         for response in stream:
             yield response.choices[0].delta.content or ""
+
+    def get_models(self) -> list[str]:
+        return [model.id for model in self.models.list().data]
