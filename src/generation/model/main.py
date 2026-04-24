@@ -1,5 +1,7 @@
 ﻿from typing import Iterator
+
 import openai
+from loguru import logger
 from openai.types.chat import ChatCompletionMessageParam
 
 
@@ -16,3 +18,11 @@ class Model(openai.OpenAI):
         )
         for response in stream:
             yield response.choices[0].delta.content or ""
+
+    def get_models(self) -> list[str]:
+        # TODO: Move to service
+        try:
+            return [model.id for model in self.models.list().data]
+        except Exception as e:
+            logger.exception(e)
+            return []

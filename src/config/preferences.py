@@ -29,8 +29,8 @@ class PreferencesConfig(BaseSettings):
     save_path: Path | None = None
 
     model_type: ModelType = ModelType.Local
-    local_model: str = text_config.default_local_model
-    remote_model: str = text_config.default_remote_model
+    local_model: str = ''
+    remote_model: str = ''
 
     @property
     def current_model(self) -> str:
