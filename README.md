@@ -22,13 +22,11 @@ ollama --version
 
 ### Загрузка модели
 
-Рекомендуемые модели:
+Рекомендую использовать лучшие модели из leaderboard-ов:
 
-- `qwen3.5:9b` — простая
-- `gpt-oss:20b` — современная
-- `qwen3.6:35b` — продвинутая
-- `gpt-oss:120b-cloud` - облачная
-- `qwen3.5:397b-cloud` - облачная 2
+https://artificialanalysis.ai/leaderboards/models?weights=open
+
+https://llm-stats.com/leaderboards/open-llm-leaderboard
 
 Пример загрузки:
 
