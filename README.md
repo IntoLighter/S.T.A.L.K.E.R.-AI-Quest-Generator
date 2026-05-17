@@ -1,79 +1,71 @@
 # S.T.A.L.K.E.R. AI Quest Generator
 
-# Генерация текста
+# Text Generation
 
-В приложении предусмотрены два режима генерации текста: локальный и удалённый.
-Более высокое качество результатов достигается при использовании больших моделей.
-Выбор типа генерации осуществляется в настройках приложения.
+The application provides two text generation modes: local and remote.  
+Higher quality results are achieved when using larger models.  
+The generation type is selected in the application settings.
 
-## Локальная генерация текста
+## Local Text Generation
 
-### Установка Ollama
+### Installing Ollama
 
-Скачать и установить:
+Download and install: https://ollama.com
 
-https://ollama.com
-
-Проверка установки:
-
-```bash
+Check installation:
+```
 ollama --version
 ```
 
-### Загрузка модели
+### Downloading a Model
 
-Рекомендую использовать лучшие модели из leaderboard-ов:
+It is recommended to use top-performing models from leaderboards:
 
-https://artificialanalysis.ai/leaderboards/models?weights=open
-
+https://artificialanalysis.ai/leaderboards/models?weights=open  
 https://llm-stats.com/leaderboards/open-llm-leaderboard
 
-Пример загрузки:
-
-```bash
+Example download:
+```
 ollama pull qwen3.6:35b
 ```
 
-### Запуск Ollama
+### Running Ollama
 
-Запустить Ollama через меню пуск.
+Launch Ollama from the Start menu.
 
-## Удалённая генерация текста
+## Remote Text Generation
 
-### Установка LLM API Key Proxy
+### Installing LLM API Key Proxy
 
-Скачать и распаковать:
-
+Download and extract:  
 https://github.com/Mirrowel/LLM-API-Key-Proxy/releases/tag/main%2Fbuild-20260123-1-bf7ab7e
 
-### Получение API ключа
+### Obtaining an API Key
 
-Получить API ключ к какому-либо провайдеру и указать его программе.
-Здесь рассказано подробнее:
-
+Get an API key from any provider and enter it into the application.  
+More details here:  
 https://github.com/danclave/TALKER/blob/main/docs/Free_Models_Guide.md
 
-# Генерация иконок
+# Icon Generation
 
-Генерация выполняется локально через ComfyUI.
+Icons are generated locally using ComfyUI.
 
-## Установка ComfyUI
+## Installing ComfyUI
 
-Скачать и установить:
+Download and install: https://www.comfy.org/download
 
-https://www.comfy.org/download
+## Configuration
 
-## Конфигурирование
+In the application settings under Server-Config, change the Port to 8188.
 
-В настройках программы в разделе Server-Config измените Port на 8188.
+You also need to download a model:
 
-Также необходимо скачать модель.
-1. Откройте настройки ComfyUI.
-1. В разделе Server-Config включите параметр Use legacy Manager UI.
-1. В верхней центральной части рабочей области нажмите кнопку Custom Nodes Manager.
-1. Перейдите в Model Manager.
-1. Найдите и установите модель sd_xl_base_1.0.safetensors.
+1. Open ComfyUI settings.
+2. In Server-Config, enable "Use legacy Manager UI".
+3. In the top-center area of the workspace, click "Custom Nodes Manager".
+4. Go to Model Manager.
+5. Find and install the model sd_xl_base_1.0.safetensors.
 
-# Заключение
+# Conclusion
 
-После проделанных настроек можно смело запускать генератор!
+After completing the setup, you can safely launch the generator!
