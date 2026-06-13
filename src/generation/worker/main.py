@@ -128,8 +128,8 @@ class Worker(QThread):
 
     def create_metadata(self, metadata_text: str) -> Metadata | None:
         try:
-            return Metadata(**(json.loads(metadata_text)))
-        except json.JSONDecodeError as e:
+            return Metadata.model_validate_json(metadata_text)
+        except Exception as e:
             self.handle_exception(
                 e,
                 "Невалидный json метаданных. Попробуйте исправить json через соотвествующие сайты и прогоните его через конфигуратор.",
