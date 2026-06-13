@@ -14,7 +14,7 @@ class Model:
         self, messages: list[ChatCompletionMessageParam], retries: int = 2, **kwargs
     ) -> Iterator[str]:
         stream = self.client.with_options(max_retries=retries).chat.completions.create(
-            model=self.model, messages=messages, stream=True, **kwargs
+            model=self.model, messages=messages, stream=True, reasoning_effort="none", **kwargs
         )
         for response in stream:
             yield response.choices[0].delta.content or ""
