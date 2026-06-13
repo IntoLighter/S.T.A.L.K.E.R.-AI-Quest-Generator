@@ -37,8 +37,8 @@ class PromptTab(Tab):
             source=self.preferences_config.icon_prompt_source,
             system_content=constants_config.default_icon_prompt,
             custom_content=self.preferences_config.custom_icon_prompt,
-            height=constants_config.editor_height,
-            stretch=constants_config.editor_stretch,
+            height=constants_config.icon_prompt_height,
+            stretch=constants_config.icon_prompt_stretch,
         )
         self.layout.addWidget(self.icon_editor)
 

@@ -237,8 +237,8 @@ class MainWidget(QWidget):
         self.layout.addWidget(label)
         self.icon_prompt_editor = QTextEdit()
         self.icon_prompt_editor.setReadOnly(True)
-        self.icon_prompt_editor.setMinimumHeight(constants_config.editor_height)
-        self.layout.addWidget(self.icon_prompt_editor, constants_config.editor_stretch)
+        self.icon_prompt_editor.setMinimumHeight(constants_config.icon_prompt_height)
+        self.layout.addWidget(self.icon_prompt_editor, constants_config.icon_prompt_stretch)
 
         label = QLabel("Иконка")
         self.layout.addWidget(label)

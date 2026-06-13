@@ -35,8 +35,8 @@ class ConfiguratorTab(Tab):
         self.icon_prompt_editor.setPlainText(
             self.preferences_config.configurator_icon_prompt
         )
-        self.icon_prompt_editor.setMinimumHeight(constants_config.editor_height)
-        self.layout.addWidget(self.icon_prompt_editor, constants_config.editor_stretch)
+        self.icon_prompt_editor.setMinimumHeight(constants_config.icon_prompt_height)
+        self.layout.addWidget(self.icon_prompt_editor, constants_config.icon_prompt_stretch)
 
     def save(self) -> None:
         self.preferences_config.configurator_concept = self.concept_editor.toPlainText()
