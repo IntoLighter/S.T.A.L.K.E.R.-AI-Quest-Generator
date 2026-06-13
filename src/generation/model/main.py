@@ -39,7 +39,6 @@ class Model:
             yield response.choices[0].delta.content or ""
 
     def get_models(self, retries: int = 0) -> list[str]:
-        # TODO: Move to service
         try:
             return [
                 model.id

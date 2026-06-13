@@ -53,7 +53,6 @@ class Worker(QThread):
     def perform_work(self) -> GenerationResult:
         return GenerationResult()
 
-    # TODO: Доработать обработку исключений
     def handle_exception_perform_work(self, e: Exception) -> None:
         match e:
             case openai.APIConnectionError():
