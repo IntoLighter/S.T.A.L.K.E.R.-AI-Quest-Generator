@@ -7,7 +7,6 @@ from PySide6.QtWidgets import (
     QPushButton,
     QRadioButton,
     QSlider,
-    QTextEdit,
 )
 
 from config.constants import constants_config
@@ -15,6 +14,7 @@ from config.preferences import ModelType, PreferencesConfig
 from generation.model.local import LocalModel
 from generation.model.remote import RemoteModel
 from misc import get_layout_with_scroll
+from ui.editor.system_custom_text_editor import SystemCustomTextEditor
 from ui.preferences.tab import Tab
 
 
@@ -103,22 +103,15 @@ class ModelTab(Tab):
         reset_button.clicked.connect(self.reset_concept_top_p)
         row.addWidget(reset_button)
 
-        label = QLabel("Иконка")
-        self.layout.addWidget(label)
-
-        row = QHBoxLayout()
-        self.layout.addLayout(row)
-        label = QLabel("Workflow")
-        row.addWidget(label)
-        self.icon_workflow_editor = QTextEdit()
-        self.icon_workflow_editor.setPlainText(self.preferences_config.icon_workflow)
-        self.icon_workflow_editor.setMinimumHeight(
-            constants_config.icon_workflow_height
+        self.icon_workflow_editor = SystemCustomTextEditor(
+            label="Workflow иконки",
+            source=self.preferences_config.icon_workflow_source,
+            system_content=constants_config.default_icon_workflow,
+            custom_content=self.preferences_config.custom_icon_workflow,
+            height=constants_config.icon_workflow_height,
+            stretch=constants_config.icon_workflow_stretch,
         )
-        row.addWidget(self.icon_workflow_editor, constants_config.icon_workflow_stretch)
-        reset_button = QPushButton("Сбросить")
-        reset_button.clicked.connect(self.reset_icon_workflow)
-        row.addWidget(reset_button)
+        self.layout.addWidget(self.icon_workflow_editor)
 
         self.layout.addStretch()
 
@@ -156,10 +149,6 @@ class ModelTab(Tab):
             int(constants_config.default_concept_top_p * 100)
         )
 
-    @Slot()
-    def reset_icon_workflow(self) -> None:
-        self.icon_workflow_editor.setPlainText(constants_config.default_icon_workflow)
-
     def save(self) -> None:
         button_to_type = {
             self.local_model_button: ModelType.Local,
@@ -176,6 +165,5 @@ class ModelTab(Tab):
 
         self.preferences_config.concept_top_p = self.concept_top_p_slider.value() / 100
 
-        self.preferences_config.icon_workflow_value = (
-            self.icon_workflow_editor.toPlainText()
-        )
+        self.preferences_config.icon_workflow_source = self.icon_workflow_editor.source
+        self.preferences_config.custom_icon_workflow = self.icon_workflow_editor.custom_content
