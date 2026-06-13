@@ -64,9 +64,8 @@ class PromptEditor(QWidget):
         label = QLabel("Промпт")
         self.layout.addWidget(label)
         self.prompt_editor = QTextEdit()
+        self.prompt_editor.setPlainText(self.preferences_config.prompt_message)
         self.prompt_editor.setMinimumHeight(constants_config.editor_height)
-        self.prompt_editor.insertPlainText(self.preferences_config.prompt_message)
-        self.prompt_editor.moveCursor(QTextCursor.MoveOperation.Start)
         self.layout.addWidget(self.prompt_editor, constants_config.editor_stretch)
 
     @property
@@ -75,5 +74,4 @@ class PromptEditor(QWidget):
 
     @prompt.setter
     def prompt(self, value: str) -> None:
-        self.prompt_editor.insertPlainText(value)
-        self.prompt_editor.moveCursor(QTextCursor.MoveOperation.Start)
+        self.prompt_editor.setPlainText(value)

@@ -166,8 +166,7 @@ class MainWidget(QWidget):
         }
 
         for editor, record in editor_to_record.items():
-            editor.insertPlainText(record)
-            editor.moveCursor(QTextCursor.MoveOperation.Start)
+            editor.setPlainText(record)
 
     @Slot(IconRecords)
     def show_icon(self, icon_records: IconRecords) -> None:
