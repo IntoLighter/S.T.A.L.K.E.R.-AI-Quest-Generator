@@ -1,8 +1,8 @@
+import enum
 from enum import Enum, auto
 from pathlib import Path
 from typing import Self
 
-from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from config.constants import constants_config
@@ -14,7 +14,7 @@ class ModelType(Enum):
     Remote = auto()
 
 
-class ValueSource(str, Enum):
+class ValueSource(enum.StrEnum):
     SYSTEM = "system"
     CUSTOM = "custom"
 
@@ -34,8 +34,8 @@ class PreferencesConfig(BaseSettings):
     save_path: Path | None = None
 
     model_type: ModelType = ModelType.Local
-    local_model: str = ''
-    remote_model: str = ''
+    local_model: str = ""
+    remote_model: str = ""
 
     @property
     def current_model(self) -> str:

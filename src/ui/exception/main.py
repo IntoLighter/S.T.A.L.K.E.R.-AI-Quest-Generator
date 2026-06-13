@@ -1,6 +1,6 @@
 import platform
-from urllib.parse import urlencode
 import webbrowser
+from urllib.parse import urlencode
 
 from PySide6.QtWidgets import QApplication, QMessageBox, QWidget
 

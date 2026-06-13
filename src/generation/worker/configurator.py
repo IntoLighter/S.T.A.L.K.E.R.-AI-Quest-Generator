@@ -1,8 +1,7 @@
-﻿from config.preferences import PreferencesConfig
+from config.preferences import PreferencesConfig
 from generation.engine.soc import SoCObjectFactory
-
-from generation.model.main import Model
 from generation.entity import ConfiguratorParameters, GenerationResult
+from generation.model.main import Model
 from generation.worker.main import Worker
 
 
@@ -72,5 +71,5 @@ class ConfiguratorWorker(Worker):
 
         except Exception as e:
             self.handle_exception_perform_work(e)
-        finally:
-            return result
+
+        return result

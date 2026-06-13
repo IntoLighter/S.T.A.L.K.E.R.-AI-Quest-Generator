@@ -1,11 +1,11 @@
-﻿from config.constants import constants_config
-from config.preferences import PreferencesConfig
-from misc import get_layout_with_scroll
 from PySide6.QtWidgets import (
     QLabel,
     QPlainTextEdit,
 )
 
+from config.constants import constants_config
+from config.preferences import PreferencesConfig
+from misc import get_layout_with_scroll
 from ui.preferences.tab import Tab
 
 
@@ -36,11 +36,15 @@ class ConfiguratorTab(Tab):
             self.preferences_config.configurator_icon_prompt
         )
         self.icon_prompt_editor.setMinimumHeight(constants_config.icon_prompt_height)
-        self.layout.addWidget(self.icon_prompt_editor, constants_config.icon_prompt_stretch)
+        self.layout.addWidget(
+            self.icon_prompt_editor, constants_config.icon_prompt_stretch
+        )
 
     def save(self) -> None:
         self.preferences_config.configurator_concept = self.concept_editor.toPlainText()
-        self.preferences_config.configurator_metadata = self.metadata_editor.toPlainText()
+        self.preferences_config.configurator_metadata = (
+            self.metadata_editor.toPlainText()
+        )
         self.preferences_config.configurator_icon_prompt = (
             self.icon_prompt_editor.toPlainText()
         )

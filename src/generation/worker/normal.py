@@ -1,4 +1,4 @@
-﻿from generation.engine.soc import SoCObjectFactory
+from generation.engine.soc import SoCObjectFactory
 from generation.entity import GenerationResult
 from generation.worker.main import Worker
 
@@ -39,11 +39,13 @@ class NormalWorker(Worker):
                         return result
 
                     if result.icon_prompt:
-                        result.icon_records = self.create_icon_records(result.icon_prompt)
+                        result.icon_records = self.create_icon_records(
+                            result.icon_prompt
+                        )
             except Exception as e:
                 self.handle_exception_perform_work(e)
 
         except Exception as e:
             self.handle_exception_perform_work(e)
-        finally:
-            return result
+
+        return result

@@ -1,10 +1,4 @@
-﻿
-from config.constants import constants_config
-from config.parameters import parameters
-from config.preferences import PreferencesConfig
-from config.text import text_config
 from PySide6.QtCore import Slot
-from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
@@ -15,9 +9,14 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from config.constants import constants_config
+from config.parameters import parameters
+from config.preferences import PreferencesConfig
+from config.text import text_config
+
 
 class PromptEditor(QWidget):
-    def __init__(self, preferences_config: PreferencesConfig):
+    def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
         self.layout = QVBoxLayout(self)
@@ -31,7 +30,7 @@ class PromptEditor(QWidget):
         self.layout.addLayout(row)
 
         self.parameter_names_combo = QComboBox()
-        self.parameter_names_combo.addItems([name for name in parameters.keys()])
+        self.parameter_names_combo.addItems(list(parameters))
         self.parameter_names_combo.currentTextChanged.connect(
             self.update_parameter_values_combo
         )

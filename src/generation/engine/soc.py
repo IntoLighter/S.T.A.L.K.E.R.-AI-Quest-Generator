@@ -1,15 +1,13 @@
-﻿from xml.sax.saxutils import escape as xml_escape
+from xml.sax.saxutils import escape as xml_escape
 
 from PIL import Image
 
-from generation.entity import Metadata, GameRecords
+from generation.entity import GameRecords, Metadata
 
 
 class SoCObjectFactory:
     @classmethod
-    def create_game_records(
-        cls, metadata: Metadata, title_english: str
-    ) -> GameRecords:
+    def create_game_records(cls, metadata: Metadata, title_english: str) -> GameRecords:
         return GameRecords(
             cls.create_task(metadata, title_english),
             cls.create_article(metadata, title_english),
@@ -17,7 +15,7 @@ class SoCObjectFactory:
         )
 
     @classmethod
-    def create_task(cls, metadata: Metadata, title_english: str):
+    def create_task(cls, metadata: Metadata, title_english: str) -> str:
         title = cls._xml_text(metadata.title)
         title_id = cls._xml_attr(title_english)
         title_id_text = cls._xml_text(title_english)
@@ -55,7 +53,7 @@ class SoCObjectFactory:
         return task
 
     @classmethod
-    def create_article(cls, metadata: Metadata, title_english: str):
+    def create_article(cls, metadata: Metadata, title_english: str) -> str:
         title_id = cls._xml_attr(title_english)
         description = cls._xml_text(metadata.description)
         return f"""
@@ -65,7 +63,7 @@ class SoCObjectFactory:
         """.strip()
 
     @classmethod
-    def create_infoportions(cls, title_english: str):
+    def create_infoportions(cls, title_english: str) -> str:
         title_id = cls._xml_attr(title_english)
         title_id_text = cls._xml_text(title_english)
         return f"""
@@ -80,7 +78,7 @@ class SoCObjectFactory:
         """.strip()
 
     @classmethod
-    def create_icon(cls, icon: Image.Image):
+    def create_icon(cls, icon: Image.Image) -> Image.Image:
         return icon.resize((83, 47), Image.Resampling.LANCZOS)
 
     @staticmethod

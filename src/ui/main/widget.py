@@ -1,22 +1,8 @@
-from loguru import logger
-from pydantic.type_adapter import P
+from __future__ import annotations
 
-from config.constants import constants_config
-from config.preferences import ModelType, PreferencesConfig
-from config.text import text_config
-from generation.entity import ConfiguratorParameters, GameRecords, IconRecords
-from generation.model.local import LocalModel
-from generation.model.remote import RemoteModel
-from generation.worker.configurator import ConfiguratorWorker
-from generation.worker.normal import NormalWorker
-from misc import (
-    ErrorInfo,
-    get_layout_with_scroll,
-    get_pixmap,
-    show_parameters_error,
-    show_settings_error,
-)
-from PIL import Image
+from typing import TYPE_CHECKING
+
+from loguru import logger
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import (
@@ -27,12 +13,33 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from config.constants import constants_config
+from config.preferences import ModelType, PreferencesConfig
+from config.text import text_config
+from generation.entity import ConfiguratorParameters, GameRecords, IconRecords
+from generation.model.local import LocalModel
+from generation.model.main import Model
+from generation.model.remote import RemoteModel
+from generation.worker.configurator import ConfiguratorWorker
+from generation.worker.normal import NormalWorker
+from misc import (
+    ErrorInfo,
+    get_layout_with_scroll,
+    get_pixmap,
+    show_parameters_error,
+    show_settings_error,
+)
 from ui.editor.prompt import PromptEditor
 from ui.exception.main import ExceptionDialog
 
+if TYPE_CHECKING:
+    from ui.main.window import MainWindow
+
 
 class MainWidget(QWidget):
-    def __init__(self, preferences_config: PreferencesConfig, main_window) -> None:
+    def __init__(
+        self, preferences_config: PreferencesConfig, main_window: MainWindow
+    ) -> None:
         super().__init__()
         self.preferences_config = preferences_config
         self.main_window = main_window
@@ -82,7 +89,7 @@ class MainWidget(QWidget):
         self.generate_quest()
 
     @property
-    def model(self):
+    def model(self) -> Model:
         type_to_value = {
             ModelType.Local: LocalModel(self.preferences_config),
             ModelType.Remote: RemoteModel(self.preferences_config),
@@ -116,7 +123,7 @@ class MainWidget(QWidget):
             self.infoportions_editor,
             self.icon_prompt_editor,
             self.icon_soc_editor,
-            self.icon_editor
+            self.icon_editor,
         ]
 
     def set_generate_button_stop(self) -> None:
@@ -238,7 +245,9 @@ class MainWidget(QWidget):
         self.icon_prompt_editor = QPlainTextEdit()
         self.icon_prompt_editor.setReadOnly(True)
         self.icon_prompt_editor.setMinimumHeight(constants_config.icon_prompt_height)
-        self.layout.addWidget(self.icon_prompt_editor, constants_config.icon_prompt_stretch)
+        self.layout.addWidget(
+            self.icon_prompt_editor, constants_config.icon_prompt_stretch
+        )
 
         label = QLabel("Иконка")
         self.layout.addWidget(label)

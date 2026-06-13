@@ -1,5 +1,4 @@
-﻿from config.preferences import PreferencesConfig
-
+from config.preferences import PreferencesConfig
 from generation.model.main import Model
 
 

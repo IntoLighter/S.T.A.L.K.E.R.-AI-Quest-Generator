@@ -1,9 +1,4 @@
-﻿from loguru import logger
-
-from config.constants import constants_config
-from config.preferences import PreferencesConfig
-from generation.entity import ConfiguratorParameters
-from misc import get_layout_with_scroll, show_parameters_error
+from loguru import logger
 from PySide6.QtWidgets import (
     QCheckBox,
     QHBoxLayout,
@@ -13,6 +8,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from config.constants import constants_config
+from config.preferences import PreferencesConfig
+from generation.entity import ConfiguratorParameters
+from misc import get_layout_with_scroll, show_parameters_error
 from ui.dialog import QWindowDialog
 from ui.editor.prompt import PromptEditor
 
@@ -80,7 +79,9 @@ class ConfiguratorDialog(QWindowDialog):
             self.preferences_config.configurator_icon_prompt
         )
         self.icon_prompt_editor.setMinimumHeight(constants_config.icon_prompt_height)
-        self.layout.addWidget(self.icon_prompt_editor, constants_config.icon_prompt_stretch)
+        self.layout.addWidget(
+            self.icon_prompt_editor, constants_config.icon_prompt_stretch
+        )
 
         self.add_close_buttons()
 

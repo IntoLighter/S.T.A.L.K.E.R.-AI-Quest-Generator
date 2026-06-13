@@ -68,7 +68,7 @@ class ModelTab(Tab):
         self.layout.addWidget(self.icon_workflow_editor)
 
     @Slot()
-    def update_text_model_dropdown(self):
+    def update_text_model_dropdown(self) -> None:
         button_to_dropdown = {
             self.local_model_button: self.local_model_dropdown,
             self.remote_model_button: self.remote_model_dropdown,
@@ -92,4 +92,6 @@ class ModelTab(Tab):
         self.preferences_config.remote_model = self.remote_model_dropdown.currentText()
 
         self.preferences_config.icon_workflow_source = self.icon_workflow_editor.source
-        self.preferences_config.custom_icon_workflow = self.icon_workflow_editor.custom_content
+        self.preferences_config.custom_icon_workflow = (
+            self.icon_workflow_editor.custom_content
+        )

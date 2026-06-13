@@ -1,14 +1,15 @@
+import asyncio
 import json
 import traceback
+from io import BytesIO
+
+import openai
+import requests
+from comfykit import ComfyKit
 from deep_translator import GoogleTranslator
 from loguru import logger
 from PIL import Image
 from PySide6.QtCore import QThread, Signal
-import asyncio
-from io import BytesIO
-from comfykit import ComfyKit
-import openai
-import requests
 
 from config.preferences import PreferencesConfig
 from generation.engine.soc import SoCObjectFactory
@@ -58,18 +59,23 @@ class Worker(QThread):
             case openai.APIConnectionError():
                 self.handle_exception(
                     e,
-                    "Ошибка подключения. Проверьте запущена ли программа генерации текста.",
+                    "Ошибка подключения."
+                    + "Проверьте запущена ли программа генерации текста.",
                 )
             case openai.APIError():
                 self.handle_exception(
                     e, "Ошибка генерации текста. Проверьте вывод программы генерации."
                 )
             case IconGenerationError():
-                self.handle_exception(e, "Возникла ошибка генерации изображения.", str(e))
+                self.handle_exception(
+                    e, "Возникла ошибка генерации изображения.", str(e)
+                )
             case _:
                 self.handle_unknown_exception(e)
 
-    def handle_exception(self, e: Exception, msg: str, details: str | None = None) -> None:
+    def handle_exception(
+        self, e: Exception, msg: str, details: str | None = None
+    ) -> None:
         if not details:
             details = traceback.format_exc()
         logger.exception(e)
@@ -134,7 +140,9 @@ class Worker(QThread):
         except Exception as e:
             self.handle_exception(
                 e,
-                "Невалидный json метаданных. Попробуйте исправить json через соотвествующие сайты и прогоните его через конфигуратор.",
+                "Невалидный json метаданных."
+                + "Попробуйте исправить json через соотвествующие сайты "
+                + "и прогоните его через конфигуратор.",
             )
 
     @log_execution

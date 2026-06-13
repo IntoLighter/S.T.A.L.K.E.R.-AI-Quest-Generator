@@ -1,4 +1,4 @@
-﻿from typing import Iterator
+from collections.abc import Iterator
 
 from loguru import logger
 from openai import OpenAI
@@ -16,7 +16,7 @@ class Model:
         messages: list[ChatCompletionMessageParam],
         schema: BaseModel | None = None,
         retries: int = 2,
-        **kwargs,
+        **kwargs: object,
     ) -> Iterator[str]:
         if schema:
             kwargs["response_format"] = {

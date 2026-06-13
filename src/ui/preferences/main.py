@@ -1,6 +1,4 @@
 from loguru import logger
-
-from config.preferences import PreferencesConfig
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QPushButton,
@@ -9,6 +7,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from config.preferences import PreferencesConfig
 from ui.dialog import QWindowDialog
 from ui.preferences.configurator import ConfiguratorTab
 from ui.preferences.general import GeneralTab

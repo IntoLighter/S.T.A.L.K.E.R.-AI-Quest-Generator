@@ -26,7 +26,9 @@ class ConstantsConfig(BaseSettings):
 
     prompt_path: Path = get_resource_path("prompt")
     default_concept_prompt: str = get_resource_file_content(prompt_path / "concept.txt")
-    default_metadata_prompt: str = get_resource_file_content(prompt_path / "metadata.txt")
+    default_metadata_prompt: str = get_resource_file_content(
+        prompt_path / "metadata.txt"
+    )
     default_icon_prompt: str = get_resource_file_content(prompt_path / "icon.txt")
 
     icon_path: Path = get_resource_path("icon.ico")

@@ -1,4 +1,3 @@
-from config.constants import constants_config
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -10,6 +9,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from config.constants import constants_config
 from config.preferences import ValueSource
 
 
@@ -60,7 +60,7 @@ class SystemCustomTextEditor(QWidget):
         self.group.buttonToggled.connect(self.on_source_changed)
         source_to_button = {
             ValueSource.SYSTEM: self.system_button,
-            ValueSource.CUSTOM: self.custom_button
+            ValueSource.CUSTOM: self.custom_button,
         }
         source_to_button[self.source].setChecked(True)
 

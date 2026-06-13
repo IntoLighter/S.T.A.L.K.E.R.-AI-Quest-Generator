@@ -1,6 +1,3 @@
-from config.app import app_config
-from config.constants import constants_config
-from config.preferences import PreferencesConfig
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import (
@@ -10,6 +7,9 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
+from config.app import app_config
+from config.constants import constants_config
+from config.preferences import PreferencesConfig
 from ui.configurator import ConfiguratorDialog
 from ui.main.widget import MainWidget
 from ui.preferences.main import PreferencesDialog
@@ -31,7 +31,7 @@ class MainWindow(QMainWindow):
 
         self.set_menubar()
 
-    def set_menubar(self):
+    def set_menubar(self) -> None:
         menubar = self.menuBar()
 
         file_menu = menubar.addMenu("Файл")
@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
 
     def get_configurator(self) -> QAction:
         action = QAction("Конфигуратор", self)
-        action.setShortcuts((QKeySequence("Ctrl+s")))
+        action.setShortcuts(QKeySequence("Ctrl+s"))
         action.triggered.connect(self.show_configurator)
         return action
 

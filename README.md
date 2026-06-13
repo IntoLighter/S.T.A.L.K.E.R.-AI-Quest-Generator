@@ -2,8 +2,8 @@
 
 # Text Generation
 
-The application provides two text generation modes: local and remote.  
-Higher quality results are achieved when using larger models.  
+The application provides two text generation modes: local and remote.
+Higher quality results are achieved when using larger models.
 The generation type is selected in the application settings.
 
 ## Local Text Generation
@@ -21,7 +21,7 @@ ollama --version
 
 It is recommended to use top-performing models from leaderboards:
 
-https://artificialanalysis.ai/leaderboards/models?weights=open  
+https://artificialanalysis.ai/leaderboards/models?weights=open<br>
 https://llm-stats.com/leaderboards/open-llm-leaderboard
 
 Example download:
@@ -37,13 +37,13 @@ Launch Ollama from the Start menu.
 
 ### Installing LLM API Key Proxy
 
-Download and extract:  
+Download and extract:
 https://github.com/Mirrowel/LLM-API-Key-Proxy/releases/tag/main%2Fbuild-20260123-1-bf7ab7e
 
 ### Obtaining an API Key
 
-Get an API key from any provider and enter it into the application.  
-More details here:  
+Get an API key from any provider and enter it into the application.
+More details here:
 https://github.com/danclave/TALKER/blob/main/docs/Free_Models_Guide.md
 
 # Icon Generation
