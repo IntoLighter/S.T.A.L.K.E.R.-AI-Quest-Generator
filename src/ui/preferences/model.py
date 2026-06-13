@@ -1,21 +1,19 @@
-from PySide6.QtCore import Slot, Qt
-
-from config.constants import constants_config
-from config.preferences import PreferencesConfig, ModelType
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import (
-    QVBoxLayout,
-    QWidget,
-    QHBoxLayout,
     QButtonGroup,
-    QRadioButton,
-    QLineEdit,
-    QPushButton,
+    QComboBox,
+    QHBoxLayout,
     QLabel,
+    QPushButton,
+    QRadioButton,
     QSlider,
     QTextEdit,
 )
 
-from config.text import text_config
+from config.constants import constants_config
+from config.preferences import ModelType, PreferencesConfig
+from generation.model.local import LocalModel
+from generation.model.remote import RemoteModel
 from misc import get_layout_with_scroll
 from ui.preferences.tab import Tab
 
@@ -44,32 +42,22 @@ class ModelTab(Tab):
         row.addWidget(self.local_model_button)
         row.addWidget(self.remote_model_button)
 
-        self.local_model_parameters = QWidget()
-        self.layout.addWidget(self.local_model_parameters)
-        column = QVBoxLayout(self.local_model_parameters)
-        column.setContentsMargins(0, 0, 0, 0)
-        row = QHBoxLayout()
-        column.addLayout(row)
-        self.local_model_editor = QLineEdit(self.preferences_config.local_model)
-        row.addWidget(self.local_model_editor)
-        reset_button = QPushButton("Сбросить")
-        reset_button.clicked.connect(self.reset_local_model)
-        row.addWidget(reset_button)
+        self.local_model_dropdown = QComboBox()
+        model = LocalModel(preferences_config)
+        self.local_model_dropdown.addItems(model.get_models())
+        index = self.local_model_dropdown.findText(preferences_config.local_model)
+        self.local_model_dropdown.setCurrentIndex(index)
+        self.layout.addWidget(self.local_model_dropdown)
 
-        self.remote_model_parameters = QWidget()
-        self.layout.addWidget(self.remote_model_parameters)
-        column = QVBoxLayout(self.remote_model_parameters)
-        column.setContentsMargins(0, 0, 0, 0)
-        row = QHBoxLayout()
-        column.addLayout(row)
-        self.remote_model_editor = QLineEdit(self.preferences_config.remote_model)
-        row.addWidget(self.remote_model_editor)
-        reset_button = QPushButton("Сбросить")
-        reset_button.clicked.connect(self.reset_remote_model)
-        row.addWidget(reset_button)
+        self.remote_model_dropdown = QComboBox()
+        model = RemoteModel(preferences_config)
+        self.remote_model_dropdown.addItems(model.get_models())
+        index = self.remote_model_dropdown.findText(preferences_config.remote_model)
+        self.remote_model_dropdown.setCurrentIndex(index)
+        self.layout.addWidget(self.remote_model_dropdown)
 
-        self.group.buttonToggled.connect(self.update_parameters)
-        self.update_parameters()
+        self.group.buttonToggled.connect(self.update_text_model_dropdown)
+        self.update_text_model_dropdown()
 
         row = QHBoxLayout()
         self.layout.addLayout(row)
@@ -135,26 +123,18 @@ class ModelTab(Tab):
         self.layout.addStretch()
 
     @Slot()
-    def reset_local_model(self):
-        self.local_model_editor.setText(text_config.default_local_model)
-
-    @Slot()
-    def reset_remote_model(self):
-        self.remote_model_editor.setText(text_config.default_remote_model)
-
-    @Slot()
-    def update_parameters(self):
-        button_to_parameters = {
-            self.local_model_button: self.local_model_parameters,
-            self.remote_model_button: self.remote_model_parameters,
+    def update_text_model_dropdown(self):
+        button_to_dropdown = {
+            self.local_model_button: self.local_model_dropdown,
+            self.remote_model_button: self.remote_model_dropdown,
         }
 
-        current_parameters = button_to_parameters[self.group.checkedButton()]
-        other_parameters = next(
-            v for v in button_to_parameters.values() if v != current_parameters
+        current_dropdown = button_to_dropdown[self.group.checkedButton()]
+        other_dropdown = next(
+            v for v in button_to_dropdown.values() if v != current_dropdown
         )
-        current_parameters.show()
-        other_parameters.hide()
+        current_dropdown.show()
+        other_dropdown.hide()
 
     @Slot(int)
     def update_concept_temperature_label(self, value: int) -> None:
@@ -187,8 +167,8 @@ class ModelTab(Tab):
         }
         self.preferences_config.model_type = button_to_type[self.group.checkedButton()]
 
-        self.preferences_config.local_model = self.local_model_editor.text()
-        self.preferences_config.remote_model = self.remote_model_editor.text()
+        self.preferences_config.local_model = self.local_model_dropdown.currentText()
+        self.preferences_config.remote_model = self.remote_model_dropdown.currentText()
 
         self.preferences_config.concept_temperature = (
             self.concept_temperature_slider.value() / 100
