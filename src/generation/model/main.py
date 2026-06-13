@@ -1,8 +1,9 @@
 ﻿from typing import Iterator
 
 from loguru import logger
-from openai import BaseModel, OpenAI
+from openai import OpenAI
 from openai.types.chat import ChatCompletionMessageParam
+from pydantic import BaseModel
 
 
 class Model:
