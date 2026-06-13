@@ -4,8 +4,8 @@ from PySide6.QtWidgets import (
     QButtonGroup,
     QHBoxLayout,
     QLabel,
+    QPlainTextEdit,
     QRadioButton,
-    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -46,7 +46,7 @@ class SystemCustomTextEditor(QWidget):
         self.group.addButton(self.custom_button)
         row.addWidget(self.custom_button)
 
-        self.editor = QTextEdit()
+        self.editor = QPlainTextEdit()
         mode_to_content = {
             ValueSource.SYSTEM: self.system_content,
             ValueSource.CUSTOM: self.custom_content,

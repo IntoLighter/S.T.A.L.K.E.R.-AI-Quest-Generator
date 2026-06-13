@@ -22,8 +22,8 @@ from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import (
     QLabel,
     QMessageBox,
+    QPlainTextEdit,
     QPushButton,
-    QTextEdit,
     QWidget,
 )
 
@@ -107,7 +107,7 @@ class MainWidget(QWidget):
         self.worker.start()
 
     @property
-    def output_editors(self) -> list[QTextEdit | QLabel]:
+    def output_editors(self) -> list[QPlainTextEdit | QLabel]:
         return [
             self.concept_editor,
             self.metadata_editor,
@@ -146,7 +146,7 @@ class MainWidget(QWidget):
     def show_icon_prompt_chunk(self, response: str) -> None:
         self.show_stream_response(self.icon_prompt_editor, response)
 
-    def show_stream_response(self, editor: QTextEdit, response: str) -> None:
+    def show_stream_response(self, editor: QPlainTextEdit, response: str) -> None:
         user_cursor = editor.textCursor()
         vertical_scroll_pos = editor.verticalScrollBar().value()
 
@@ -200,42 +200,42 @@ class MainWidget(QWidget):
     def add_output_editors(self) -> None:
         label = QLabel("Концепт")
         self.layout.addWidget(label)
-        self.concept_editor = QTextEdit()
+        self.concept_editor = QPlainTextEdit()
         self.concept_editor.setReadOnly(True)
         self.concept_editor.setMinimumHeight(constants_config.concept_height)
         self.layout.addWidget(self.concept_editor, constants_config.concept_stretch)
 
         label = QLabel("Метаданные")
         self.layout.addWidget(label)
-        self.metadata_editor = QTextEdit()
+        self.metadata_editor = QPlainTextEdit()
         self.metadata_editor.setReadOnly(True)
         self.metadata_editor.setMinimumHeight(constants_config.metadata_height)
         self.layout.addWidget(self.metadata_editor, constants_config.metadata_stretch)
 
         label = QLabel("Задание")
         self.layout.addWidget(label)
-        self.task_editor = QTextEdit()
+        self.task_editor = QPlainTextEdit()
         self.task_editor.setReadOnly(True)
         self.task_editor.setMinimumHeight(constants_config.editor_height)
         self.layout.addWidget(self.task_editor, constants_config.editor_stretch)
 
         label = QLabel("Описание")
         self.layout.addWidget(label)
-        self.article_editor = QTextEdit()
+        self.article_editor = QPlainTextEdit()
         self.article_editor.setReadOnly(True)
         self.article_editor.setMinimumHeight(constants_config.editor_height)
         self.layout.addWidget(self.article_editor, constants_config.editor_stretch)
 
         label = QLabel("Инфопоршни")
         self.layout.addWidget(label)
-        self.infoportions_editor = QTextEdit()
+        self.infoportions_editor = QPlainTextEdit()
         self.infoportions_editor.setReadOnly(True)
         self.infoportions_editor.setMinimumHeight(constants_config.editor_height)
         self.layout.addWidget(self.infoportions_editor, constants_config.editor_stretch)
 
         label = QLabel("Промпт иконки")
         self.layout.addWidget(label)
-        self.icon_prompt_editor = QTextEdit()
+        self.icon_prompt_editor = QPlainTextEdit()
         self.icon_prompt_editor.setReadOnly(True)
         self.icon_prompt_editor.setMinimumHeight(constants_config.icon_prompt_height)
         self.layout.addWidget(self.icon_prompt_editor, constants_config.icon_prompt_stretch)

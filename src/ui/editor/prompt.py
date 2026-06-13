@@ -9,8 +9,8 @@ from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
     QLabel,
+    QPlainTextEdit,
     QPushButton,
-    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -63,7 +63,7 @@ class PromptEditor(QWidget):
     def add_prompt_editor(self) -> None:
         label = QLabel("Промпт")
         self.layout.addWidget(label)
-        self.prompt_editor = QTextEdit()
+        self.prompt_editor = QPlainTextEdit()
         self.prompt_editor.setPlainText(self.preferences_config.prompt_message)
         self.prompt_editor.setMinimumHeight(constants_config.editor_height)
         self.layout.addWidget(self.prompt_editor, constants_config.editor_stretch)

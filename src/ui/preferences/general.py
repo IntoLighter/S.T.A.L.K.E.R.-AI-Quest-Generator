@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QLineEdit,
     QPushButton,
-    QTextEdit,
+    QPlainTextEdit,
     QVBoxLayout,
 )
 
@@ -69,7 +69,7 @@ class GeneralTab(Tab):
         label = QLabel("Шаблон промпта")
         row.addWidget(label)
 
-        self.prompt_template_editor = QTextEdit()
+        self.prompt_template_editor = QPlainTextEdit()
         self.prompt_template_editor.setPlainText(self.preferences_config.prompt_message)
         row.addWidget(self.prompt_template_editor, stretch=1)
 

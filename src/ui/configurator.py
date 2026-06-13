@@ -8,8 +8,8 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QHBoxLayout,
     QLabel,
+    QPlainTextEdit,
     QPushButton,
-    QTextEdit,
     QWidget,
 )
 
@@ -41,7 +41,7 @@ class ConfiguratorDialog(QWindowDialog):
         )
         row.addWidget(self.should_generate_concept_editor)
         row.addStretch()
-        self.concept_editor = QTextEdit()
+        self.concept_editor = QPlainTextEdit()
         self.concept_editor.setPlainText(self.preferences_config.configurator_concept)
         self.concept_editor.setMinimumHeight(constants_config.concept_height)
         self.layout.addWidget(self.concept_editor, constants_config.concept_stretch)
@@ -58,7 +58,7 @@ class ConfiguratorDialog(QWindowDialog):
         )
         row.addWidget(self.should_generate_metadata_editor)
         row.addStretch()
-        self.metadata_editor = QTextEdit()
+        self.metadata_editor = QPlainTextEdit()
         self.metadata_editor.setPlainText(self.preferences_config.configurator_metadata)
         self.metadata_editor.setMinimumHeight(constants_config.metadata_height)
         self.layout.addWidget(self.metadata_editor, constants_config.metadata_stretch)
@@ -75,7 +75,7 @@ class ConfiguratorDialog(QWindowDialog):
         )
         row.addWidget(self.should_generate_icon_editor)
         row.addStretch()
-        self.icon_prompt_editor = QTextEdit()
+        self.icon_prompt_editor = QPlainTextEdit()
         self.icon_prompt_editor.setPlainText(
             self.preferences_config.configurator_icon_prompt
         )
