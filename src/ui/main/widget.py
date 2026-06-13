@@ -66,7 +66,7 @@ class MainWidget(QWidget):
         logger.info("Normal generation started")
 
         self.worker = NormalWorker(
-            self.preferences_config, self.get_model, self.prompt_editor.prompt
+            self.preferences_config, self.model, self.prompt_editor.prompt
         )
         self.generate_quest()
 
@@ -75,14 +75,14 @@ class MainWidget(QWidget):
 
         self.worker = ConfiguratorWorker(
             self.preferences_config,
-            self.get_model,
+            self.model,
             parameters.prompt,
             parameters,
         )
         self.generate_quest()
 
     @property
-    def get_model(self):
+    def model(self):
         type_to_value = {
             ModelType.Local: LocalModel(self.preferences_config),
             ModelType.Remote: RemoteModel(self.preferences_config),
