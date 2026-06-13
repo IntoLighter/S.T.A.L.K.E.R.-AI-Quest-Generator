@@ -117,10 +117,7 @@ class Worker(QThread):
 
         metadata = ""
 
-        for token in self.text_model.generate(
-            messages,
-            response_format={"type": "json_object"},
-        ):
+        for token in self.text_model.generate(messages, schema=Metadata):
             if self.isInterruptionRequested():
                 return
 

@@ -1,7 +1,7 @@
 ﻿from typing import Iterator
 
 from loguru import logger
-from openai import OpenAI
+from openai import BaseModel, OpenAI
 from openai.types.chat import ChatCompletionMessageParam
 
 
@@ -11,11 +11,30 @@ class Model:
         self.model = model
 
     def generate(
-        self, messages: list[ChatCompletionMessageParam], retries: int = 2, **kwargs
+        self,
+        messages: list[ChatCompletionMessageParam],
+        schema: BaseModel | None = None,
+        retries: int = 2,
+        **kwargs,
     ) -> Iterator[str]:
+        if schema:
+            kwargs["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": schema.__name__,
+                    "strict": True,
+                    "schema": schema.model_json_schema(),
+                },
+            }
+
         stream = self.client.with_options(max_retries=retries).chat.completions.create(
-            model=self.model, messages=messages, stream=True, reasoning_effort="none", **kwargs
+            model=self.model,
+            messages=messages,
+            stream=True,
+            reasoning_effort="none",
+            **kwargs,
         )
+
         for response in stream:
             yield response.choices[0].delta.content or ""
 
