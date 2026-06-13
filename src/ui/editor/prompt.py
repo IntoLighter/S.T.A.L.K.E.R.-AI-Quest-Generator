@@ -72,3 +72,8 @@ class PromptEditor(QWidget):
     @property
     def prompt(self) -> str:
         return self.prompt_editor.toPlainText()
+
+    @prompt.setter
+    def prompt(self, value: str) -> None:
+        self.prompt_editor.insertPlainText(value)
+        self.prompt_editor.moveCursor(QTextCursor.MoveOperation.Start)

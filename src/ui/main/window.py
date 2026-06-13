@@ -60,6 +60,7 @@ class MainWindow(QMainWindow):
         dialog = ConfiguratorDialog(self, self.preferences_config)
         result = dialog.exec()
         if result == QDialog.DialogCode.Accepted:
+            self.main_widget.prompt_editor.prompt = dialog.parameters.prompt
             self.main_widget.generate_quest_configurator(dialog.parameters)
 
     def get_settings(self) -> QAction:
