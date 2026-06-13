@@ -67,8 +67,6 @@ class ModelTab(Tab):
         )
         self.layout.addWidget(self.icon_workflow_editor)
 
-        self.layout.addStretch()
-
     @Slot()
     def update_text_model_dropdown(self):
         button_to_dropdown = {
