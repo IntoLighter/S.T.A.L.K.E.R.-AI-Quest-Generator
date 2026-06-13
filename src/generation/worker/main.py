@@ -232,21 +232,21 @@ class Worker(QThread):
 
         try:
             quest_prompt_path = quest_path / "prompt.txt"
-            quest_prompt_path.write_text(self.quest_prompt, encoding="cp1251")
+            quest_prompt_path.write_text(self.quest_prompt, encoding="utf-8")
         except Exception as e:
             self.handle_unknown_exception(e)
 
         if result.concept:
             try:
                 concept_path = quest_path / "concept.txt"
-                concept_path.write_text(result.concept, encoding="cp1251")
+                concept_path.write_text(result.concept, encoding="utf-8")
             except Exception as e:
                 self.handle_unknown_exception(e)
 
         if result.metadata_text:
             try:
                 metadata_path = quest_path / "metadata.json"
-                metadata_path.write_text(result.metadata_text, encoding="cp1251")
+                metadata_path.write_text(result.metadata_text, encoding="utf-8")
             except Exception as e:
                 self.handle_unknown_exception(e)
 
@@ -274,7 +274,7 @@ class Worker(QThread):
         if result.icon_prompt:
             try:
                 icon_prompt_path = quest_path / "icon_prompt.txt"
-                icon_prompt_path.write_text(result.icon_prompt, encoding="cp1251")
+                icon_prompt_path.write_text(result.icon_prompt, encoding="utf-8")
             except Exception as e:
                 self.handle_unknown_exception(e)
 
