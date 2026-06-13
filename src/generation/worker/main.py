@@ -94,11 +94,7 @@ class Worker(QThread):
 
         concept = ""
 
-        for token in self.text_model.generate(
-            messages,
-            temperature=self.preferences_config.concept_temperature,
-            top_p=self.preferences_config.concept_top_p,
-        ):
+        for token in self.text_model.generate(messages):
             if self.isInterruptionRequested():
                 return
 
@@ -124,7 +120,6 @@ class Worker(QThread):
         for token in self.text_model.generate(
             messages,
             response_format={"type": "json_object"},
-            temperature=0,
         ):
             if self.isInterruptionRequested():
                 return
@@ -174,7 +169,7 @@ class Worker(QThread):
 
         icon_prompt = ""
 
-        for token in self.text_model.generate(messages, temperature=0):
+        for token in self.text_model.generate(messages):
             if self.isInterruptionRequested():
                 return
 

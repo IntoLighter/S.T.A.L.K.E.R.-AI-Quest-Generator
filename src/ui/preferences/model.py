@@ -1,12 +1,10 @@
-from PySide6.QtCore import Qt, Slot
+from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QButtonGroup,
     QComboBox,
     QHBoxLayout,
     QLabel,
-    QPushButton,
     QRadioButton,
-    QSlider,
 )
 
 from config.constants import constants_config
@@ -59,50 +57,6 @@ class ModelTab(Tab):
         self.group.buttonToggled.connect(self.update_text_model_dropdown)
         self.update_text_model_dropdown()
 
-        row = QHBoxLayout()
-        self.layout.addLayout(row)
-        label = QLabel("Температура концепта")
-        row.addWidget(label)
-        self.concept_temperature_slider = QSlider(Qt.Horizontal)
-        self.concept_temperature_slider.setRange(0, 200)
-        self.concept_temperature_slider.setSingleStep(5)
-        self.concept_temperature_slider.setPageStep(10)
-        self.concept_temperature_slider.setValue(
-            int(self.preferences_config.concept_temperature * 100)
-        )
-        row.addWidget(self.concept_temperature_slider)
-        self.concept_temperature_label = QLabel(
-            f"{self.preferences_config.concept_temperature:.2f}"
-        )
-        row.addWidget(self.concept_temperature_label)
-        self.concept_temperature_slider.valueChanged.connect(
-            self.update_concept_temperature_label
-        )
-        reset_button = QPushButton("Сбросить")
-        reset_button.clicked.connect(self.reset_concept_temperature)
-        row.addWidget(reset_button)
-
-        row = QHBoxLayout()
-        self.layout.addLayout(row)
-        label = QLabel("Top-p концепта")
-        row.addWidget(label)
-        self.concept_top_p_slider = QSlider(Qt.Horizontal)
-        self.concept_top_p_slider.setRange(0, 100)
-        self.concept_top_p_slider.setSingleStep(5)
-        self.concept_top_p_slider.setPageStep(10)
-        self.concept_top_p_slider.setValue(
-            int(self.preferences_config.concept_top_p * 100)
-        )
-        row.addWidget(self.concept_top_p_slider)
-        self.concept_top_p_label = QLabel(
-            f"{self.preferences_config.concept_top_p:.2f}"
-        )
-        row.addWidget(self.concept_top_p_label)
-        self.concept_top_p_slider.valueChanged.connect(self.update_concept_top_p_label)
-        reset_button = QPushButton("Сбросить")
-        reset_button.clicked.connect(self.reset_concept_top_p)
-        row.addWidget(reset_button)
-
         self.icon_workflow_editor = SystemCustomTextEditor(
             label="Workflow иконки",
             source=self.preferences_config.icon_workflow_source,
@@ -129,26 +83,6 @@ class ModelTab(Tab):
         current_dropdown.show()
         other_dropdown.hide()
 
-    @Slot(int)
-    def update_concept_temperature_label(self, value: int) -> None:
-        self.concept_temperature_label.setText(f"{value / 100:.2f}")
-
-    @Slot()
-    def reset_concept_temperature(self) -> None:
-        self.concept_temperature_slider.setValue(
-            int(constants_config.default_concept_temperature * 100)
-        )
-
-    @Slot(int)
-    def update_concept_top_p_label(self, value: int) -> None:
-        self.concept_top_p_label.setText(f"{value / 100:.2f}")
-
-    @Slot()
-    def reset_concept_top_p(self) -> None:
-        self.concept_top_p_slider.setValue(
-            int(constants_config.default_concept_top_p * 100)
-        )
-
     def save(self) -> None:
         button_to_type = {
             self.local_model_button: ModelType.Local,
@@ -158,12 +92,6 @@ class ModelTab(Tab):
 
         self.preferences_config.local_model = self.local_model_dropdown.currentText()
         self.preferences_config.remote_model = self.remote_model_dropdown.currentText()
-
-        self.preferences_config.concept_temperature = (
-            self.concept_temperature_slider.value() / 100
-        )
-
-        self.preferences_config.concept_top_p = self.concept_top_p_slider.value() / 100
 
         self.preferences_config.icon_workflow_source = self.icon_workflow_editor.source
         self.preferences_config.custom_icon_workflow = self.icon_workflow_editor.custom_content

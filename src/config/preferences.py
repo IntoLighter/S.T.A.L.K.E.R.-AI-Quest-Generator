@@ -46,9 +46,6 @@ class PreferencesConfig(BaseSettings):
 
         return type_to_value[self.model_type]
 
-    concept_temperature: float = constants_config.default_concept_temperature
-    concept_top_p: float = constants_config.default_concept_top_p
-
     icon_workflow_source: ValueSource = ValueSource.SYSTEM
     custom_icon_workflow: str = constants_config.default_icon_workflow
 

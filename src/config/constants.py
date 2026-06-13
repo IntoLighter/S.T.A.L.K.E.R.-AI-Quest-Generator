@@ -32,9 +32,6 @@ class ConstantsConfig(BaseSettings):
     icon_workflow_path: Path = get_resource_path("generation/icon.json")
     default_icon_workflow: str = get_resource_file_content(icon_workflow_path)
 
-    default_concept_temperature: float = 0.7
-    default_concept_top_p: float = 0.9
-
     @computed_field
     def config_path(self) -> Path:
         path = Path(
