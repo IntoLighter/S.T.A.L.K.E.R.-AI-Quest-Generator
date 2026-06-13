@@ -31,7 +31,7 @@ class Worker(QThread):
     icon_ready = Signal(IconRecords)
     status_update = Signal(str)
     error_occurred = Signal(ErrorInfo)
-    unknown_error_occured = Signal(str)
+    unknown_error_occurred = Signal(str)
 
     def __init__(
         self, preferences_config: PreferencesConfig, text_model: Model, prompt: str
@@ -77,7 +77,7 @@ class Worker(QThread):
 
     def handle_unknown_exception(self, e: Exception) -> None:
         logger.exception(e)
-        self.unknown_error_occured.emit(traceback.format_exc())
+        self.unknown_error_occurred.emit(traceback.format_exc())
 
     @log_execution
     def create_concept(self) -> str | None:

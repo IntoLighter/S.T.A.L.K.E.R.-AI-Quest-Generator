@@ -102,7 +102,7 @@ class MainWidget(QWidget):
         self.worker.icon_prompt_chunk_ready.connect(self.show_icon_prompt_chunk)
         self.worker.icon_ready.connect(self.show_icon)
         self.worker.error_occurred.connect(self.show_generation_error)
-        self.worker.unknown_error_occured.connect(self.show_generation_unknown_error)
+        self.worker.unknown_error_occurred.connect(self.show_generation_unknown_error)
         self.worker.finished.connect(self.worker_complete)
         self.worker.start()
 
