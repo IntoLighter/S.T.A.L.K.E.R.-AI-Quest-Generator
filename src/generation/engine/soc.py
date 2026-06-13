@@ -69,10 +69,14 @@ class SoCObjectFactory:
         title_id = cls._xml_attr(title_english)
         title_id_text = cls._xml_text(title_english)
         return f"""
-<info_portion id="{title_id}_start_info">
-    <task>{title_id_text}</task>
-</info_portion>
-<info_portion id="{title_id}_done_info"></info_portion>
+<game_information_portions>
+
+    <info_portion id="{title_id}_start_info">
+        <task>{title_id_text}</task>
+    </info_portion>
+    <info_portion id="{title_id}_done_info"></info_portion>
+
+</game_information_portions>
         """.strip()
 
     @classmethod
