@@ -188,12 +188,18 @@ class Worker(QThread):
         self.status_update.emit("Генерация иконки")
 
         kit = ComfyKit(comfyui_url="http://127.0.0.1:8188")
-        result = asyncio.run(
-            kit.execute_json(
-                json.loads(self.preferences_config.icon_workflow),
-                {"prompt": icon_prompt},
+
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            result = loop.run_until_complete(
+                kit.execute_json(
+                    json.loads(self.preferences_config.icon_workflow),
+                    {"prompt": icon_prompt},
+                )
             )
-        )
+        finally:
+            loop.close()
 
         if result.status == "error":
             raise AppError(f"Возникла ошибка генерации изображения: {result.msg}.")
