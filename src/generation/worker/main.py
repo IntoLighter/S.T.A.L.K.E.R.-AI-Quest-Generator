@@ -28,7 +28,7 @@ class Worker(QThread):
     metadata_chunk_ready = Signal(str)
     game_records_ready = Signal(GameRecords)
     icon_prompt_chunk_ready = Signal(str)
-    icon_ready = Signal(Image.Image)
+    icon_ready = Signal(IconRecords)
     status_update = Signal(str)
     error_occurred = Signal(ErrorInfo)
     unknown_error_occured = Signal(str)
@@ -204,7 +204,7 @@ class Worker(QThread):
 
         icon_soc = SoCObjectFactory.create_icon(icon)
         icon_records = IconRecords(icon, icon_soc)
-        self.icon_ready.emit(icon_soc)
+        self.icon_ready.emit(icon_records)
 
         return icon_records
 

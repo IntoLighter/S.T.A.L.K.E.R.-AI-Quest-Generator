@@ -4,7 +4,7 @@ from pydantic.type_adapter import P
 from config.constants import constants_config
 from config.preferences import ModelType, PreferencesConfig
 from config.text import text_config
-from generation.entity import ConfiguratorParameters, GameRecords
+from generation.entity import ConfiguratorParameters, GameRecords, IconRecords
 from generation.model.local import LocalModel
 from generation.model.remote import RemoteModel
 from generation.worker.configurator import ConfiguratorWorker
@@ -94,6 +94,7 @@ class MainWidget(QWidget):
         self.set_generate_button_stop()
         for editor in self.output_editors:
             editor.clear()
+        self.icon_soc_editor.clear()
         self.icon_editor.clear()
 
         self.worker.status_update.connect(self.main_window.show_status)
@@ -168,9 +169,10 @@ class MainWidget(QWidget):
             editor.insertPlainText(record)
             editor.moveCursor(QTextCursor.MoveOperation.Start)
 
-    @Slot(Image.Image)
-    def show_icon(self, icon: Image.Image) -> None:
-        self.icon_editor.setPixmap(get_pixmap(icon))
+    @Slot(IconRecords)
+    def show_icon(self, icon_records: IconRecords) -> None:
+        self.icon_editor.setPixmap(get_pixmap(icon_records.icon))
+        self.icon_soc_editor.setPixmap(get_pixmap(icon_records.icon_soc))
 
     @Slot(ErrorInfo)
     def show_generation_error(self, error_result: ErrorInfo) -> None:
@@ -241,5 +243,7 @@ class MainWidget(QWidget):
 
         label = QLabel("Иконка")
         self.layout.addWidget(label)
+        self.icon_soc_editor = QLabel()
+        self.layout.addWidget(self.icon_soc_editor)
         self.icon_editor = QLabel()
         self.layout.addWidget(self.icon_editor)
