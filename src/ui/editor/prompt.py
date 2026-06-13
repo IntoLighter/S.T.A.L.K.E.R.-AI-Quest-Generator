@@ -21,6 +21,7 @@ class PromptEditor(QWidget):
         super().__init__()
         self.preferences_config = preferences_config
         self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
 
         self.add_parameters_editor()
         self.add_prompt_editor()
