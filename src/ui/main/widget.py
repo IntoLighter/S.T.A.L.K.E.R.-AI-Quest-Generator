@@ -94,8 +94,6 @@ class MainWidget(QWidget):
         self.set_generate_button_stop()
         for editor in self.output_editors:
             editor.clear()
-        self.icon_soc_editor.clear()
-        self.icon_editor.clear()
 
         self.worker.status_update.connect(self.main_window.show_status)
         self.worker.concept_chunk_ready.connect(self.show_concept_chunk)
@@ -109,7 +107,7 @@ class MainWidget(QWidget):
         self.worker.start()
 
     @property
-    def output_editors(self) -> list[QTextEdit]:
+    def output_editors(self) -> list[QTextEdit | QLabel]:
         return [
             self.concept_editor,
             self.metadata_editor,
@@ -117,6 +115,8 @@ class MainWidget(QWidget):
             self.article_editor,
             self.infoportions_editor,
             self.icon_prompt_editor,
+            self.icon_soc_editor,
+            self.icon_editor
         ]
 
     def set_generate_button_stop(self) -> None:
