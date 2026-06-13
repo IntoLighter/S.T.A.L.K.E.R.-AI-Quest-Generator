@@ -258,13 +258,13 @@ class Worker(QThread):
                 self.handle_unknown_exception(e)
 
             try:
-                article_path = quest_path / "article.xml"
+                article_path = quest_path / "storyline_info.xml"
                 article_path.write_text(result.game_records.article, encoding="cp1251")
             except Exception as e:
                 self.handle_unknown_exception(e)
 
             try:
-                infoportions_path = quest_path / "infoportions.xml"
+                infoportions_path = quest_path / "info.xml"
                 infoportions_path.write_text(
                     result.game_records.infoportions, encoding="cp1251"
                 )
