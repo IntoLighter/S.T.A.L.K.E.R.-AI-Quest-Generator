@@ -46,15 +46,6 @@ class MainWidget(QWidget):
 
         self.add_output_editors()
 
-    def save_prompt(self) -> None:
-        self.preferences_config.prompt_message = self.prompt_editor.prompt
-        self.preferences_config.save()
-
-    @Slot()
-    def reset(self) -> None:
-        self.prompt_editor.clear()
-        self.prompt_editor.insertPlainText(self.preferences_config.prompt_message)
-
     @Slot()
     def generate_quest_normal(self) -> None:
         if not self.preferences_config.current_model:
