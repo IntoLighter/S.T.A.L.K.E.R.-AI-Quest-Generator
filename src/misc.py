@@ -1,4 +1,5 @@
-﻿import sys
+﻿from dataclasses import dataclass
+import sys
 from functools import wraps
 from pathlib import Path
 
@@ -90,5 +91,11 @@ def show_settings_error(parent: QWidget, text: str) -> None:
     QMessageBox.warning(parent, "Ошибка настроек", text)
 
 
-class AppError(Exception):
+class IconGenerationError(Exception):
     pass
+
+
+@dataclass
+class ErrorInfo:
+    msg: str
+    details: str

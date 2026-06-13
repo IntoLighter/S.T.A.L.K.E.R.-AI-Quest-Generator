@@ -20,7 +20,7 @@ def exception_hook(exc_type, exc_value, exc_traceback) -> None:
     stacktrace = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
     logger.exception(stacktrace)
     dialog = ExceptionDialog(stacktrace)
-    dialog.exec()
+    dialog.show()
 
 
 def on_app_stopped() -> None:

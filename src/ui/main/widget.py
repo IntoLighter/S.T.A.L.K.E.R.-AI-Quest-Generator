@@ -1,4 +1,5 @@
 from loguru import logger
+from pydantic.type_adapter import P
 
 from config.constants import constants_config
 from config.preferences import ModelType, PreferencesConfig
@@ -9,6 +10,7 @@ from generation.model.remote import RemoteModel
 from generation.worker.configurator import ConfiguratorWorker
 from generation.worker.normal import NormalWorker
 from misc import (
+    ErrorInfo,
     get_layout_with_scroll,
     get_pixmap,
     show_parameters_error,
@@ -170,14 +172,21 @@ class MainWidget(QWidget):
     def show_icon(self, icon: Image.Image) -> None:
         self.icon_editor.setPixmap(get_pixmap(icon))
 
-    @Slot(str)
-    def show_generation_error(self, error: str) -> None:
-        QMessageBox.warning(self, "Ошибка генерации", error)
+    @Slot(ErrorInfo)
+    def show_generation_error(self, error_result: ErrorInfo) -> None:
+        dialog = QMessageBox(
+            QMessageBox.Icon.Warning,
+            "Ошибка",
+            error_result.msg,
+            parent=self,
+            detailedText=error_result.details,
+        )
+        dialog.show()
 
     @Slot(str)
     def show_generation_unknown_error(self, stacktrace: str) -> None:
         dialog = ExceptionDialog(stacktrace, self)
-        dialog.exec()
+        dialog.show()
 
     @Slot()
     def worker_complete(self) -> None:

@@ -15,7 +15,8 @@ from generation.engine.soc import SoCObjectFactory
 from generation.entity import GameRecords, GenerationResult, IconRecords, Metadata
 from generation.model.main import Model
 from misc import (
-    AppError,
+    ErrorInfo,
+    IconGenerationError,
     get_unique_counter_name_path,
     get_unique_name_path,
     log_execution,
@@ -29,7 +30,7 @@ class Worker(QThread):
     icon_prompt_chunk_ready = Signal(str)
     icon_ready = Signal(Image.Image)
     status_update = Signal(str)
-    error_occurred = Signal(str)
+    error_occurred = Signal(ErrorInfo)
     unknown_error_occured = Signal(str)
 
     def __init__(
@@ -64,14 +65,16 @@ class Worker(QThread):
                 self.handle_exception(
                     e, "Ошибка генерации текста. Проверьте вывод программы генерации."
                 )
-            case AppError():
-                self.handle_exception(e, str(e))
+            case IconGenerationError():
+                self.handle_exception(e, "Возникла ошибка генерации изображения.", str(e))
             case _:
                 self.handle_unknown_exception(e)
 
-    def handle_exception(self, e: Exception, msg: str) -> None:
+    def handle_exception(self, e: Exception, msg: str, details: str | None = None) -> None:
+        if not details:
+            details = traceback.format_exc()
         logger.exception(e)
-        self.error_occurred.emit(msg)
+        self.error_occurred.emit(ErrorInfo(msg, details))
 
     def handle_unknown_exception(self, e: Exception) -> None:
         logger.exception(e)
@@ -194,7 +197,7 @@ class Worker(QThread):
             loop.close()
 
         if result.status == "error":
-            raise AppError(f"Возникла ошибка генерации изображения: {result.msg}.")
+            raise IconGenerationError(result.msg)
 
         response = requests.get(result.images[0])
         response.raise_for_status()

@@ -47,5 +47,5 @@ class ExceptionDialog:
 
         webbrowser.open(url)
 
-    def exec(self) -> None:
-        self.msg.exec()
+    def show(self) -> None:
+        self.msg.show()
