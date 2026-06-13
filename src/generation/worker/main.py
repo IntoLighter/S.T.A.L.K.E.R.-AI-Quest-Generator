@@ -230,6 +230,12 @@ class Worker(QThread):
 
         quest_path.mkdir(parents=True)
 
+        generation_path = quest_path / "generation"
+        generation_path.mkdir(parents=True)
+
+        gamedata_path = quest_path / "gamedata"
+        gamedata_path.mkdir(parents=True)
+
         try:
             quest_prompt_path = quest_path / "prompt.txt"
             quest_prompt_path.write_text(self.quest_prompt, encoding="utf-8")
@@ -238,33 +244,36 @@ class Worker(QThread):
 
         if result.concept:
             try:
-                concept_path = quest_path / "concept.txt"
+                concept_path = generation_path / "concept.txt"
                 concept_path.write_text(result.concept, encoding="utf-8")
             except Exception as e:
                 self.handle_unknown_exception(e)
 
         if result.metadata_text:
             try:
-                metadata_path = quest_path / "metadata.json"
+                metadata_path = generation_path / "metadata.json"
                 metadata_path.write_text(result.metadata_text, encoding="utf-8")
             except Exception as e:
                 self.handle_unknown_exception(e)
 
         if result.game_records:
+            game_records_path = gamedata_path / "config" / "gameplay"
+            game_records_path.mkdir(parents=True)
+
             try:
-                task_path = quest_path / "task.xml"
+                task_path = game_records_path / "task.xml"
                 task_path.write_text(result.game_records.task, encoding="cp1251")
             except Exception as e:
                 self.handle_unknown_exception(e)
 
             try:
-                article_path = quest_path / "storyline_info.xml"
+                article_path = game_records_path / "storyline_info.xml"
                 article_path.write_text(result.game_records.article, encoding="cp1251")
             except Exception as e:
                 self.handle_unknown_exception(e)
 
             try:
-                infoportions_path = quest_path / "info.xml"
+                infoportions_path = game_records_path / "info.xml"
                 infoportions_path.write_text(
                     result.game_records.infoportions, encoding="cp1251"
                 )
@@ -273,20 +282,23 @@ class Worker(QThread):
 
         if result.icon_prompt:
             try:
-                icon_prompt_path = quest_path / "icon_prompt.txt"
+                icon_prompt_path = generation_path / "icon_prompt.txt"
                 icon_prompt_path.write_text(result.icon_prompt, encoding="utf-8")
             except Exception as e:
                 self.handle_unknown_exception(e)
 
         if result.icon_records:
             try:
-                icon_path = quest_path / "icon.png"
+                icon_path = generation_path / "icon.png"
                 result.icon_records.icon.save(icon_path)
             except Exception as e:
                 self.handle_unknown_exception(e)
 
+            icon_path = gamedata_path / "texture" / "ui"
+            icon_path.mkdir(parents=True)
+
             try:
-                icon_soc_path = quest_path / "icon_soc.png"
+                icon_soc_path = icon_path / "icon.png"
                 result.icon_records.icon_soc.save(icon_soc_path)
             except Exception as e:
                 self.handle_unknown_exception(e)
