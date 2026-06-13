@@ -230,36 +230,63 @@ class Worker(QThread):
 
         quest_path.mkdir(parents=True)
 
-        quest_prompt_path = quest_path / "prompt.txt"
-        quest_prompt_path.write_text(self.quest_prompt, encoding="cp1251")
+        try:
+            quest_prompt_path = quest_path / "prompt.txt"
+            quest_prompt_path.write_text(self.quest_prompt, encoding="cp1251")
+        except Exception as e:
+            self.handle_unknown_exception(e)
 
         if result.concept:
-            concept_path = quest_path / "concept.txt"
-            concept_path.write_text(result.concept, encoding="cp1251")
+            try:
+                concept_path = quest_path / "concept.txt"
+                concept_path.write_text(result.concept, encoding="cp1251")
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
         if result.metadata_text:
-            metadata_path = quest_path / "metadata.json"
-            metadata_path.write_text(result.metadata_text, encoding="cp1251")
+            try:
+                metadata_path = quest_path / "metadata.json"
+                metadata_path.write_text(result.metadata_text, encoding="cp1251")
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
         if result.game_records:
-            task_path = quest_path / "task.xml"
-            task_path.write_text(result.game_records.task, encoding="cp1251")
+            try:
+                task_path = quest_path / "task.xml"
+                task_path.write_text(result.game_records.task, encoding="cp1251")
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
-            article_path = quest_path / "article.xml"
-            article_path.write_text(result.game_records.article, encoding="cp1251")
+            try:
+                article_path = quest_path / "article.xml"
+                article_path.write_text(result.game_records.article, encoding="cp1251")
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
-            infoportions_path = quest_path / "infoportions.xml"
-            infoportions_path.write_text(
-                result.game_records.infoportions, encoding="cp1251"
-            )
+            try:
+                infoportions_path = quest_path / "infoportions.xml"
+                infoportions_path.write_text(
+                    result.game_records.infoportions, encoding="cp1251"
+                )
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
         if result.icon_prompt:
-            icon_prompt_path = quest_path / "icon_prompt.txt"
-            icon_prompt_path.write_text(result.icon_prompt, encoding="cp1251")
+            try:
+                icon_prompt_path = quest_path / "icon_prompt.txt"
+                icon_prompt_path.write_text(result.icon_prompt, encoding="cp1251")
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
         if result.icon_records:
-            icon_path = quest_path / "icon.png"
-            result.icon_records.icon.save(icon_path)
+            try:
+                icon_path = quest_path / "icon.png"
+                result.icon_records.icon.save(icon_path)
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
-            icon_soc_path = quest_path / "icon_soc.png"
-            result.icon_records.icon_soc.save(icon_soc_path)
+            try:
+                icon_soc_path = quest_path / "icon_soc.png"
+                result.icon_records.icon_soc.save(icon_soc_path)
+            except Exception as e:
+                self.handle_unknown_exception(e)
