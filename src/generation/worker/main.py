@@ -227,8 +227,8 @@ class Worker(QThread):
         generation_path = quest_path / "generation"
         generation_path.mkdir(parents=True)
 
-        gamedata_path = quest_path / "gamedata"
-        gamedata_path.mkdir(parents=True)
+        resource_path = quest_path / "resource"
+        resource_path.mkdir(parents=True)
 
         try:
             quest_prompt_path = quest_path / "prompt.txt"
@@ -251,23 +251,20 @@ class Worker(QThread):
                 self.handle_unknown_exception(e)
 
         if result.game_records:
-            game_records_path = gamedata_path / "config" / "gameplay"
-            game_records_path.mkdir(parents=True)
-
             try:
-                task_path = game_records_path / "task.xml"
+                task_path = resource_path / "task.xml"
                 task_path.write_text(result.game_records.task, encoding="cp1251")
             except Exception as e:
                 self.handle_unknown_exception(e)
 
             try:
-                article_path = game_records_path / "storyline_info.xml"
+                article_path = resource_path / "storyline_info.xml"
                 article_path.write_text(result.game_records.article, encoding="cp1251")
             except Exception as e:
                 self.handle_unknown_exception(e)
 
             try:
-                infoportions_path = game_records_path / "info.xml"
+                infoportions_path = resource_path / "info.xml"
                 infoportions_path.write_text(
                     result.game_records.infoportions, encoding="cp1251"
                 )
@@ -288,11 +285,8 @@ class Worker(QThread):
             except Exception as e:
                 self.handle_unknown_exception(e)
 
-            icon_path = gamedata_path / "texture" / "ui"
-            icon_path.mkdir(parents=True)
-
             try:
-                icon_soc_path = icon_path / "icon.png"
+                icon_soc_path = resource_path / "icon.png"
                 result.icon_records.icon_soc.save(icon_soc_path)
             except Exception as e:
                 self.handle_unknown_exception(e)
