@@ -20,6 +20,7 @@ dependencies = [
 dev = [
     "commitizen>=4.16.3",
     "prek>=0.4.4",
+    "ruff>=0.15.17",
 ]
 
 [tool.commitizen]
@@ -30,3 +31,6 @@ version_provider = "scm"
 update_changelog_on_bump = true
 changelog_incremental = true
 breaking_change_exclamation_in_title = true
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "W", "C4", "ANN"]
