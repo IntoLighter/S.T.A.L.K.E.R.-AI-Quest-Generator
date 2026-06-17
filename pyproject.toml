@@ -34,3 +34,6 @@ breaking_change_exclamation_in_title = true
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "SIM", "W", "C4", "ANN"]
+
+[tool.typos.default.extend-words]
+datas = "datas"
