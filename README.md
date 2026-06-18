@@ -1,4 +1,4 @@
-# S.T.A.L.K.E.R. AI Quest Generator
+![Text logo](docs/image/text_logo.jpg)
 
 # Text Generation
 
