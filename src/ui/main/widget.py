@@ -143,28 +143,28 @@ class MainWidget(QWidget):
         self.generate_button.clicked.connect(self.generate_quest_normal)
 
     @Slot(str)
-    def show_concept_chunk(self, response: str) -> None:
-        self.show_stream_response(self.concept_editor, response)
+    def show_concept_chunk(self, chunk: str) -> None:
+        self.show_stream_chunk(self.concept_editor, chunk)
 
     @Slot(str)
-    def show_metadata_chunk(self, response: str) -> None:
-        self.show_stream_response(self.metadata_editor, response)
+    def show_metadata_chunk(self, chunk: str) -> None:
+        self.show_stream_chunk(self.metadata_editor, chunk)
 
     @Slot(str)
     def update_metadata(self, metadata: str) -> None:
         self.metadata_editor.setPlainText(metadata)
 
     @Slot(str)
-    def show_icon_prompt_chunk(self, response: str) -> None:
-        self.show_stream_response(self.icon_prompt_editor, response)
+    def show_icon_prompt_chunk(self, chunk: str) -> None:
+        self.show_stream_chunk(self.icon_prompt_editor, chunk)
 
-    def show_stream_response(self, editor: QPlainTextEdit, response: str) -> None:
+    def show_stream_chunk(self, editor: QPlainTextEdit, chunk: str) -> None:
         user_cursor = editor.textCursor()
         vertical_scroll_pos = editor.verticalScrollBar().value()
 
         end_cursor = QTextCursor(editor.document())
         end_cursor.movePosition(QTextCursor.MoveOperation.End)
-        end_cursor.insertText(response)
+        end_cursor.insertText(chunk)
 
         editor.setTextCursor(user_cursor)
         editor.verticalScrollBar().setValue(vertical_scroll_pos)
