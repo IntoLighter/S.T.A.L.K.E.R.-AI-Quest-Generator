@@ -1,6 +1,7 @@
 import asyncio
 import json
 import traceback
+from contextlib import suppress
 from io import BytesIO
 
 import openai
@@ -27,6 +28,7 @@ from misc import (
 class Worker(QThread):
     concept_chunk_ready = Signal(str)
     metadata_chunk_ready = Signal(str)
+    metadata_ready = Signal(str)
     game_records_ready = Signal(GameRecords)
     icon_prompt_chunk_ready = Signal(str)
     icon_ready = Signal(IconRecords)
@@ -131,6 +133,12 @@ class Worker(QThread):
 
             metadata += token
             self.metadata_chunk_ready.emit(token)
+
+        with suppress(Exception):
+            parsed = json.loads(metadata)
+            formatted = json.dumps(parsed, ensure_ascii=False, indent=2)
+            metadata = formatted
+            self.metadata_ready.emit(metadata)
 
         return metadata
 

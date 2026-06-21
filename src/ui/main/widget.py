@@ -105,6 +105,7 @@ class MainWidget(QWidget):
         self.worker.status_update.connect(self.main_window.show_status)
         self.worker.concept_chunk_ready.connect(self.show_concept_chunk)
         self.worker.metadata_chunk_ready.connect(self.show_metadata_chunk)
+        self.worker.metadata_ready.connect(self.update_metadata)
         self.worker.game_records_ready.connect(self.show_game_records)
         self.worker.icon_prompt_chunk_ready.connect(self.show_icon_prompt_chunk)
         self.worker.icon_ready.connect(self.show_icon)
@@ -148,6 +149,10 @@ class MainWidget(QWidget):
     @Slot(str)
     def show_metadata_chunk(self, response: str) -> None:
         self.show_stream_response(self.metadata_editor, response)
+
+    @Slot(str)
+    def update_metadata(self, metadata: str) -> None:
+        self.metadata_editor.setPlainText(metadata)
 
     @Slot(str)
     def show_icon_prompt_chunk(self, response: str) -> None:
