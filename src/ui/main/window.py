@@ -22,7 +22,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(app_config.name)
         self.preferences_config = preferences_config
 
-        self.main_widget = MainWidget(self.preferences_config)
+        self.main_widget = MainWidget(preferences_config=self.preferences_config)
         self.main_widget.status_update_signal.connect(self.show_status)
         self.main_widget.generation_completed.connect(
             self.set_parameters_unspecified_restrictions
@@ -61,7 +61,9 @@ class MainWindow(QMainWindow):
             )
             return
 
-        dialog = ConfiguratorDialog(self, self.preferences_config)
+        dialog = ConfiguratorDialog(
+            parent=self, preferences_config=self.preferences_config
+        )
         result = dialog.exec()
         if result == QDialog.DialogCode.Accepted:
             self.main_widget.prompt_editor.prompt = dialog.parameters.prompt
@@ -76,7 +78,9 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def open_settings(self) -> None:
-        dialog = PreferencesDialog(self, self.preferences_config)
+        dialog = PreferencesDialog(
+            parent=self, preferences_config=self.preferences_config
+        )
         result = dialog.exec()
         if result == QDialog.DialogCode.Accepted:
             self.set_parameters_unspecified_restrictions()

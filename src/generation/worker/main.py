@@ -85,7 +85,7 @@ class Worker(QObject):
         if not details:
             details = traceback.format_exc()
         logger.exception(e)
-        self.error_occurred.emit(ErrorInfo(msg, details))
+        self.error_occurred.emit(ErrorInfo(msg=msg, details=details))
 
     def handle_unknown_exception(self, e: Exception) -> None:
         logger.exception(e)
@@ -223,7 +223,7 @@ class Worker(QObject):
         icon = Image.open(BytesIO(response.content))
 
         icon_soc = SoCObjectFactory.create_icon(icon)
-        icon_records = IconRecords(icon, icon_soc)
+        icon_records = IconRecords(icon=icon, icon_soc=icon_soc)
         self.icon_ready.emit(icon_records)
 
         return icon_records

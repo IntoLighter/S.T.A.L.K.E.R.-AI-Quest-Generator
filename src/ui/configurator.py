@@ -134,13 +134,13 @@ class ConfiguratorDialog(QWindowDialog):
     @property
     def parameters(self) -> ConfiguratorParameters:
         return ConfiguratorParameters(
-            self.should_generate_concept_editor.isChecked(),
-            self.should_generate_metadata_editor.isChecked(),
-            self.should_generate_icon_editor.isChecked(),
-            self.prompt_editor.prompt,
-            self.concept_editor.toPlainText(),
-            self.metadata_editor.toPlainText(),
-            self.icon_prompt_editor.toPlainText(),
+            should_generate_concept=self.should_generate_concept_editor.isChecked(),
+            should_generate_metadata=self.should_generate_metadata_editor.isChecked(),
+            should_generate_icon=self.should_generate_icon_editor.isChecked(),
+            prompt=self.prompt_editor.prompt,
+            concept=self.concept_editor.toPlainText(),
+            metadata=self.metadata_editor.toPlainText(),
+            icon_prompt=self.icon_prompt_editor.toPlainText(),
         )
 
     def reject(self) -> None:

@@ -25,7 +25,7 @@ def exception_hook(
 ) -> None:
     stacktrace = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
     logger.exception(stacktrace)
-    dialog = ExceptionDialog(stacktrace)
+    dialog = ExceptionDialog(stacktrace=stacktrace)
     dialog.show()
 
 
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     logger.debug(f"log path: {constants_config.log_path}")
     logger.debug(f"save path: {preferences_config.save_path}")
 
-    window = MainWindow(preferences_config)
+    window = MainWindow(preferences_config=preferences_config)
     window.show()
 
     logger.info("Application started")

@@ -13,7 +13,9 @@ class ConfiguratorWorker(Worker):
         prompt: str,
         parameters: ConfiguratorParameters,
     ) -> None:
-        super().__init__(preferences_config, text_model, prompt)
+        super().__init__(
+            preferences_config=preferences_config, text_model=text_model, prompt=prompt
+        )
         self.parameters = parameters
 
     def perform_work(self) -> GenerationResult:

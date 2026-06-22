@@ -9,9 +9,9 @@ class SoCObjectFactory:
     @classmethod
     def create_game_records(cls, metadata: Metadata, title_english: str) -> GameRecords:
         return GameRecords(
-            cls.create_task(metadata, title_english),
-            cls.create_article(metadata, title_english),
-            cls.create_infoportions(title_english),
+            task=cls.create_task(metadata, title_english),
+            article=cls.create_article(metadata, title_english),
+            infoportions=cls.create_infoportions(title_english),
         )
 
     @classmethod

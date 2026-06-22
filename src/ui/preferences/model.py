@@ -41,14 +41,14 @@ class ModelTab(Tab):
         row.addWidget(self.remote_model_button)
 
         self.local_model_dropdown = QComboBox()
-        model = LocalModel(preferences_config)
+        model = LocalModel(preferences_config=preferences_config)
         self.local_model_dropdown.addItems(model.get_models())
         index = self.local_model_dropdown.findText(preferences_config.local_model)
         self.local_model_dropdown.setCurrentIndex(index)
         self.layout.addWidget(self.local_model_dropdown)
 
         self.remote_model_dropdown = QComboBox()
-        model = RemoteModel(preferences_config)
+        model = RemoteModel(preferences_config=preferences_config)
         self.remote_model_dropdown.addItems(model.get_models())
         index = self.remote_model_dropdown.findText(preferences_config.remote_model)
         self.remote_model_dropdown.setCurrentIndex(index)

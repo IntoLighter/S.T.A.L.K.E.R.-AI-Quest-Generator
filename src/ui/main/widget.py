@@ -68,7 +68,9 @@ class MainWidget(QWidget):
         logger.info("Normal generation started")
 
         self.worker = NormalWorker(
-            self.preferences_config, self.model, self.prompt_editor.prompt
+            preferences_config=self.preferences_config,
+            text_model=self.model,
+            prompt=self.prompt_editor.prompt,
         )
         self.generate_quest()
 
@@ -76,18 +78,18 @@ class MainWidget(QWidget):
         logger.info("Configurator generation started")
 
         self.worker = ConfiguratorWorker(
-            self.preferences_config,
-            self.model,
-            parameters.prompt,
-            parameters,
+            preferences_config=self.preferences_config,
+            text_model=self.model,
+            prompt=parameters.prompt,
+            parameters=parameters,
         )
         self.generate_quest()
 
     @property
     def model(self) -> Model:
         type_to_value = {
-            ModelType.Local: LocalModel(self.preferences_config),
-            ModelType.Remote: RemoteModel(self.preferences_config),
+            ModelType.Local: LocalModel(preferences_config=self.preferences_config),
+            ModelType.Remote: RemoteModel(preferences_config=self.preferences_config),
         }
 
         return type_to_value[self.preferences_config.model_type]
@@ -202,7 +204,7 @@ class MainWidget(QWidget):
 
     @Slot(str)
     def show_generation_unknown_error(self, stacktrace: str) -> None:
-        dialog = ExceptionDialog(stacktrace, self)
+        dialog = ExceptionDialog(stacktrace=stacktrace, parent=self)
         dialog.show()
 
     @Slot()
