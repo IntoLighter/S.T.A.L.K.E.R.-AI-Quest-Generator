@@ -22,7 +22,11 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(app_config.name)
         self.preferences_config = preferences_config
 
-        self.main_widget = MainWidget(self.preferences_config, self)
+        self.main_widget = MainWidget(self.preferences_config)
+        self.main_widget.status_update_signal.connect(self.show_status)
+        self.main_widget.generation_completed.connect(
+            self.set_parameters_unspecified_restrictions
+        )
         self.setCentralWidget(self.main_widget)
 
         self.status_label = QLabel()

@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from loguru import logger
-from PySide6.QtCore import QThread, Slot
+from PySide6.QtCore import QThread, Signal, Slot
 from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import (
     QLabel,
@@ -32,17 +30,14 @@ from misc import (
 from ui.editor.prompt import PromptEditor
 from ui.exception.main import ExceptionDialog
 
-if TYPE_CHECKING:
-    from ui.main.window import MainWindow
-
 
 class MainWidget(QWidget):
-    def __init__(
-        self, preferences_config: PreferencesConfig, main_window: MainWindow
-    ) -> None:
+    status_update_signal = Signal(str)
+    generation_completed = Signal()
+
+    def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
-        self.main_window = main_window
 
         self.layout = get_layout_with_scroll(self)
 
@@ -105,7 +100,7 @@ class MainWidget(QWidget):
         self.worker_thread = QThread()
         self.worker.moveToThread(self.worker_thread)
 
-        self.worker.status_update.connect(self.main_window.show_status)
+        self.worker.status_update.connect(self.status_update_signal)
         self.worker.concept_chunk_ready.connect(self.show_concept_chunk)
         self.worker.metadata_chunk_ready.connect(self.show_metadata_chunk)
         self.worker.metadata_ready.connect(self.update_metadata)
@@ -214,7 +209,7 @@ class MainWidget(QWidget):
     def thread_complete(self) -> None:
         logger.info("Generation completed")
         self.set_generate_button_generate()
-        self.main_window.set_parameters_unspecified_restrictions()
+        self.generation_completed.emit()
 
         self.worker = None
         self.worker_thread = None
