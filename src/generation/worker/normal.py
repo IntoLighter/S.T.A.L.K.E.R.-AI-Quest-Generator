@@ -10,14 +10,14 @@ class NormalWorker(Worker):
         try:
             result.concept = self.create_concept()
 
-            if self.isInterruptionRequested():
+            if self.is_interruption_requested:
                 return result
 
             try:
                 if self.preferences_config.should_generate_metadata:
                     result.metadata_text = self.create_metadata_text(result.concept)
 
-                    if self.isInterruptionRequested():
+                    if self.is_interruption_requested:
                         return result
 
                     result.metadata = self.create_metadata(result.metadata_text)
@@ -35,7 +35,7 @@ class NormalWorker(Worker):
                 if self.preferences_config.should_generate_icon:
                     result.icon_prompt = self.create_icon_prompt(result.concept)
 
-                    if self.isInterruptionRequested():
+                    if self.is_interruption_requested:
                         return result
 
                     if result.icon_prompt:

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from loguru import logger
-from PySide6.QtCore import Slot
+from PySide6.QtCore import QThread, Slot
 from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import (
     QLabel,
@@ -102,6 +102,9 @@ class MainWidget(QWidget):
         for editor in self.output_editors:
             editor.clear()
 
+        self.worker_thread = QThread()
+        self.worker.moveToThread(self.worker_thread)
+
         self.worker.status_update.connect(self.main_window.show_status)
         self.worker.concept_chunk_ready.connect(self.show_concept_chunk)
         self.worker.metadata_chunk_ready.connect(self.show_metadata_chunk)
@@ -111,8 +114,14 @@ class MainWidget(QWidget):
         self.worker.icon_ready.connect(self.show_icon)
         self.worker.error_occurred.connect(self.show_generation_error)
         self.worker.unknown_error_occurred.connect(self.show_generation_unknown_error)
-        self.worker.finished.connect(self.worker_complete)
-        self.worker.start()
+
+        self.worker_thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.worker_thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.worker_thread.finished.connect(self.worker_thread.deleteLater)
+        self.worker_thread.finished.connect(self.thread_complete)
+
+        self.worker_thread.start()
 
     @property
     def output_editors(self) -> list[QPlainTextEdit | QLabel]:
@@ -134,7 +143,7 @@ class MainWidget(QWidget):
 
     def stop_generate(self) -> None:
         logger.info("Generation canceled")
-        self.worker.requestInterruption()
+        self.worker.is_interruption_requested = True
         self.set_generate_button_generate()
 
     def set_generate_button_generate(self) -> None:
@@ -202,12 +211,13 @@ class MainWidget(QWidget):
         dialog.show()
 
     @Slot()
-    def worker_complete(self) -> None:
+    def thread_complete(self) -> None:
         logger.info("Generation completed")
         self.set_generate_button_generate()
-        self.worker.deleteLater()
-        self.worker = None
         self.main_window.set_parameters_unspecified_restrictions()
+
+        self.worker = None
+        self.worker_thread = None
 
     def add_output_editors(self) -> None:
         label = QLabel("Концепт")

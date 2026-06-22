@@ -27,7 +27,7 @@ class ConfiguratorWorker(Worker):
             elif self.parameters.should_generate_concept:
                 result.concept = self.create_concept()
 
-            if self.isInterruptionRequested():
+            if self.is_interruption_requested:
                 return result
 
             try:
@@ -38,7 +38,7 @@ class ConfiguratorWorker(Worker):
                 elif self.parameters.should_generate_metadata:
                     result.metadata_text = self.create_metadata_text(result.concept)
 
-                if self.isInterruptionRequested():
+                if self.is_interruption_requested:
                     return result
 
                 if result.metadata_text:
@@ -61,7 +61,7 @@ class ConfiguratorWorker(Worker):
                 elif self.parameters.should_generate_icon:
                     result.icon_prompt = self.create_icon_prompt(result.concept)
 
-                if self.isInterruptionRequested():
+                if self.is_interruption_requested:
                     return result
 
                 if result.icon_prompt and self.parameters.should_generate_icon:

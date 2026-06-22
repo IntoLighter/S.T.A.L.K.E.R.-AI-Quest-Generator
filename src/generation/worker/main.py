@@ -10,7 +10,7 @@ from comfykit import ComfyKit
 from deep_translator import GoogleTranslator
 from loguru import logger
 from PIL import Image
-from PySide6.QtCore import QThread, Signal
+from PySide6.QtCore import QObject, Signal, Slot
 
 from config.preferences import PreferencesConfig
 from generation.engine.soc import SoCObjectFactory
@@ -25,7 +25,7 @@ from misc import (
 )
 
 
-class Worker(QThread):
+class Worker(QObject):
     concept_chunk_ready = Signal(str)
     metadata_chunk_ready = Signal(str)
     metadata_ready = Signal(str)
@@ -35,6 +35,7 @@ class Worker(QThread):
     status_update = Signal(str)
     error_occurred = Signal(ErrorInfo)
     unknown_error_occurred = Signal(str)
+    finished = Signal()
 
     def __init__(
         self, preferences_config: PreferencesConfig, text_model: Model, prompt: str
@@ -43,7 +44,9 @@ class Worker(QThread):
         self.preferences_config = preferences_config
         self.text_model = text_model
         self.quest_prompt = prompt
+        self.is_interruption_requested = False
 
+    @Slot()
     def run(self) -> None:
         try:
             result = self.perform_work()
@@ -52,6 +55,7 @@ class Worker(QThread):
             self.handle_unknown_exception(e)
         finally:
             self.status_update.emit("")
+            self.finished.emit()
 
     def perform_work(self) -> GenerationResult:
         return GenerationResult()
@@ -105,7 +109,7 @@ class Worker(QThread):
         concept = ""
 
         for token in self.text_model.generate(messages):
-            if self.isInterruptionRequested():
+            if self.is_interruption_requested:
                 return
 
             concept += token
@@ -128,7 +132,7 @@ class Worker(QThread):
         metadata = ""
 
         for token in self.text_model.generate(messages, schema=Metadata):
-            if self.isInterruptionRequested():
+            if self.is_interruption_requested:
                 return
 
             metadata += token
@@ -185,7 +189,7 @@ class Worker(QThread):
         icon_prompt = ""
 
         for token in self.text_model.generate(messages):
-            if self.isInterruptionRequested():
+            if self.is_interruption_requested:
                 return
 
             icon_prompt += token
