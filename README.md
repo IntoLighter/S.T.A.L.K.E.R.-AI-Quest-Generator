@@ -56,17 +56,35 @@ Icons are generated locally using ComfyUI.
 
 Download and install: https://www.comfy.org/download
 
-### Configuration
+### Installing models
 
-In the application settings under Server-Config, change the Port to 8188.
+Download and install models to specified locations.
 
-You also need to download a model:
+**diffusion_models**
 
-1. Open ComfyUI settings.
-2. In Server-Config, enable "Use legacy Manager UI".
-3. In the top-center area of the workspace, click "Custom Nodes Manager".
-4. Go to Model Manager.
-5. Find and install the model sd_xl_base_1.0.safetensors.
+- [flux-2-klein-9b-fp8.safetensors](https://huggingface.co/black-forest-labs/FLUX.2-klein-9b-fp8/resolve/main/flux-2-klein-9b-fp8.safetensors)
+
+**text_encoders**
+
+- [qwen_3_8b_fp8mixed.safetensors](https://huggingface.co/Comfy-Org/flux2-klein-9B/resolve/main/split_files/text_encoders/qwen_3_8b_fp8mixed.safetensors)
+
+**vae**
+
+- [full_encoder_small_decoder.safetensors](https://huggingface.co/black-forest-labs/FLUX.2-small-decoder/resolve/main/full_encoder_small_decoder.safetensors)
+
+
+#### Model Storage Location
+
+```
+📂 ComfyUI/
+├── 📂 models/
+│   ├── 📂 diffusion_models/
+│   │   └── flux-2-klein-9b-fp8.safetensors
+│   ├── 📂 text_encoders/
+│   │   └── qwen_3_8b_fp8mixed.safetensors
+│   └── 📂 vae/
+│       └── full_encoder_small_decoder.safetensors
+```
 
 ## Conclusion
 
