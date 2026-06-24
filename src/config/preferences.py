@@ -1,8 +1,8 @@
+import enum
 from enum import Enum, auto
 from pathlib import Path
 from typing import Self
 
-from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from config.constants import constants_config
@@ -12,6 +12,11 @@ from config.text import text_config
 class ModelType(Enum):
     Local = auto()
     Remote = auto()
+
+
+class ValueSource(enum.StrEnum):
+    SYSTEM = "system"
+    CUSTOM = "custom"
 
 
 class PreferencesConfig(BaseSettings):
@@ -29,8 +34,8 @@ class PreferencesConfig(BaseSettings):
     save_path: Path | None = None
 
     model_type: ModelType = ModelType.Local
-    local_model: str = text_config.default_local_model
-    remote_model: str = text_config.default_remote_model
+    local_model: str = ""
+    remote_model: str = ""
 
     @property
     def current_model(self) -> str:
@@ -41,66 +46,45 @@ class PreferencesConfig(BaseSettings):
 
         return type_to_value[self.model_type]
 
-    concept_temperature: float = constants_config.default_concept_temperature
-    concept_top_p: float = constants_config.default_concept_top_p
-
-    icon_workflow_value: str = Field(
-        default=constants_config.default_icon_workflow, alias="icon_workflow"
-    )
+    icon_workflow_source: ValueSource = ValueSource.SYSTEM
+    custom_icon_workflow: str = constants_config.default_icon_workflow
 
     @property
     def icon_workflow(self) -> str:
-        if __debug__:
+        if self.icon_workflow_source == ValueSource.SYSTEM:
             return constants_config.default_icon_workflow
         else:
-            return self.icon_workflow_value
+            return self.custom_icon_workflow
 
-    @icon_workflow.setter
-    def icon_workflow(self, value: str) -> None:
-        self.icon_workflow_value = value
-
-    concept_prompt_value: str = Field(
-        default=constants_config.default_concept_prompt, alias="concept_prompt"
-    )
-    metadata_prompt_value: str = Field(
-        default=constants_config.default_metadata_prompt, alias="metadata_prompt"
-    )
-    icon_prompt_value: str = Field(
-        default=constants_config.default_icon_prompt, alias="icon_prompt"
-    )
+    concept_prompt_source: ValueSource = ValueSource.SYSTEM
+    custom_concept_prompt: str = constants_config.default_concept_prompt
 
     @property
     def concept_prompt(self) -> str:
-        if __debug__:
+        if self.concept_prompt_source == ValueSource.SYSTEM:
             return constants_config.default_concept_prompt
         else:
-            return self.concept_prompt_value
+            return self.custom_concept_prompt
 
-    @concept_prompt.setter
-    def concept_prompt(self, value: str) -> None:
-        self.concept_prompt_value = value
+    metadata_prompt_source: ValueSource = ValueSource.SYSTEM
+    custom_metadata_prompt: str = constants_config.default_metadata_prompt
 
     @property
     def metadata_prompt(self) -> str:
-        if __debug__:
+        if self.metadata_prompt_source == ValueSource.SYSTEM:
             return constants_config.default_metadata_prompt
         else:
-            return self.metadata_prompt_value
+            return self.custom_metadata_prompt
 
-    @metadata_prompt.setter
-    def metadata_prompt(self, value: str) -> None:
-        self.metadata_prompt_value = value
+    icon_prompt_source: ValueSource = ValueSource.SYSTEM
+    custom_icon_prompt: str = constants_config.default_icon_prompt
 
     @property
     def icon_prompt(self) -> str:
-        if __debug__:
+        if self.icon_prompt_source == ValueSource.SYSTEM:
             return constants_config.default_icon_prompt
         else:
-            return self.icon_prompt_value
-
-    @icon_prompt.setter
-    def icon_prompt(self, value: str) -> None:
-        self.icon_prompt_value = value
+            return self.custom_icon_prompt
 
     configurator_concept: str = ""
     configurator_metadata: str = ""

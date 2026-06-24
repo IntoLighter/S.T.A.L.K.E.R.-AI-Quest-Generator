@@ -1,6 +1,6 @@
 import platform
-from urllib.parse import urlencode
 import webbrowser
+from urllib.parse import urlencode
 
 from PySide6.QtWidgets import QApplication, QMessageBox, QWidget
 
@@ -47,5 +47,5 @@ class ExceptionDialog:
 
         webbrowser.open(url)
 
-    def exec(self) -> None:
-        self.msg.exec()
+    def show(self) -> None:
+        self.msg.show()

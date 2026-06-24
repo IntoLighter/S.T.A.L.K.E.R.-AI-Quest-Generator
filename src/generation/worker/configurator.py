@@ -1,8 +1,7 @@
-﻿from config.preferences import PreferencesConfig
+from config.preferences import PreferencesConfig
 from generation.engine.soc import SoCObjectFactory
-
-from generation.model.main import Model
 from generation.entity import ConfiguratorParameters, GenerationResult
+from generation.model.main import Model
 from generation.worker.main import Worker
 
 
@@ -14,7 +13,9 @@ class ConfiguratorWorker(Worker):
         prompt: str,
         parameters: ConfiguratorParameters,
     ) -> None:
-        super().__init__(preferences_config, text_model, prompt)
+        super().__init__(
+            preferences_config=preferences_config, text_model=text_model, prompt=prompt
+        )
         self.parameters = parameters
 
     def perform_work(self) -> GenerationResult:
@@ -28,42 +29,49 @@ class ConfiguratorWorker(Worker):
             elif self.parameters.should_generate_concept:
                 result.concept = self.create_concept()
 
-            if self.isInterruptionRequested():
+            if self.is_interruption_requested:
                 return result
 
-            result.metadata_text = self.parameters.metadata
+            try:
+                result.metadata_text = self.parameters.metadata
 
-            if result.metadata_text:
-                self.metadata_chunk_ready.emit(result.metadata_text)
-            elif self.parameters.should_generate_metadata:
-                result.metadata_text = self.create_metadata_text(result.concept)
+                if result.metadata_text:
+                    self.metadata_chunk_ready.emit(result.metadata_text)
+                elif self.parameters.should_generate_metadata:
+                    result.metadata_text = self.create_metadata_text(result.concept)
 
-            if self.isInterruptionRequested():
-                return result
+                if self.is_interruption_requested:
+                    return result
 
-            if result.metadata_text:
-                result.metadata = self.create_metadata(result.metadata_text)
+                if result.metadata_text:
+                    result.metadata = self.create_metadata(result.metadata_text)
 
-            if result.metadata:
-                title_english = self.create_title_english(result.metadata.title)
-                result.game_records = SoCObjectFactory.create_game_records(
-                    result.metadata, title_english
-                )
-                self.game_records_ready.emit(result.game_records)
+                if result.metadata:
+                    title_english = self.create_title_english(result.metadata.title)
+                    result.game_records = SoCObjectFactory.create_game_records(
+                        result.metadata, title_english
+                    )
+                    self.game_records_ready.emit(result.game_records)
+            except Exception as e:
+                self.handle_exception_perform_work(e)
 
-            result.icon_prompt = self.parameters.icon_prompt
+            try:
+                result.icon_prompt = self.parameters.icon_prompt
 
-            if result.icon_prompt:
-                self.icon_prompt_chunk_ready.emit(result.icon_prompt)
-            elif self.parameters.should_generate_icon:
-                result.icon_prompt = self.create_icon_prompt(result.concept)
+                if result.icon_prompt:
+                    self.icon_prompt_chunk_ready.emit(result.icon_prompt)
+                elif self.parameters.should_generate_icon:
+                    result.icon_prompt = self.create_icon_prompt(result.concept)
 
-            if self.isInterruptionRequested():
-                return result
+                if self.is_interruption_requested:
+                    return result
 
-            if result.icon_prompt and self.parameters.should_generate_icon:
-                result.icon_records = self.create_icon_records(result.icon_prompt)
+                if result.icon_prompt and self.parameters.should_generate_icon:
+                    result.icon_records = self.create_icon_records(result.icon_prompt)
+            except Exception as e:
+                self.handle_exception_perform_work(e)
+
         except Exception as e:
             self.handle_exception_perform_work(e)
-        finally:
-            return result
+
+        return result

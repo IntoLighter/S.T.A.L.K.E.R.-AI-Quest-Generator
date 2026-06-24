@@ -1,10 +1,8 @@
 import signal
 import sys
 import traceback
+import types
 
-from config.app import app_config
-from config.constants import constants_config
-from config.preferences import PreferencesConfig
 from loguru import logger
 from PySide6.QtCore import QLibraryInfo, QTranslator
 from PySide6.QtGui import QIcon
@@ -12,22 +10,30 @@ from PySide6.QtWidgets import (
     QApplication,
     QMessageBox,
 )
+
+from config.app import app_config
+from config.constants import constants_config
+from config.preferences import PreferencesConfig
 from ui.exception.main import ExceptionDialog
 from ui.main.window import MainWindow
 
 
-def exception_hook(exc_type, exc_value, exc_traceback) -> None:
+def exception_hook(
+    exc_type: type[BaseException],
+    exc_value: BaseException,
+    exc_traceback: types.TracebackType | None,
+) -> None:
     stacktrace = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
     logger.exception(stacktrace)
-    dialog = ExceptionDialog(stacktrace)
-    dialog.exec()
+    dialog = ExceptionDialog(stacktrace=stacktrace)
+    dialog.show()
 
 
 def on_app_stopped() -> None:
     logger.info("Application closed")
 
 
-def setup_logging():
+def setup_logging() -> None:
     logger.add(
         constants_config.log_path,
         rotation="5 MB",
@@ -69,7 +75,7 @@ if __name__ == "__main__":
     logger.debug(f"log path: {constants_config.log_path}")
     logger.debug(f"save path: {preferences_config.save_path}")
 
-    window = MainWindow(preferences_config)
+    window = MainWindow(preferences_config=preferences_config)
     window.show()
 
     logger.info("Application started")

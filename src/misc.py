@@ -1,9 +1,10 @@
-﻿import sys
+import sys
+from collections.abc import Callable
+from dataclasses import dataclass
 from functools import wraps
 from pathlib import Path
 
 from loguru import logger
-
 from PIL import Image
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import (
@@ -23,7 +24,7 @@ def get_resource_path(relative_path: str) -> Path:
         return Path(relative_path)
 
 
-def get_resource_file_content(file: Path):
+def get_resource_file_content(file: Path) -> str:
     return file.read_text(encoding="utf-8")
 
 
@@ -58,7 +59,7 @@ def get_pixmap(image: Image.Image) -> QPixmap:
     return pixmap
 
 
-def get_layout_with_scroll(parent: QWidget):
+def get_layout_with_scroll(parent: QWidget) -> QVBoxLayout:
     main_layout = QVBoxLayout(parent)
 
     scroll = QScrollArea(widgetResizable=True)
@@ -71,9 +72,9 @@ def get_layout_with_scroll(parent: QWidget):
     return layout
 
 
-def log_execution(func):
+def log_execution[**P, R](func: Callable[P, R]) -> Callable[P, R]:
     @wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         logger.info(f"{func.__name__} started")
         result = func(*args, **kwargs)
         logger.info(f"{func.__name__} completed")
@@ -90,5 +91,11 @@ def show_settings_error(parent: QWidget, text: str) -> None:
     QMessageBox.warning(parent, "Ошибка настроек", text)
 
 
-class AppError(Exception):
+class IconGenerationError(Exception):
     pass
+
+
+@dataclass
+class ErrorInfo:
+    msg: str
+    details: str

@@ -1,26 +1,26 @@
-﻿
-from config.constants import constants_config
-from config.parameters import parameters
-from config.preferences import PreferencesConfig
-from config.text import text_config
 from PySide6.QtCore import Slot
-from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
     QLabel,
+    QPlainTextEdit,
     QPushButton,
-    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
 
+from config.constants import constants_config
+from config.parameters import parameters
+from config.preferences import PreferencesConfig
+from config.text import text_config
+
 
 class PromptEditor(QWidget):
-    def __init__(self, preferences_config: PreferencesConfig):
+    def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
         self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
 
         self.add_parameters_editor()
         self.add_prompt_editor()
@@ -30,7 +30,7 @@ class PromptEditor(QWidget):
         self.layout.addLayout(row)
 
         self.parameter_names_combo = QComboBox()
-        self.parameter_names_combo.addItems([name for name in parameters.keys()])
+        self.parameter_names_combo.addItems(list(parameters))
         self.parameter_names_combo.currentTextChanged.connect(
             self.update_parameter_values_combo
         )
@@ -62,12 +62,15 @@ class PromptEditor(QWidget):
     def add_prompt_editor(self) -> None:
         label = QLabel("Промпт")
         self.layout.addWidget(label)
-        self.prompt_editor = QTextEdit()
+        self.prompt_editor = QPlainTextEdit()
+        self.prompt_editor.setPlainText(self.preferences_config.prompt_message)
         self.prompt_editor.setMinimumHeight(constants_config.editor_height)
-        self.prompt_editor.insertPlainText(self.preferences_config.prompt_message)
-        self.prompt_editor.moveCursor(QTextCursor.MoveOperation.Start)
         self.layout.addWidget(self.prompt_editor, constants_config.editor_stretch)
 
     @property
     def prompt(self) -> str:
         return self.prompt_editor.toPlainText()
+
+    @prompt.setter
+    def prompt(self, value: str) -> None:
+        self.prompt_editor.setPlainText(value)

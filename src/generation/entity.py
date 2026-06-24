@@ -1,4 +1,4 @@
-﻿from dataclasses import dataclass
+from dataclasses import dataclass
 
 from PIL import Image
 from pydantic import BaseModel, Field

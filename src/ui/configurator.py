@@ -1,18 +1,17 @@
-﻿from loguru import logger
+from loguru import logger
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QHBoxLayout,
+    QLabel,
+    QPlainTextEdit,
+    QPushButton,
+    QWidget,
+)
 
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
 from generation.entity import ConfiguratorParameters
 from misc import get_layout_with_scroll, show_parameters_error
-from PySide6.QtWidgets import (
-    QCheckBox,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
-    QTextEdit,
-    QWidget,
-)
-
 from ui.dialog import QWindowDialog
 from ui.editor.prompt import PromptEditor
 
@@ -41,7 +40,7 @@ class ConfiguratorDialog(QWindowDialog):
         )
         row.addWidget(self.should_generate_concept_editor)
         row.addStretch()
-        self.concept_editor = QTextEdit()
+        self.concept_editor = QPlainTextEdit()
         self.concept_editor.setPlainText(self.preferences_config.configurator_concept)
         self.concept_editor.setMinimumHeight(constants_config.concept_height)
         self.layout.addWidget(self.concept_editor, constants_config.concept_stretch)
@@ -58,7 +57,7 @@ class ConfiguratorDialog(QWindowDialog):
         )
         row.addWidget(self.should_generate_metadata_editor)
         row.addStretch()
-        self.metadata_editor = QTextEdit()
+        self.metadata_editor = QPlainTextEdit()
         self.metadata_editor.setPlainText(self.preferences_config.configurator_metadata)
         self.metadata_editor.setMinimumHeight(constants_config.metadata_height)
         self.layout.addWidget(self.metadata_editor, constants_config.metadata_stretch)
@@ -75,12 +74,14 @@ class ConfiguratorDialog(QWindowDialog):
         )
         row.addWidget(self.should_generate_icon_editor)
         row.addStretch()
-        self.icon_prompt_editor = QTextEdit()
+        self.icon_prompt_editor = QPlainTextEdit()
         self.icon_prompt_editor.setPlainText(
             self.preferences_config.configurator_icon_prompt
         )
-        self.icon_prompt_editor.setMinimumHeight(constants_config.editor_height)
-        self.layout.addWidget(self.icon_prompt_editor, constants_config.editor_stretch)
+        self.icon_prompt_editor.setMinimumHeight(constants_config.icon_prompt_height)
+        self.layout.addWidget(
+            self.icon_prompt_editor, constants_config.icon_prompt_stretch
+        )
 
         self.add_close_buttons()
 
@@ -133,13 +134,13 @@ class ConfiguratorDialog(QWindowDialog):
     @property
     def parameters(self) -> ConfiguratorParameters:
         return ConfiguratorParameters(
-            self.should_generate_concept_editor.isChecked(),
-            self.should_generate_metadata_editor.isChecked(),
-            self.should_generate_icon_editor.isChecked(),
-            self.prompt_editor.prompt,
-            self.concept_editor.toPlainText(),
-            self.metadata_editor.toPlainText(),
-            self.icon_prompt_editor.toPlainText(),
+            should_generate_concept=self.should_generate_concept_editor.isChecked(),
+            should_generate_metadata=self.should_generate_metadata_editor.isChecked(),
+            should_generate_icon=self.should_generate_icon_editor.isChecked(),
+            prompt=self.prompt_editor.prompt,
+            concept=self.concept_editor.toPlainText(),
+            metadata=self.metadata_editor.toPlainText(),
+            icon_prompt=self.icon_prompt_editor.toPlainText(),
         )
 
     def reject(self) -> None:

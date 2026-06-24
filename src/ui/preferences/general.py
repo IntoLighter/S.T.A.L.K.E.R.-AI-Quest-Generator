@@ -1,8 +1,6 @@
 import os
 import pathlib
 
-from config.preferences import PreferencesConfig
-from config.text import text_config
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -10,16 +8,18 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QLineEdit,
+    QPlainTextEdit,
     QPushButton,
-    QTextEdit,
     QVBoxLayout,
 )
 
+from config.preferences import PreferencesConfig
+from config.text import text_config
 from ui.preferences.tab import Tab
 
 
 class GeneralTab(Tab):
-    def __init__(self, preferences_config: PreferencesConfig):
+    def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
 
@@ -69,7 +69,7 @@ class GeneralTab(Tab):
         label = QLabel("Шаблон промпта")
         row.addWidget(label)
 
-        self.prompt_template_editor = QTextEdit()
+        self.prompt_template_editor = QPlainTextEdit()
         self.prompt_template_editor.setPlainText(self.preferences_config.prompt_message)
         row.addWidget(self.prompt_template_editor, stretch=1)
 
@@ -135,10 +135,5 @@ class GeneralTab(Tab):
         )
 
         save_path_str = self.save_path_editor.text()
-
-        if save_path_str:
-            save_path = pathlib.Path(save_path_str)
-        else:
-            save_path = None
-
+        save_path = pathlib.Path(save_path_str) if save_path_str else None
         self.preferences_config.save_path = save_path

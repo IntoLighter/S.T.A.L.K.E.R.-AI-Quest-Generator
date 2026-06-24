@@ -14,26 +14,27 @@ class ConstantsConfig(BaseSettings):
     editor_stretch: int = 1
     concept_stretch: int = 4
     metadata_stretch: int = 2
+    icon_prompt_stretch: int = 2
 
     editor_height: int = 100
     concept_height: int = editor_height * concept_stretch
     metadata_height: int = editor_height * metadata_stretch
+    icon_prompt_height: int = editor_height * icon_prompt_stretch
 
     icon_workflow_stretch: int = 4
     icon_workflow_height: int = editor_height * icon_workflow_stretch
 
     prompt_path: Path = get_resource_path("prompt")
     default_concept_prompt: str = get_resource_file_content(prompt_path / "concept.txt")
-    default_metadata_prompt: str = get_resource_file_content(prompt_path / "metadata.txt")
+    default_metadata_prompt: str = get_resource_file_content(
+        prompt_path / "metadata.txt"
+    )
     default_icon_prompt: str = get_resource_file_content(prompt_path / "icon.txt")
 
     icon_path: Path = get_resource_path("icon.ico")
 
     icon_workflow_path: Path = get_resource_path("generation/icon.json")
     default_icon_workflow: str = get_resource_file_content(icon_workflow_path)
-
-    default_concept_temperature: float = 0.7
-    default_concept_top_p: float = 0.9
 
     @computed_field
     def config_path(self) -> Path:

@@ -1,80 +1,91 @@
-# S.T.A.L.K.E.R. AI Quest Generator
+![Text logo](docs/image/text_logo.jpg)
 
-# Генерация текста
+# First launch
 
-В приложении предусмотрены два режима генерации текста: локальный и удалённый.
-Более высокое качество результатов достигается при использовании больших удалённых моделей.
-Выбор типа генерации осуществляется в настройках приложения.
+## Text Generation
 
-## Локальная генерация текста
+The application provides two text generation modes: local and remote.
+Higher quality results are achieved when using larger models.
+The generation type is selected in the application settings.
 
-### Установка Ollama
+### Local Text Generation
 
-Скачать и установить:
+#### Installing Ollama
 
-https://ollama.com
+Download and install: https://ollama.com
 
-Проверка установки:
-
-```bash
+Check installation:
+```
 ollama --version
 ```
 
-### Загрузка модели
+#### Downloading a Model
 
-Рекомендуемые модели:
+It is recommended to use top-performing models from leaderboards:
 
-* `llama3.1:8b` — универсальная
-* `mistral:7b` — быстрая и атмосферная
-* `qwen3:8b` — хорошо держит инструкции
-* `gpt-oss:20b` - продвинутая
+https://artificialanalysis.ai/leaderboards/models?weights=open<br>
+https://llm-stats.com/leaderboards/open-llm-leaderboard
 
-Пример загрузки:
-
-```bash
-ollama pull qwen3:8b
+Example download:
+```
+ollama pull qwen3.6:35b
 ```
 
-### Запуск Ollama
+#### Running Ollama
 
-Запустить Ollama через меню пуск.
+Launch Ollama from the Start menu.
 
-## Удалённая генерация текста
+### Remote Text Generation
 
-### Установка LLM API Key Proxy
+#### Installing LLM API Key Proxy
 
-Скачать и распаковать:
-
+Download and extract:
 https://github.com/Mirrowel/LLM-API-Key-Proxy/releases/tag/main%2Fbuild-20260123-1-bf7ab7e
 
-### Получение API ключа
+#### Obtaining an API Key
 
-Получить API ключ к какому-либо провайдеру и указать его программе.
-Здесь рассказано подробнее:
-
+Get an API key from any provider and enter it into the application.
+More details here:
 https://github.com/danclave/TALKER/blob/main/docs/Free_Models_Guide.md
 
-# Генерация иконок
+## Icon Generation
 
-Генерация выполняется локально через ComfyUI.
+Icons are generated locally using ComfyUI.
 
-## Установка ComfyUI
+### Installing ComfyUI
 
-Скачать и установить:
+Download and install: https://www.comfy.org/download
 
-https://www.comfy.org/download
+### Installing models
 
-## Конфигурирование
+Download and install models to specified locations.
 
-В настройках программы в разделе Server-Config измените Port на 8188.
+**diffusion_models**
 
-Также необходимо скачать модель.
-1. Откройте настройки ComfyUI.
-1. В разделе Server-Config включите параметр Use legacy Manager UI.
-1. В верхней центральной части рабочей области нажмите кнопку Custom Nodes Manager.
-1. Перейдите в Model Manager.
-1. Найдите и установите модель sd_xl_base_1.0.safetensors.
+- [flux-2-klein-9b-fp8.safetensors](https://huggingface.co/black-forest-labs/FLUX.2-klein-9b-fp8/resolve/main/flux-2-klein-9b-fp8.safetensors)
 
-# Заключение
+**text_encoders**
 
-После проделанных настроек можно смело запускать генератор!
+- [qwen_3_8b_fp8mixed.safetensors](https://huggingface.co/Comfy-Org/flux2-klein-9B/resolve/main/split_files/text_encoders/qwen_3_8b_fp8mixed.safetensors)
+
+**vae**
+
+- [full_encoder_small_decoder.safetensors](https://huggingface.co/black-forest-labs/FLUX.2-small-decoder/resolve/main/full_encoder_small_decoder.safetensors)
+
+
+#### Model Storage Location
+
+```
+📂 ComfyUI/
+├── 📂 models/
+│   ├── 📂 diffusion_models/
+│   │   └── flux-2-klein-9b-fp8.safetensors
+│   ├── 📂 text_encoders/
+│   │   └── qwen_3_8b_fp8mixed.safetensors
+│   └── 📂 vae/
+│       └── full_encoder_small_decoder.safetensors
+```
+
+## Conclusion
+
+After completing the setup, you can safely launch the generator!

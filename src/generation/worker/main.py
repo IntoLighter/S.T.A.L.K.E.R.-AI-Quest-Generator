@@ -1,36 +1,41 @@
+import asyncio
 import json
 import traceback
+from contextlib import suppress
+from io import BytesIO
+
+import openai
+import requests
+from comfykit import ComfyKit
 from deep_translator import GoogleTranslator
 from loguru import logger
 from PIL import Image
-from PySide6.QtCore import QThread, Signal
-import asyncio
-from io import BytesIO
-from comfykit import ComfyKit
-import openai
-import requests
+from PySide6.QtCore import QObject, Signal, Slot
 
 from config.preferences import PreferencesConfig
 from generation.engine.soc import SoCObjectFactory
 from generation.entity import GameRecords, GenerationResult, IconRecords, Metadata
 from generation.model.main import Model
 from misc import (
-    AppError,
+    ErrorInfo,
+    IconGenerationError,
     get_unique_counter_name_path,
     get_unique_name_path,
     log_execution,
 )
 
 
-class Worker(QThread):
+class Worker(QObject):
     concept_chunk_ready = Signal(str)
     metadata_chunk_ready = Signal(str)
+    metadata_ready = Signal(str)
     game_records_ready = Signal(GameRecords)
     icon_prompt_chunk_ready = Signal(str)
-    icon_ready = Signal(Image.Image)
+    icon_ready = Signal(IconRecords)
     status_update = Signal(str)
-    error_occurred = Signal(str)
-    unknown_error_occured = Signal(str)
+    error_occurred = Signal(ErrorInfo)
+    unknown_error_occurred = Signal(str)
+    finished = Signal()
 
     def __init__(
         self, preferences_config: PreferencesConfig, text_model: Model, prompt: str
@@ -39,7 +44,9 @@ class Worker(QThread):
         self.preferences_config = preferences_config
         self.text_model = text_model
         self.quest_prompt = prompt
+        self.is_interruption_requested = False
 
+    @Slot()
     def run(self) -> None:
         try:
             result = self.perform_work()
@@ -48,34 +55,41 @@ class Worker(QThread):
             self.handle_unknown_exception(e)
         finally:
             self.status_update.emit("")
+            self.finished.emit()
 
     def perform_work(self) -> GenerationResult:
         return GenerationResult()
 
-    # TODO: Доработать обработку исключений
     def handle_exception_perform_work(self, e: Exception) -> None:
         match e:
             case openai.APIConnectionError():
                 self.handle_exception(
                     e,
-                    "Ошибка подключения. Проверьте запущена ли программа генерации текста.",
+                    "Ошибка подключения."
+                    + "Проверьте запущена ли программа генерации текста.",
                 )
             case openai.APIError():
                 self.handle_exception(
                     e, "Ошибка генерации текста. Проверьте вывод программы генерации."
                 )
-            case AppError():
-                self.handle_exception(e, str(e))
+            case IconGenerationError():
+                self.handle_exception(
+                    e, "Возникла ошибка генерации изображения.", str(e)
+                )
             case _:
                 self.handle_unknown_exception(e)
 
-    def handle_exception(self, e: Exception, msg: str) -> None:
+    def handle_exception(
+        self, e: Exception, msg: str, details: str | None = None
+    ) -> None:
+        if not details:
+            details = traceback.format_exc()
         logger.exception(e)
-        self.error_occurred.emit(msg)
+        self.error_occurred.emit(ErrorInfo(msg=msg, details=details))
 
     def handle_unknown_exception(self, e: Exception) -> None:
         logger.exception(e)
-        self.unknown_error_occured.emit(traceback.format_exc())
+        self.unknown_error_occurred.emit(traceback.format_exc())
 
     @log_execution
     def create_concept(self) -> str | None:
@@ -94,12 +108,8 @@ class Worker(QThread):
 
         concept = ""
 
-        for token in self.text_model.generate(
-            messages,
-            temperature=self.preferences_config.concept_temperature,
-            top_p=self.preferences_config.concept_top_p,
-        ):
-            if self.isInterruptionRequested():
+        for token in self.text_model.generate(messages):
+            if self.is_interruption_requested:
                 return
 
             concept += token
@@ -121,26 +131,30 @@ class Worker(QThread):
 
         metadata = ""
 
-        for token in self.text_model.generate(
-            messages,
-            response_format={"type": "json_object"},
-            temperature=0,
-        ):
-            if self.isInterruptionRequested():
+        for token in self.text_model.generate(messages, schema=Metadata):
+            if self.is_interruption_requested:
                 return
 
             metadata += token
             self.metadata_chunk_ready.emit(token)
 
+        with suppress(Exception):
+            parsed = json.loads(metadata)
+            formatted = json.dumps(parsed, ensure_ascii=False, indent=2)
+            metadata = formatted
+            self.metadata_ready.emit(metadata)
+
         return metadata
 
     def create_metadata(self, metadata_text: str) -> Metadata | None:
         try:
-            return Metadata(**(json.loads(metadata_text)))
-        except json.JSONDecodeError as e:
+            return Metadata.model_validate_json(metadata_text)
+        except Exception as e:
             self.handle_exception(
                 e,
-                "Невалидный json метаданных. Попробуйте исправить json через соотвествующие сайты и прогоните его через конфигуратор.",
+                "Невалидный json метаданных."
+                + "Попробуйте исправить json через соотвествующие сайты "
+                + "и прогоните его через конфигуратор.",
             )
 
     @log_execution
@@ -174,8 +188,8 @@ class Worker(QThread):
 
         icon_prompt = ""
 
-        for token in self.text_model.generate(messages, temperature=0):
-            if self.isInterruptionRequested():
+        for token in self.text_model.generate(messages):
+            if self.is_interruption_requested:
                 return
 
             icon_prompt += token
@@ -188,23 +202,29 @@ class Worker(QThread):
         self.status_update.emit("Генерация иконки")
 
         kit = ComfyKit(comfyui_url="http://127.0.0.1:8188")
-        result = asyncio.run(
-            kit.execute_json(
-                json.loads(self.preferences_config.icon_workflow),
-                {"prompt": icon_prompt},
+
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            result = loop.run_until_complete(
+                kit.execute_json(
+                    json.loads(self.preferences_config.icon_workflow),
+                    {"prompt": icon_prompt},
+                )
             )
-        )
+        finally:
+            loop.close()
 
         if result.status == "error":
-            raise AppError(f"Возникла ошибка генерации изображения: {result.msg}.")
+            raise IconGenerationError(result.msg)
 
         response = requests.get(result.images[0])
         response.raise_for_status()
         icon = Image.open(BytesIO(response.content))
 
         icon_soc = SoCObjectFactory.create_icon(icon)
-        icon_records = IconRecords(icon, icon_soc)
-        self.icon_ready.emit(icon_soc)
+        icon_records = IconRecords(icon=icon, icon_soc=icon_soc)
+        self.icon_ready.emit(icon_records)
 
         return icon_records
 
@@ -224,36 +244,69 @@ class Worker(QThread):
 
         quest_path.mkdir(parents=True)
 
-        quest_prompt_path = quest_path / "prompt.txt"
-        quest_prompt_path.write_text(self.quest_prompt, encoding="cp1251")
+        generation_path = quest_path / "generation"
+        generation_path.mkdir(parents=True)
+
+        resource_path = quest_path / "resource"
+        resource_path.mkdir(parents=True)
+
+        try:
+            quest_prompt_path = quest_path / "prompt.txt"
+            quest_prompt_path.write_text(self.quest_prompt, encoding="utf-8")
+        except Exception as e:
+            self.handle_unknown_exception(e)
 
         if result.concept:
-            concept_path = quest_path / "concept.txt"
-            concept_path.write_text(result.concept, encoding="cp1251")
+            try:
+                concept_path = generation_path / "concept.txt"
+                concept_path.write_text(result.concept, encoding="utf-8")
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
         if result.metadata_text:
-            metadata_path = quest_path / "metadata.json"
-            metadata_path.write_text(result.metadata_text, encoding="cp1251")
+            try:
+                metadata_path = generation_path / "metadata.json"
+                metadata_path.write_text(result.metadata_text, encoding="utf-8")
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
         if result.game_records:
-            task_path = quest_path / "task.xml"
-            task_path.write_text(result.game_records.task, encoding="cp1251")
+            try:
+                task_path = resource_path / "task.xml"
+                task_path.write_text(result.game_records.task, encoding="cp1251")
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
-            article_path = quest_path / "article.xml"
-            article_path.write_text(result.game_records.article, encoding="cp1251")
+            try:
+                article_path = resource_path / "storyline_info.xml"
+                article_path.write_text(result.game_records.article, encoding="cp1251")
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
-            infoportions_path = quest_path / "infoportions.xml"
-            infoportions_path.write_text(
-                result.game_records.infoportions, encoding="cp1251"
-            )
+            try:
+                infoportions_path = resource_path / "info.xml"
+                infoportions_path.write_text(
+                    result.game_records.infoportions, encoding="cp1251"
+                )
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
         if result.icon_prompt:
-            icon_prompt_path = quest_path / "icon_prompt.txt"
-            icon_prompt_path.write_text(result.icon_prompt, encoding="cp1251")
+            try:
+                icon_prompt_path = generation_path / "icon_prompt.txt"
+                icon_prompt_path.write_text(result.icon_prompt, encoding="utf-8")
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
         if result.icon_records:
-            icon_path = quest_path / "icon.png"
-            result.icon_records.icon.save(icon_path)
+            try:
+                icon_path = generation_path / "icon.png"
+                result.icon_records.icon.save(icon_path)
+            except Exception as e:
+                self.handle_unknown_exception(e)
 
-            icon_soc_path = quest_path / "icon_soc.png"
-            result.icon_records.icon_soc.save(icon_soc_path)
+            try:
+                icon_soc_path = resource_path / "icon.png"
+                result.icon_records.icon_soc.save(icon_soc_path)
+            except Exception as e:
+                self.handle_unknown_exception(e)

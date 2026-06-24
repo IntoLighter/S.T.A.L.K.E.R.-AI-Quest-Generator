@@ -1,0 +1,48 @@
+[[repos]]
+repo = "builtin"
+hooks = [
+  { id = "trailing-whitespace" },
+  { id = "check-added-large-files" },
+  { id = "check-case-conflict" },
+  { id = "end-of-file-fixer" },
+  { id = "file-contents-sorter" },
+  { id = "fix-byte-order-marker" },
+  { id = "check-json" },
+  { id = "check-json5" },
+  { id = "pretty-format-json", args = ["--no-sort-keys"] },
+  { id = "check-toml" },
+  { id = "check-vcs-permalinks" },
+  { id = "check-yaml" },
+  { id = "check-xml" },
+  { id = "mixed-line-ending" },
+  { id = "check-symlinks" },
+  { id = "destroyed-symlinks" },
+  { id = "check-merge-conflict" },
+  { id = "detect-private-key" },
+  { id = "no-commit-to-branch" },
+  { id = "check-shebang-scripts-are-executable" },
+  { id = "check-executables-have-shebangs" },
+]
+
+[[repos]]
+repo = "https://github.com/commitizen-tools/commitizen"
+rev = "v4.16.3"
+hooks = [
+  { id = "commitizen" },
+  { id = "commitizen-branch" },
+]
+
+[[repos]]
+repo = "https://github.com/astral-sh/ruff-pre-commit"
+rev = "v0.15.17"
+hooks = [
+  { id = "ruff-check", args = ["--fix"] },
+  { id = "ruff-format" },
+]
+
+[[repos]]
+repo = "https://github.com/crate-ci/typos"
+rev = "v1.47.2"
+hooks = [
+  { id = "typos" }
+]

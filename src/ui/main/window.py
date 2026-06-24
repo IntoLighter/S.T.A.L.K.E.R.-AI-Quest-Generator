@@ -1,6 +1,3 @@
-from config.app import app_config
-from config.constants import constants_config
-from config.preferences import PreferencesConfig
 from PySide6.QtCore import Slot
 from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import (
@@ -10,6 +7,9 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
+from config.app import app_config
+from config.constants import constants_config
+from config.preferences import PreferencesConfig
 from ui.configurator import ConfiguratorDialog
 from ui.main.widget import MainWidget
 from ui.preferences.main import PreferencesDialog
@@ -22,7 +22,11 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(app_config.name)
         self.preferences_config = preferences_config
 
-        self.main_widget = MainWidget(self.preferences_config, self)
+        self.main_widget = MainWidget(preferences_config=self.preferences_config)
+        self.main_widget.status_update_signal.connect(self.show_status)
+        self.main_widget.generation_completed.connect(
+            self.set_parameters_unspecified_restrictions
+        )
         self.setCentralWidget(self.main_widget)
 
         self.status_label = QLabel()
@@ -31,7 +35,7 @@ class MainWindow(QMainWindow):
 
         self.set_menubar()
 
-    def set_menubar(self):
+    def set_menubar(self) -> None:
         menubar = self.menuBar()
 
         file_menu = menubar.addMenu("Файл")
@@ -43,7 +47,7 @@ class MainWindow(QMainWindow):
 
     def get_configurator(self) -> QAction:
         action = QAction("Конфигуратор", self)
-        action.setShortcuts((QKeySequence("Ctrl+s")))
+        action.setShortcuts(QKeySequence("Ctrl+s"))
         action.triggered.connect(self.show_configurator)
         return action
 
@@ -57,9 +61,12 @@ class MainWindow(QMainWindow):
             )
             return
 
-        dialog = ConfiguratorDialog(self, self.preferences_config)
+        dialog = ConfiguratorDialog(
+            parent=self, preferences_config=self.preferences_config
+        )
         result = dialog.exec()
         if result == QDialog.DialogCode.Accepted:
+            self.main_widget.prompt_editor.prompt = dialog.parameters.prompt
             self.main_widget.generate_quest_configurator(dialog.parameters)
 
     def get_settings(self) -> QAction:
@@ -71,7 +78,9 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def open_settings(self) -> None:
-        dialog = PreferencesDialog(self, self.preferences_config)
+        dialog = PreferencesDialog(
+            parent=self, preferences_config=self.preferences_config
+        )
         result = dialog.exec()
         if result == QDialog.DialogCode.Accepted:
             self.set_parameters_unspecified_restrictions()
