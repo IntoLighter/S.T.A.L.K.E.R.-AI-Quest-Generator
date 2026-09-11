@@ -217,53 +217,59 @@ class MainWidget(QWidget):
         self.worker_thread = None
 
     def add_output_editors(self) -> None:
-        label = QLabel("Концепт")
-        self.layout.addWidget(label)
-        self.concept_editor = QPlainTextEdit()
-        self.concept_editor.setReadOnly(True)
-        self.concept_editor.setMinimumHeight(constants_config.concept_height)
-        self.layout.addWidget(self.concept_editor, constants_config.concept_stretch)
-
-        label = QLabel("Метаданные")
-        self.layout.addWidget(label)
-        self.metadata_editor = QPlainTextEdit()
-        self.metadata_editor.setReadOnly(True)
-        self.metadata_editor.setMinimumHeight(constants_config.metadata_height)
-        self.layout.addWidget(self.metadata_editor, constants_config.metadata_stretch)
-
-        label = QLabel("Задание")
-        self.layout.addWidget(label)
-        self.task_editor = QPlainTextEdit()
-        self.task_editor.setReadOnly(True)
-        self.task_editor.setMinimumHeight(constants_config.editor_height)
-        self.layout.addWidget(self.task_editor, constants_config.editor_stretch)
-
-        label = QLabel("Описание")
-        self.layout.addWidget(label)
-        self.article_editor = QPlainTextEdit()
-        self.article_editor.setReadOnly(True)
-        self.article_editor.setMinimumHeight(constants_config.editor_height)
-        self.layout.addWidget(self.article_editor, constants_config.editor_stretch)
-
-        label = QLabel("Инфопоршни")
-        self.layout.addWidget(label)
-        self.infoportions_editor = QPlainTextEdit()
-        self.infoportions_editor.setReadOnly(True)
-        self.infoportions_editor.setMinimumHeight(constants_config.editor_height)
-        self.layout.addWidget(self.infoportions_editor, constants_config.editor_stretch)
-
-        label = QLabel("Промпт иконки")
-        self.layout.addWidget(label)
-        self.icon_prompt_editor = QPlainTextEdit()
-        self.icon_prompt_editor.setReadOnly(True)
-        self.icon_prompt_editor.setMinimumHeight(constants_config.icon_prompt_height)
-        self.layout.addWidget(
-            self.icon_prompt_editor, constants_config.icon_prompt_stretch
+        self.concept_editor = self.create_plain_text_editor(
+            "Концепт",
+            constants_config.concept_height,
+            constants_config.concept_stretch,
         )
 
-        label = QLabel("Иконка")
+        self.metadata_editor = self.create_plain_text_editor(
+            "Метаданные",
+            constants_config.metadata_height,
+            constants_config.metadata_stretch,
+        )
+        self.task_editor = self.create_plain_text_editor(
+            "Задание",
+            constants_config.editor_height,
+            constants_config.editor_stretch,
+        )
+        self.article_editor = self.create_plain_text_editor(
+            "Описание",
+            constants_config.editor_height,
+            constants_config.editor_stretch,
+        )
+        self.infoportions_editor = self.create_plain_text_editor(
+            "Инфопоршни",
+            constants_config.editor_height,
+            constants_config.editor_stretch,
+        )
+
+        self.icon_prompt_editor = self.create_plain_text_editor(
+            "Промпт иконки",
+            constants_config.icon_prompt_height,
+            constants_config.icon_prompt_stretch,
+        )
+        self.icon_soc_editor = self.create_label_editor("Иконка (SoC)")
+        self.icon_editor = self.create_label_editor("Иконка (оригинал)")
+
+    def create_plain_text_editor(
+        self, title: str, height: int, stretch: int
+    ) -> QPlainTextEdit:
+        label = QLabel(title)
         self.layout.addWidget(label)
-        self.icon_soc_editor = QLabel()
-        self.layout.addWidget(self.icon_soc_editor)
-        self.icon_editor = QLabel()
-        self.layout.addWidget(self.icon_editor)
+
+        editor = QPlainTextEdit()
+        editor.setReadOnly(True)
+        editor.setMinimumHeight(height)
+        self.layout.addWidget(editor, stretch)
+
+        return editor
+
+    def create_label_editor(self, title: str) -> QLabel:
+        label = QLabel(title)
+        self.layout.addWidget(label)
+
+        editor = QLabel()
+        self.layout.addWidget(editor)
+
+        return editor
