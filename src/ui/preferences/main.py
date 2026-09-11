@@ -63,12 +63,7 @@ class PreferencesDialog(QWindowDialog):
 
     @property
     def tabs(self) -> list[Tab]:
-        return [
-            self.general_tab,
-            self.model_tab,
-            self.configurator_tab,
-            self.prompt_tab,
-        ]
+        return [self.tab_widget.widget(i) for i in range(self.tab_widget.count())]
 
     def reject(self) -> None:
         logger.info("Window 'Settings' rejected")
