@@ -12,6 +12,7 @@ from loguru import logger
 from PIL import Image
 from PySide6.QtCore import QObject, Signal, Slot
 
+from config.constants import constants_config
 from config.preferences import PreferencesConfig
 from generation.engine.soc import SoCObjectFactory
 from generation.entity import GameRecords, GenerationResult, IconRecords, Metadata
@@ -201,7 +202,7 @@ class Worker(QObject):
     def create_icon_records(self, icon_prompt: str) -> IconRecords | None:
         self.status_update.emit("Генерация иконки")
 
-        kit = ComfyKit(comfyui_url="http://127.0.0.1:8188")
+        kit = ComfyKit(comfyui_url=constants_config.comfy_ui_base_url)
 
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
