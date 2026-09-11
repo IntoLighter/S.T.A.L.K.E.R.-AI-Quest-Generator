@@ -2,19 +2,16 @@ from __future__ import annotations
 
 from loguru import logger
 from PySide6.QtCore import QThread, Signal, Slot
-from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import (
-    QLabel,
     QMessageBox,
-    QPlainTextEdit,
     QPushButton,
+    QTabWidget,
     QWidget,
 )
 
-from config.constants import constants_config
 from config.preferences import ModelType, PreferencesConfig
 from config.text import text_config
-from generation.entity import ConfiguratorParameters, GameRecords, IconRecords
+from generation.entity import ConfiguratorParameters
 from generation.model.local import LocalModel
 from generation.model.main import Model
 from generation.model.remote import RemoteModel
@@ -23,12 +20,15 @@ from generation.worker.normal import NormalWorker
 from misc import (
     ErrorInfo,
     get_layout_with_scroll,
-    get_pixmap,
     show_parameters_error,
     show_settings_error,
 )
 from ui.editor.prompt import PromptEditor
 from ui.exception.main import ExceptionDialog
+from ui.main.tab.base import Tab
+from ui.main.tab.concept import ConceptTab
+from ui.main.tab.icon import IconTab
+from ui.main.tab.metadata import MetadataTab
 
 
 class MainWidget(QWidget):
@@ -48,7 +48,7 @@ class MainWidget(QWidget):
         self.generate_button.clicked.connect(self.generate_quest_normal)
         self.layout.addWidget(self.generate_button)
 
-        self.add_output_editors()
+        self.add_tabs()
 
     @Slot()
     def generate_quest_normal(self) -> None:
@@ -96,19 +96,15 @@ class MainWidget(QWidget):
 
     def generate_quest(self) -> None:
         self.set_generate_button_stop()
-        for editor in self.output_editors:
-            editor.clear()
+        for tab in self.tabs:
+            tab.clear()
 
         self.worker_thread = QThread()
         self.worker.moveToThread(self.worker_thread)
 
+        for tab in self.tabs:
+            tab.bind_worker(self.worker)
         self.worker.status_update.connect(self.status_update_signal)
-        self.worker.concept_chunk_ready.connect(self.show_concept_chunk)
-        self.worker.metadata_chunk_ready.connect(self.show_metadata_chunk)
-        self.worker.metadata_ready.connect(self.update_metadata)
-        self.worker.game_records_ready.connect(self.show_game_records)
-        self.worker.icon_prompt_chunk_ready.connect(self.show_icon_prompt_chunk)
-        self.worker.icon_ready.connect(self.show_icon)
         self.worker.error_occurred.connect(self.show_generation_error)
         self.worker.unknown_error_occurred.connect(self.show_generation_unknown_error)
 
@@ -119,19 +115,6 @@ class MainWidget(QWidget):
         self.worker_thread.finished.connect(self.thread_complete)
 
         self.worker_thread.start()
-
-    @property
-    def output_editors(self) -> list[QPlainTextEdit | QLabel]:
-        return [
-            self.concept_editor,
-            self.metadata_editor,
-            self.task_editor,
-            self.article_editor,
-            self.infoportions_editor,
-            self.icon_prompt_editor,
-            self.icon_soc_editor,
-            self.icon_editor,
-        ]
 
     def set_generate_button_stop(self) -> None:
         self.generate_button.setText(text_config.stop_generate_text)
@@ -147,49 +130,6 @@ class MainWidget(QWidget):
         self.generate_button.setText(text_config.generate_text)
         self.generate_button.clicked.disconnect()
         self.generate_button.clicked.connect(self.generate_quest_normal)
-
-    @Slot(str)
-    def show_concept_chunk(self, chunk: str) -> None:
-        self.show_stream_chunk(self.concept_editor, chunk)
-
-    @Slot(str)
-    def show_metadata_chunk(self, chunk: str) -> None:
-        self.show_stream_chunk(self.metadata_editor, chunk)
-
-    @Slot(str)
-    def update_metadata(self, metadata: str) -> None:
-        self.metadata_editor.setPlainText(metadata)
-
-    @Slot(str)
-    def show_icon_prompt_chunk(self, chunk: str) -> None:
-        self.show_stream_chunk(self.icon_prompt_editor, chunk)
-
-    def show_stream_chunk(self, editor: QPlainTextEdit, chunk: str) -> None:
-        user_cursor = editor.textCursor()
-        vertical_scroll_pos = editor.verticalScrollBar().value()
-
-        end_cursor = QTextCursor(editor.document())
-        end_cursor.movePosition(QTextCursor.MoveOperation.End)
-        end_cursor.insertText(chunk)
-
-        editor.setTextCursor(user_cursor)
-        editor.verticalScrollBar().setValue(vertical_scroll_pos)
-
-    @Slot(GameRecords)
-    def show_game_records(self, quest_records: GameRecords) -> None:
-        editor_to_record = {
-            self.task_editor: quest_records.task,
-            self.article_editor: quest_records.article,
-            self.infoportions_editor: quest_records.infoportions,
-        }
-
-        for editor, record in editor_to_record.items():
-            editor.setPlainText(record)
-
-    @Slot(IconRecords)
-    def show_icon(self, icon_records: IconRecords) -> None:
-        self.icon_editor.setPixmap(get_pixmap(icon_records.icon))
-        self.icon_soc_editor.setPixmap(get_pixmap(icon_records.icon_soc))
 
     @Slot(ErrorInfo)
     def show_generation_error(self, error_result: ErrorInfo) -> None:
@@ -216,60 +156,19 @@ class MainWidget(QWidget):
         self.worker = None
         self.worker_thread = None
 
-    def add_output_editors(self) -> None:
-        self.concept_editor = self.create_plain_text_editor(
-            "Концепт",
-            constants_config.concept_height,
-            constants_config.concept_stretch,
-        )
+    def add_tabs(self) -> None:
+        self.tab_widget = QTabWidget()
+        self.layout.addWidget(self.tab_widget)
 
-        self.metadata_editor = self.create_plain_text_editor(
-            "Метаданные",
-            constants_config.metadata_height,
-            constants_config.metadata_stretch,
-        )
-        self.task_editor = self.create_plain_text_editor(
-            "Задание",
-            constants_config.editor_height,
-            constants_config.editor_stretch,
-        )
-        self.article_editor = self.create_plain_text_editor(
-            "Описание",
-            constants_config.editor_height,
-            constants_config.editor_stretch,
-        )
-        self.infoportions_editor = self.create_plain_text_editor(
-            "Инфопоршни",
-            constants_config.editor_height,
-            constants_config.editor_stretch,
-        )
+        self.concept_tab = ConceptTab()
+        self.tab_widget.addTab(self.concept_tab, "Концепт")
 
-        self.icon_prompt_editor = self.create_plain_text_editor(
-            "Промпт иконки",
-            constants_config.icon_prompt_height,
-            constants_config.icon_prompt_stretch,
-        )
-        self.icon_soc_editor = self.create_label_editor("Иконка (SoC)")
-        self.icon_editor = self.create_label_editor("Иконка (оригинал)")
+        self.metadata_tab = MetadataTab()
+        self.tab_widget.addTab(self.metadata_tab, "Метаданные")
 
-    def create_plain_text_editor(
-        self, title: str, height: int, stretch: int
-    ) -> QPlainTextEdit:
-        label = QLabel(title)
-        self.layout.addWidget(label)
+        self.icon_tab = IconTab()
+        self.tab_widget.addTab(self.icon_tab, "Иконка")
 
-        editor = QPlainTextEdit()
-        editor.setReadOnly(True)
-        editor.setMinimumHeight(height)
-        self.layout.addWidget(editor, stretch)
-
-        return editor
-
-    def create_label_editor(self, title: str) -> QLabel:
-        label = QLabel(title)
-        self.layout.addWidget(label)
-
-        editor = QLabel()
-        self.layout.addWidget(editor)
-
-        return editor
+    @property
+    def tabs(self) -> list[Tab]:
+        return [self.tab_widget.widget(i) for i in range(self.tab_widget.count())]
