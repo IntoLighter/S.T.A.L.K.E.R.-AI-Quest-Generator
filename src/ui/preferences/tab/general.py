@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
 
 from config.preferences import PreferencesConfig
 from config.text import text_config
-from ui.preferences.tab import Tab
+from ui.preferences.tab.tab import Tab
 
 
 class GeneralTab(Tab):
