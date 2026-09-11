@@ -9,11 +9,11 @@ from PySide6.QtWidgets import (
 
 from config.preferences import PreferencesConfig
 from ui.dialog import QWindowDialog
+from ui.preferences.tab.base import Tab
 from ui.preferences.tab.configurator import ConfiguratorTab
 from ui.preferences.tab.general import GeneralTab
 from ui.preferences.tab.model import ModelTab
 from ui.preferences.tab.prompt import PromptTab
-from ui.preferences.tab.tab import Tab
 
 
 class PreferencesDialog(QWindowDialog):
