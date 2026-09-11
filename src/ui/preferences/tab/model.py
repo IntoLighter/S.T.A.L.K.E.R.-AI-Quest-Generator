@@ -13,7 +13,7 @@ from generation.model.local import LocalModel
 from generation.model.remote import RemoteModel
 from misc import get_layout_with_scroll
 from ui.editor.system_custom_text_editor import SystemCustomTextEditor
-from ui.preferences.tab import Tab
+from ui.preferences.tab.tab import Tab
 
 
 class ModelTab(Tab):
