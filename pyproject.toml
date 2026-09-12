@@ -23,6 +23,12 @@ dev = [
     "ruff>=0.15.17",
 ]
 
+[tool.pyside6-project]
+files = [
+    "src/main.py",
+    "src/main.qrc",
+]
+
 [tool.commitizen]
 name = "cz_conventional_commits"
 tag_format = "$version"
