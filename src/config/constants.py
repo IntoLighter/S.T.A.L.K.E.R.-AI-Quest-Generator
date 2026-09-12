@@ -39,7 +39,7 @@ class ConstantsConfig(BaseSettings):
 
     icon_path: Path = get_resource_path("icon.ico")
 
-    icon_workflow_path: Path = get_resource_path("generation/icon.json")
+    icon_workflow_path: Path = get_resource_path("workflow/icon.json")
     default_icon_workflow: str = get_resource_file_content(icon_workflow_path)
 
     @computed_field
