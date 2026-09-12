@@ -1,3 +1,4 @@
+import rc_main  # noqa: F401 I001
 import signal
 import sys
 import traceback
@@ -5,7 +6,7 @@ import types
 
 from loguru import logger
 from PySide6.QtCore import QLibraryInfo, QTranslator
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QApplication,
     QMessageBox,
@@ -59,7 +60,7 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     app.setApplicationName(app_config.name)
-    app.setWindowIcon(QIcon(str(constants_config.icon_path)))
+    app.setWindowIcon(QIcon(constants_config.icon_path))
     app.aboutToQuit.connect(on_app_stopped)
 
     setup_logging()
