@@ -4,7 +4,7 @@ from pydantic import computed_field
 from pydantic_settings import BaseSettings
 from PySide6.QtCore import QStandardPaths
 
-from misc import get_resource_file_content, get_resource_path
+from misc import read_resource
 
 
 class ConstantsConfig(BaseSettings):
@@ -30,17 +30,13 @@ class ConstantsConfig(BaseSettings):
     icon_workflow_stretch: int = 4
     icon_workflow_height: int = editor_height * icon_workflow_stretch
 
-    prompt_path: Path = get_resource_path("prompt")
-    default_concept_prompt: str = get_resource_file_content(prompt_path / "concept.txt")
-    default_metadata_prompt: str = get_resource_file_content(
-        prompt_path / "metadata.txt"
-    )
-    default_icon_prompt: str = get_resource_file_content(prompt_path / "icon.txt")
+    default_concept_prompt: str = read_resource(":/prompt/concept.txt")
+    default_metadata_prompt: str = read_resource(":/prompt/metadata.txt")
+    default_icon_prompt: str = read_resource(":/prompt/icon.txt")
 
-    icon_path: Path = get_resource_path("icon.ico")
+    icon_path: str = ":/icon/icon.ico"
 
-    icon_workflow_path: Path = get_resource_path("workflow/icon.json")
-    default_icon_workflow: str = get_resource_file_content(icon_workflow_path)
+    default_icon_workflow: str = read_resource(":/workflow/icon.json")
 
     @computed_field
     def config_path(self) -> Path:

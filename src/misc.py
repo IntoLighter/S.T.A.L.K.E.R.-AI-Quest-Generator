@@ -1,4 +1,3 @@
-import sys
 from collections.abc import Callable
 from dataclasses import dataclass
 from functools import wraps
@@ -6,6 +5,7 @@ from pathlib import Path
 
 from loguru import logger
 from PIL import Image
+from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import (
     QMessageBox,
@@ -15,17 +15,16 @@ from PySide6.QtWidgets import (
 )
 
 
-def get_resource_path(relative_path: str) -> Path:
-    relative_path = f"resource/{relative_path}"
+def read_resource(path: str) -> str:
+    file = QFile(path)
 
-    if hasattr(sys, "_MEIPASS"):
-        return Path(sys._MEIPASS) / relative_path
-    else:
-        return Path(relative_path)
+    if not file.open(QIODevice.OpenModeFlag.ReadOnly | QIODevice.OpenModeFlag.Text):
+        raise RuntimeError(f"Не удалось открыть ресурс: {path}")
 
-
-def get_resource_file_content(file: Path) -> str:
-    return file.read_text(encoding="utf-8")
+    try:
+        return bytes(file.readAll()).decode("utf-8")
+    finally:
+        file.close()
 
 
 def get_unique_name_path(path: Path) -> Path:
