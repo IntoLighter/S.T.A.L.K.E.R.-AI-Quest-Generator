@@ -7,16 +7,10 @@ from io import BytesIO
 import openai
 import requests
 from comfykit import ComfyKit
-from deep_translator import GoogleTranslator
-from loguru import logger
-from PIL import Image
-from PySide6.QtCore import QObject, Signal, Slot
-
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
-from generation.engine.soc import SoCObjectFactory
-from generation.entity import GameRecords, GenerationResult, IconRecords, Metadata
-from generation.model.main import Model
+from deep_translator import GoogleTranslator
+from loguru import logger
 from misc import (
     ErrorInfo,
     IconGenerationError,
@@ -24,6 +18,12 @@ from misc import (
     get_unique_name_path,
     log_execution,
 )
+from PIL import Image
+from PySide6.QtCore import QObject, Signal, Slot
+
+from generation.engine.soc import SoCObjectFactory
+from generation.entity import GameRecords, GenerationResult, IconRecords, Metadata
+from generation.model.main import Model
 
 
 class Worker(QObject):
@@ -66,16 +66,19 @@ class Worker(QObject):
             case openai.APIConnectionError():
                 self.handle_exception(
                     e,
-                    "Ошибка подключения."
-                    + "Проверьте запущена ли программа генерации текста.",
+                    self.tr("Ошибка подключения.")
+                    + self.tr("Проверьте запущена ли программа генерации текста."),
                 )
             case openai.APIError():
                 self.handle_exception(
-                    e, "Ошибка генерации текста. Проверьте вывод программы генерации."
+                    e,
+                    self.tr(
+                        "Ошибка генерации текста. Проверьте вывод программы генерации."
+                    ),
                 )
             case IconGenerationError():
                 self.handle_exception(
-                    e, "Возникла ошибка генерации изображения.", str(e)
+                    e, self.tr("Возникла ошибка генерации изображения."), str(e)
                 )
             case _:
                 self.handle_unknown_exception(e)
@@ -94,7 +97,7 @@ class Worker(QObject):
 
     @log_execution
     def create_concept(self) -> str | None:
-        self.status_update.emit("Генерация концепта")
+        self.status_update.emit(self.tr("Генерация концепта"))
 
         messages = [
             {
@@ -120,7 +123,7 @@ class Worker(QObject):
 
     @log_execution
     def create_metadata_text(self, concept: str) -> str | None:
-        self.status_update.emit("Генерация метаданных")
+        self.status_update.emit(self.tr("Генерация метаданных"))
 
         messages = [
             {
@@ -153,9 +156,9 @@ class Worker(QObject):
         except Exception as e:
             self.handle_exception(
                 e,
-                "Невалидный json метаданных."
-                + "Попробуйте исправить json через соотвествующие сайты "
-                + "и прогоните его через конфигуратор.",
+                self.tr("Невалидный json метаданных.")
+                + self.tr("Попробуйте исправить json через соотвествующие сайты ")
+                + self.tr("и прогоните его через конфигуратор."),
             )
 
     @log_execution
@@ -164,7 +167,7 @@ class Worker(QObject):
             title_english = GoogleTranslator(source="ru", target="en").translate(title)
         except Exception as e:
             self.handle_exception(
-                e, "Ошибка гугл переводчика. Название не будет переведено."
+                e, self.tr("Ошибка гугл переводчика. Название не будет переведено.")
             )
             title_english = title
 
@@ -174,7 +177,7 @@ class Worker(QObject):
 
     @log_execution
     def create_icon_prompt(self, concept: str) -> str | None:
-        self.status_update.emit("Генерация промпта иконки")
+        self.status_update.emit(self.tr("Генерация промпта иконки"))
 
         messages = [
             {
@@ -200,7 +203,7 @@ class Worker(QObject):
 
     @log_execution
     def create_icon_records(self, icon_prompt: str) -> IconRecords | None:
-        self.status_update.emit("Генерация иконки")
+        self.status_update.emit(self.tr("Генерация иконки"))
 
         kit = ComfyKit(comfyui_url=constants_config.comfy_ui_base_url)
 
@@ -231,7 +234,7 @@ class Worker(QObject):
 
     @log_execution
     def save_on_disk(self, result: GenerationResult) -> None:
-        self.status_update.emit("Сохранение данных")
+        self.status_update.emit(self.tr("Сохранение данных"))
 
         if not self.preferences_config.save_path:
             return
