@@ -5,8 +5,8 @@ import traceback
 import types
 
 from loguru import logger
-from PySide6.QtCore import QLibraryInfo, QTranslator
-from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtCore import QCoreApplication, QLibraryInfo, QTranslator
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QApplication,
     QMessageBox,
@@ -49,7 +49,9 @@ def create_preferences_config() -> PreferencesConfig:
         preferences_config = PreferencesConfig.load()
     except Exception as e:
         logger.exception(e)
-        QMessageBox.warning(None, "Ошибка файла настроек", str(e))
+        QMessageBox.warning(
+            None, QCoreApplication.translate("main", "Ошибка файла настроек"), str(e)
+        )
         preferences_config = PreferencesConfig()
     return preferences_config
 

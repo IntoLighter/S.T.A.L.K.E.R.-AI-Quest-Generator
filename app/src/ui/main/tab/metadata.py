@@ -1,8 +1,8 @@
-from PySide6.QtCore import Slot
-
 from config.constants import constants_config
 from generation.entity import GameRecords
 from generation.worker.main import Worker
+from PySide6.QtCore import Slot
+
 from ui.main.tab.base import Tab
 
 
@@ -10,22 +10,22 @@ class MetadataTab(Tab):
     def __init__(self) -> None:
         super().__init__()
         self.metadata_editor = self.create_plain_text_editor(
-            "Метаданные",
+            self.tr("Метаданные"),
             constants_config.metadata_height,
             constants_config.metadata_stretch,
         )
         self.task_editor = self.create_plain_text_editor(
-            "Задание",
+            self.tr("Задание"),
             constants_config.editor_height,
             constants_config.editor_stretch,
         )
         self.article_editor = self.create_plain_text_editor(
-            "Описание",
+            self.tr("Описание"),
             constants_config.editor_height,
             constants_config.editor_stretch,
         )
         self.infoportions_editor = self.create_plain_text_editor(
-            "Инфопоршни",
+            self.tr("Инфопоршни"),
             constants_config.editor_height,
             constants_config.editor_stretch,
         )

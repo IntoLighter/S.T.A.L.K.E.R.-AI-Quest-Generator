@@ -1,4 +1,8 @@
+from config.constants import constants_config
+from config.preferences import PreferencesConfig
+from generation.entity import ConfiguratorParameters
 from loguru import logger
+from misc import get_layout_with_scroll, show_parameters_error
 from PySide6.QtWidgets import (
     QCheckBox,
     QHBoxLayout,
@@ -8,10 +12,6 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from config.constants import constants_config
-from config.preferences import PreferencesConfig
-from generation.entity import ConfiguratorParameters
-from misc import get_layout_with_scroll, show_parameters_error
 from ui.dialog import QWindowDialog
 from ui.editor.prompt import PromptEditor
 
@@ -19,7 +19,7 @@ from ui.editor.prompt import PromptEditor
 class ConfiguratorDialog(QWindowDialog):
     def __init__(self, parent: QWidget, preferences_config: PreferencesConfig) -> None:
         super().__init__(parent)
-        self.setWindowTitle("Конфигуратор")
+        self.setWindowTitle(self.tr("Конфигуратор"))
         self.preferences_config = preferences_config
         logger.info("Window 'Configurator' created")
 
@@ -28,11 +28,11 @@ class ConfiguratorDialog(QWindowDialog):
         self.prompt_editor = PromptEditor(preferences_config)
         self.layout.addWidget(self.prompt_editor)
 
-        label = QLabel("Концепт")
+        label = QLabel(self.tr("Концепт"))
         self.layout.addWidget(label)
         row = QHBoxLayout()
         self.layout.addLayout(row)
-        label = QLabel("Генерировать концепт")
+        label = QLabel(self.tr("Генерировать концепт"))
         row.addWidget(label)
         self.should_generate_concept_editor = QCheckBox()
         self.should_generate_concept_editor.setChecked(
@@ -45,11 +45,11 @@ class ConfiguratorDialog(QWindowDialog):
         self.concept_editor.setMinimumHeight(constants_config.concept_height)
         self.layout.addWidget(self.concept_editor, constants_config.concept_stretch)
 
-        label = QLabel("Метаданные")
+        label = QLabel(self.tr("Метаданные"))
         self.layout.addWidget(label)
         row = QHBoxLayout()
         self.layout.addLayout(row)
-        label = QLabel("Генерировать метаданные")
+        label = QLabel(self.tr("Генерировать метаданные"))
         row.addWidget(label)
         self.should_generate_metadata_editor = QCheckBox()
         self.should_generate_metadata_editor.setChecked(
@@ -62,11 +62,11 @@ class ConfiguratorDialog(QWindowDialog):
         self.metadata_editor.setMinimumHeight(constants_config.metadata_height)
         self.layout.addWidget(self.metadata_editor, constants_config.metadata_stretch)
 
-        label = QLabel("Промпт иконки")
+        label = QLabel(self.tr("Промпт иконки"))
         self.layout.addWidget(label)
         row = QHBoxLayout()
         self.layout.addLayout(row)
-        label = QLabel("Генерировать иконку")
+        label = QLabel(self.tr("Генерировать иконку"))
         row.addWidget(label)
         self.should_generate_icon_editor = QCheckBox()
         self.should_generate_icon_editor.setChecked(
@@ -89,11 +89,11 @@ class ConfiguratorDialog(QWindowDialog):
         row = QHBoxLayout()
         self.layout.addLayout(row)
 
-        ok_btn = QPushButton("Сгенерировать")
+        ok_btn = QPushButton(self.tr("Сгенерировать"))
         ok_btn.clicked.connect(self.accept)
         row.addWidget(ok_btn, stretch=1)
 
-        cancel_btn = QPushButton("Отмена")
+        cancel_btn = QPushButton(self.tr("Отмена"))
         cancel_btn.clicked.connect(self.reject)
         row.addWidget(cancel_btn, stretch=1)
 
@@ -105,7 +105,9 @@ class ConfiguratorDialog(QWindowDialog):
             or parameters.should_generate_metadata
             or parameters.should_generate_icon
         ):
-            show_parameters_error(self, "Невозможно запустить пустую генерацию.")
+            show_parameters_error(
+                self, self.tr("Невозможно запустить пустую генерацию.")
+            )
             return
 
         if (
@@ -114,7 +116,7 @@ class ConfiguratorDialog(QWindowDialog):
             and not (parameters.should_generate_concept or parameters.concept)
         ):
             show_parameters_error(
-                self, "Невозможно сгенерировать метаданные без концепта."
+                self, self.tr("Невозможно сгенерировать метаданные без концепта.")
             )
             return
 
@@ -124,7 +126,7 @@ class ConfiguratorDialog(QWindowDialog):
             and not (parameters.should_generate_concept or parameters.concept)
         ):
             show_parameters_error(
-                self, "Невозможно сгенерировать промпт иконки без концепта."
+                self, self.tr("Невозможно сгенерировать промпт иконки без концепта.")
             )
             return
 
