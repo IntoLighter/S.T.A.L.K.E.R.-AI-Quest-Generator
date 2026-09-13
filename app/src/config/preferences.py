@@ -6,7 +6,11 @@ from typing import Self
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from config.constants import constants_config
-from config.text import text_config
+
+DEFAULT_PROMPT = """
+Тип: исследование
+Квестодатель: Сидорович
+""".strip()
 
 
 class ModelType(Enum):
@@ -30,7 +34,7 @@ class PreferencesConfig(BaseSettings):
     should_generate_metadata: bool = True
     should_generate_icon: bool = True
 
-    prompt_message: str = text_config.default_prompt
+    prompt_message: str = DEFAULT_PROMPT
     save_path: Path | None = None
 
     model_type: ModelType = ModelType.Local
