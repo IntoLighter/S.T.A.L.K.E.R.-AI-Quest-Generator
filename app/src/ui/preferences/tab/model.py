@@ -1,3 +1,8 @@
+from config.constants import constants_config
+from config.preferences import ModelType, PreferencesConfig
+from generation.model.local import LocalModel
+from generation.model.remote import RemoteModel
+from misc import get_layout_with_scroll
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -7,11 +12,6 @@ from PySide6.QtWidgets import (
     QRadioButton,
 )
 
-from config.constants import constants_config
-from config.preferences import ModelType, PreferencesConfig
-from generation.model.local import LocalModel
-from generation.model.remote import RemoteModel
-from misc import get_layout_with_scroll
 from ui.editor.system_custom_text_editor import SystemCustomTextEditor
 from ui.preferences.tab.base import Tab
 
@@ -22,14 +22,14 @@ class ModelTab(Tab):
         self.preferences_config = preferences_config
         self.layout = get_layout_with_scroll(self)
 
-        label = QLabel("Текст")
+        label = QLabel(self.tr("Текст"))
         self.layout.addWidget(label)
 
         self.group = QButtonGroup(self)
         row = QHBoxLayout()
         self.layout.addLayout(row)
-        self.local_model_button = QRadioButton("Локальная")
-        self.remote_model_button = QRadioButton("Удаленная")
+        self.local_model_button = QRadioButton(self.tr("Локальная"))
+        self.remote_model_button = QRadioButton(self.tr("Удаленная"))
         self.group.addButton(self.local_model_button)
         self.group.addButton(self.remote_model_button)
         type_to_button = {
@@ -58,7 +58,7 @@ class ModelTab(Tab):
         self.update_text_model_dropdown()
 
         self.icon_workflow_editor = SystemCustomTextEditor(
-            label="Workflow иконки",
+            label=self.tr("Workflow иконки"),
             source=self.preferences_config.icon_workflow_source,
             system_content=constants_config.default_icon_workflow,
             custom_content=self.preferences_config.custom_icon_workflow,
