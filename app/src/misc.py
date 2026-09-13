@@ -83,11 +83,11 @@ def log_execution[**P, R](func: Callable[P, R]) -> Callable[P, R]:
 
 
 def show_parameters_error(parent: QWidget, text: str) -> None:
-    QMessageBox.warning(parent, "Ошибка параметров", text)
+    QMessageBox.warning(parent, parent.tr("Ошибка параметров"), text)
 
 
 def show_settings_error(parent: QWidget, text: str) -> None:
-    QMessageBox.warning(parent, "Ошибка настроек", text)
+    QMessageBox.warning(parent, parent.tr("Ошибка настроек"), text)
 
 
 class IconGenerationError(Exception):

@@ -1,3 +1,5 @@
+from config.constants import constants_config
+from config.preferences import ValueSource
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -8,9 +10,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
-from config.constants import constants_config
-from config.preferences import ValueSource
 
 
 class SystemCustomTextEditor(QWidget):
@@ -38,11 +37,11 @@ class SystemCustomTextEditor(QWidget):
         self.layout.addLayout(row)
         self.group = QButtonGroup(self)
 
-        self.system_button = QRadioButton("Системный")
+        self.system_button = QRadioButton(self.tr("Системный"))
         self.group.addButton(self.system_button)
         row.addWidget(self.system_button)
 
-        self.custom_button = QRadioButton("Собственный")
+        self.custom_button = QRadioButton(self.tr("Собственный"))
         self.group.addButton(self.custom_button)
         row.addWidget(self.custom_button)
 

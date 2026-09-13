@@ -1,3 +1,6 @@
+from config.constants import constants_config
+from config.parameters import parameters
+from config.preferences import PreferencesConfig
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QComboBox,
@@ -8,11 +11,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-
-from config.constants import constants_config
-from config.parameters import parameters
-from config.preferences import PreferencesConfig
-from config.text import text_config
 
 
 class PromptEditor(QWidget):
@@ -42,7 +40,7 @@ class PromptEditor(QWidget):
         )
         row.addWidget(self.parameter_values_combo, stretch=1)
 
-        self.add_parameter_button = QPushButton(text_config.add_parameter_text)
+        self.add_parameter_button = QPushButton(self.tr("Добавить"))
         self.add_parameter_button.clicked.connect(self.add_parameter)
         row.addWidget(self.add_parameter_button)
 
@@ -60,7 +58,7 @@ class PromptEditor(QWidget):
         self.prompt_editor.append(f"{name}: {value}")
 
     def add_prompt_editor(self) -> None:
-        label = QLabel("Промпт")
+        label = QLabel(self.tr("Промпт"))
         self.layout.addWidget(label)
         self.prompt_editor = QPlainTextEdit()
         self.prompt_editor.setPlainText(self.preferences_config.prompt_message)
