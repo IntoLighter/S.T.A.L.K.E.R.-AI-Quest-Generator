@@ -26,7 +26,7 @@ dev = [
 [tool.pyside6-project]
 files = [
     "app/src/main.py",
-    "app/src/main.qrc",
+    "app/src/resource/main.qrc",
 ]
 
 [tool.commitizen]

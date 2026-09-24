@@ -8,7 +8,7 @@ from generation.model.remote import RemoteModel
 from generation.worker.configurator import ConfiguratorWorker
 from generation.worker.normal import NormalWorker
 from loguru import logger
-from misc import (
+from util.misc import (
     ErrorInfo,
     get_layout_with_scroll,
     show_parameters_error,
