@@ -38,6 +38,8 @@ class ConstantsConfig(BaseSettings):
 
     default_icon_workflow: str = read_resource(":/workflow/icon.json")
 
+    quest_generated_tray_message_msecs: int = 5000
+
     @computed_field
     def config_path(self) -> Path:
         path = Path(
