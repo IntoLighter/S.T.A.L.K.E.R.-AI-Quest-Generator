@@ -10,11 +10,11 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QSystemTrayIcon,
 )
-from tray import Tray
 
 from ui.configurator import ConfiguratorDialog
 from ui.main.widget import MainWidget
 from ui.preferences.main import PreferencesDialog
+from ui.tray import Tray
 
 
 class MainWindow(QMainWindow):

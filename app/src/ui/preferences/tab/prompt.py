@@ -1,6 +1,6 @@
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
-from misc import get_layout_with_scroll
+from util.misc import get_layout_with_scroll
 
 from ui.editor.system_custom_text_editor import SystemCustomTextEditor
 from ui.preferences.tab.base import Tab

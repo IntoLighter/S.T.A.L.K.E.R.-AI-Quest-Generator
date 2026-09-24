@@ -1,4 +1,4 @@
-import rc_main  # noqa: F401 I001
+import resource.rc_main # noqa: F401 I001
 import signal
 import sys
 import traceback

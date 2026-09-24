@@ -3,8 +3,7 @@ from pathlib import Path
 from pydantic import computed_field
 from pydantic_settings import BaseSettings
 from PySide6.QtCore import QStandardPaths
-
-from misc import read_resource
+from util.misc import read_resource
 
 
 class ConstantsConfig(BaseSettings):
