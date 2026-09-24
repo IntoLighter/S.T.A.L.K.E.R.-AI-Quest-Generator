@@ -2,7 +2,7 @@ from config.constants import constants_config
 from config.preferences import PreferencesConfig
 from generation.entity import ConfiguratorParameters
 from loguru import logger
-from misc import get_layout_with_scroll, show_parameters_error
+from util.misc import get_layout_with_scroll, show_parameters_error
 from PySide6.QtWidgets import (
     QCheckBox,
     QHBoxLayout,
