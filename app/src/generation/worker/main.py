@@ -11,7 +11,7 @@ from config.constants import constants_config
 from config.preferences import PreferencesConfig
 from deep_translator import GoogleTranslator
 from loguru import logger
-from misc import (
+from util.misc import (
     ErrorInfo,
     IconGenerationError,
     get_unique_counter_name_path,
