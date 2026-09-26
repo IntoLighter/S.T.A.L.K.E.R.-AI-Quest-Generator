@@ -1,0 +1,2 @@
+class IconGenerationError(Exception):
+    pass
