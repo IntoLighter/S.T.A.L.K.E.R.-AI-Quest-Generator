@@ -4,7 +4,7 @@ from generation.worker.main import Worker
 from ui.utils.image import get_pixmap
 from PySide6.QtCore import Slot
 
-from ui.main.tab.base import Tab
+from ui.windows.main.tab.base import Tab
 
 
 class IconTab(Tab):

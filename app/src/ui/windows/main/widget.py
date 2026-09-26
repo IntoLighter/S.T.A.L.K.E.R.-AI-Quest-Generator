@@ -21,12 +21,12 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ui.editor.prompt import PromptEditor
-from ui.exception.main import ExceptionDialog
-from ui.main.tab.base import Tab
-from ui.main.tab.concept import ConceptTab
-from ui.main.tab.icon import IconTab
-from ui.main.tab.metadata import MetadataTab
+from ui.widgets.prompt import PromptEditor
+from ui.windows.exception.main import ExceptionDialog
+from ui.windows.main.tab.base import Tab
+from ui.windows.main.tab.concept import ConceptTab
+from ui.windows.main.tab.icon import IconTab
+from ui.windows.main.tab.metadata import MetadataTab
 
 
 class MainWidget(QWidget):

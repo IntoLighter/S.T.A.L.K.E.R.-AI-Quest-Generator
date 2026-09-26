@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
 )
 
 from ui.dialog import QWindowDialog
-from ui.editor.prompt import PromptEditor
+from ui.widgets.prompt import PromptEditor
 
 
 class ConfiguratorDialog(QWindowDialog):
