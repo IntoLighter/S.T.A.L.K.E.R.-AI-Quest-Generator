@@ -1,7 +1,7 @@
 from config.constants import constants_config
 from generation.entity import IconRecords
 from generation.worker.main import Worker
-from util.misc import get_pixmap
+from ui.utils.image import get_pixmap
 from PySide6.QtCore import Slot
 
 from ui.main.tab.base import Tab

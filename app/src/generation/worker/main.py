@@ -11,12 +11,10 @@ from config.constants import constants_config
 from config.preferences import PreferencesConfig
 from deep_translator import GoogleTranslator
 from loguru import logger
-from util.misc import (
+from generation.errors import IconGenerationError
+from util.logging import log_execution
+from util.error import (
     ErrorInfo,
-    IconGenerationError,
-    get_unique_counter_name_path,
-    get_unique_name_path,
-    log_execution,
 )
 from PIL import Image
 from PySide6.QtCore import QObject, Signal, Slot
@@ -24,6 +22,7 @@ from PySide6.QtCore import QObject, Signal, Slot
 from generation.engine.soc import SoCObjectFactory
 from generation.entity import GameRecords, GenerationResult, IconRecords, Metadata
 from generation.model.main import Model
+from util.path import get_unique_counter_name_path, get_unique_name_path
 
 
 class Worker(QObject):
