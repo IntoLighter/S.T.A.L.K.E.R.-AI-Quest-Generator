@@ -15,8 +15,8 @@ from PySide6.QtWidgets import (
 from config.app import app_config
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
-from ui.exception.main import ExceptionDialog
-from ui.main.window import MainWindow
+from ui.windows.exception.main import ExceptionDialog
+from ui.windows.main.window import MainWindow
 
 
 def exception_hook(
