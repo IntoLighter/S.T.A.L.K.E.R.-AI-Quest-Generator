@@ -3,7 +3,7 @@ from config.preferences import PreferencesConfig
 from generation.entity import ConfiguratorParameters
 from loguru import logger
 from ui.utils.layout import get_layout_with_scroll
-from ui.utils.message import show_parameters_error
+from ui.utils.message import show_generation_start_error
 from PySide6.QtWidgets import (
     QCheckBox,
     QHBoxLayout,
@@ -106,7 +106,7 @@ class ConfiguratorDialog(QWindowDialog):
             or parameters.should_generate_metadata
             or parameters.should_generate_icon
         ):
-            show_parameters_error(
+            show_generation_start_error(
                 self, self.tr("Невозможно запустить пустую генерацию.")
             )
             return
@@ -116,7 +116,7 @@ class ConfiguratorDialog(QWindowDialog):
             and not parameters.metadata
             and not (parameters.should_generate_concept or parameters.concept)
         ):
-            show_parameters_error(
+            show_generation_start_error(
                 self, self.tr("Невозможно сгенерировать метаданные без концепта.")
             )
             return
@@ -126,7 +126,7 @@ class ConfiguratorDialog(QWindowDialog):
             and not parameters.icon_prompt
             and not (parameters.should_generate_concept or parameters.concept)
         ):
-            show_parameters_error(
+            show_generation_start_error(
                 self, self.tr("Невозможно сгенерировать промпт иконки без концепта.")
             )
             return
