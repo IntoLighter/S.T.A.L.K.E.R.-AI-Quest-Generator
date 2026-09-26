@@ -12,8 +12,8 @@ from PySide6.QtWidgets import (
     QRadioButton,
 )
 
-from ui.editor.system_custom_text_editor import SystemCustomTextEditor
-from ui.preferences.tab.base import Tab
+from ui.widgets.system_custom_text_editor import SystemCustomTextEditor
+from ui.windows.preferences.tab.base import Tab
 
 
 class ModelTab(Tab):

@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
     QPlainTextEdit,
 )
 
-from ui.preferences.tab.base import Tab
+from ui.windows.preferences.tab.base import Tab
 
 
 class ConfiguratorTab(Tab):

@@ -11,9 +11,9 @@ from PySide6.QtWidgets import (
     QSystemTrayIcon,
 )
 
-from ui.configurator import ConfiguratorDialog
-from ui.main.widget import MainWidget
-from ui.preferences.main import PreferencesDialog
+from ui.windows.configurator.main import ConfiguratorDialog
+from ui.windows.main.widget import MainWidget
+from ui.windows.preferences.main import PreferencesDialog
 from ui.tray import Tray
 
 

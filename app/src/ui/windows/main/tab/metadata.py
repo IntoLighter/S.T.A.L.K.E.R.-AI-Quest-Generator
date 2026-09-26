@@ -3,7 +3,7 @@ from generation.entity import GameRecords
 from generation.worker.main import Worker
 from PySide6.QtCore import Slot
 
-from ui.main.tab.base import Tab
+from ui.windows.main.tab.base import Tab
 
 
 class MetadataTab(Tab):
