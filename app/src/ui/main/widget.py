@@ -8,11 +8,10 @@ from generation.model.remote import RemoteModel
 from generation.worker.configurator import ConfiguratorWorker
 from generation.worker.normal import NormalWorker
 from loguru import logger
-from util.misc import (
+from ui.utils.layout import get_layout_with_scroll
+from ui.utils.message import show_parameters_error, show_settings_error
+from util.error import (
     ErrorInfo,
-    get_layout_with_scroll,
-    show_parameters_error,
-    show_settings_error,
 )
 from PySide6.QtCore import QThread, Signal, Slot
 from PySide6.QtWidgets import (
