@@ -13,11 +13,11 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ui.dialog import QWindowDialog
+from ui.dialog import BaseDialog
 from ui.widgets.prompt import PromptEditor
 
 
-class ConfiguratorDialog(QWindowDialog):
+class ConfiguratorDialog(BaseDialog):
     def __init__(self, parent: QWidget, preferences_config: PreferencesConfig) -> None:
         super().__init__(parent)
         self.setWindowTitle(self.tr("Конфигуратор"))

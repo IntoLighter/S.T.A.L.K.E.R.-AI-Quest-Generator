@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from ui.dialog import QWindowDialog
+from ui.dialog import BaseDialog
 from ui.windows.preferences.tab.base import Tab
 from ui.windows.preferences.tab.configurator import ConfiguratorTab
 from ui.windows.preferences.tab.general import GeneralTab
@@ -16,7 +16,7 @@ from ui.windows.preferences.tab.model import ModelTab
 from ui.windows.preferences.tab.prompt import PromptTab
 
 
-class PreferencesDialog(QWindowDialog):
+class PreferencesDialog(BaseDialog):
     def __init__(self, parent: QWidget, preferences_config: PreferencesConfig) -> None:
         super().__init__(parent)
         self.setWindowTitle(self.tr("Настройки"))

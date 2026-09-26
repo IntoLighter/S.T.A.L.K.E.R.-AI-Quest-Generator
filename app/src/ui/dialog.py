@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QDialog, QWidget
 from config.constants import constants_config
 
 
-class QWindowDialog(QDialog):
+class BaseDialog(QDialog):
     def __init__(self, parent: QWidget) -> None:
         super().__init__(parent)
         self.resize(*constants_config.dialog_size)  # noqa
