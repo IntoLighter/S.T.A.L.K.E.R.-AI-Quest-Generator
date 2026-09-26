@@ -2,7 +2,7 @@ from config.constants import constants_config
 from config.preferences import ModelType, PreferencesConfig
 from generation.model.local import LocalModel
 from generation.model.remote import RemoteModel
-from util.misc import get_layout_with_scroll
+from ui.utils.layout import get_layout_with_scroll
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QButtonGroup,
