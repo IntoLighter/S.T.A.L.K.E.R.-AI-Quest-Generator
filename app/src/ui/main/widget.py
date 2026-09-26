@@ -9,7 +9,7 @@ from generation.worker.configurator import ConfiguratorWorker
 from generation.worker.normal import NormalWorker
 from loguru import logger
 from ui.utils.layout import get_layout_with_scroll
-from ui.utils.message import show_parameters_error, show_settings_error
+from ui.utils.message import show_generation_start_error
 from util.error import (
     ErrorInfo,
 )
@@ -51,7 +51,7 @@ class MainWidget(QWidget):
     @Slot()
     def generate_quest_normal(self) -> None:
         if not self.preferences_config.current_model:
-            show_settings_error(
+            show_generation_start_error(
                 self,
                 self.tr(
                     "Невозможно запустить генерацию. Текстовая модель не задана."
@@ -60,7 +60,7 @@ class MainWidget(QWidget):
             return
 
         if not self.preferences_config.should_generate_concept:
-            show_parameters_error(
+            show_generation_start_error(
                 self,
                 self.tr(
                     "Невозможно запустить генерацию. Отключенна генерация концепта."
