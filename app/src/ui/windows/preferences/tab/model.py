@@ -2,7 +2,6 @@ from config.constants import constants_config
 from config.preferences import ModelType, PreferencesConfig
 from generation.model.text.local import LocalTextModel
 from generation.model.text.remote import RemoteTextModel
-from ui.utils.layout import get_layout_with_scroll
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -12,6 +11,7 @@ from PySide6.QtWidgets import (
     QRadioButton,
 )
 
+from ui.utils.layout import get_layout_with_scroll
 from ui.widgets.system_custom_text_editor import SystemCustomTextEditor
 from ui.windows.preferences.tab.base import Tab
 
