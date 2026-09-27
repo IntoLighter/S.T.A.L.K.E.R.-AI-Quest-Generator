@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from config.preferences import ModelType, PreferencesConfig
 from generation.entity import ConfiguratorParameters
-from generation.model.local import LocalModel
-from generation.model.main import Model
-from generation.model.remote import RemoteModel
+from generation.model.text.local import LocalTextModel
+from generation.model.text.main import TextModel
+from generation.model.text.remote import RemoteTextModel
 from generation.worker.configurator import ConfiguratorWorker
 from generation.worker.normal import NormalWorker
 from loguru import logger
@@ -89,10 +89,10 @@ class MainWidget(QWidget):
         self.generate_quest()
 
     @property
-    def model(self) -> Model:
+    def model(self) -> TextModel:
         type_to_value = {
-            ModelType.Local: LocalModel(preferences_config=self.preferences_config),
-            ModelType.Remote: RemoteModel(preferences_config=self.preferences_config),
+            ModelType.Local: LocalTextModel(preferences_config=self.preferences_config),
+            ModelType.Remote: RemoteTextModel(preferences_config=self.preferences_config),
         }
 
         return type_to_value[self.preferences_config.model_type]

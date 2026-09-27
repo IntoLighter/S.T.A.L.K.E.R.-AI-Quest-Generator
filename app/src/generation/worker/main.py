@@ -1,27 +1,22 @@
-import asyncio
 import json
 import traceback
 from contextlib import suppress
-from io import BytesIO
 
 import openai
-import requests
-from comfykit import ComfyKit
-from config.constants import constants_config
 from config.preferences import PreferencesConfig
 from deep_translator import GoogleTranslator
 from loguru import logger
-from generation.errors import IconGenerationError
+from generation.errors import ImageGenerationError
+from generation.model.image.main import ImageModel
 from util.logging import log_execution
 from util.error import (
     ErrorInfo,
 )
-from PIL import Image
 from PySide6.QtCore import QObject, Signal, Slot
 
 from generation.engine.soc import SoCObjectFactory
 from generation.entity import GameRecords, GenerationResult, IconRecords, Metadata
-from generation.model.main import Model
+from generation.model.text.main import TextModel
 from util.path import get_unique_counter_name_path, get_unique_name_path
 
 
@@ -38,11 +33,12 @@ class Worker(QObject):
     finished = Signal()
 
     def __init__(
-        self, preferences_config: PreferencesConfig, text_model: Model, prompt: str
+        self, preferences_config: PreferencesConfig, text_model: TextModel, prompt: str
     ) -> None:
         super().__init__()
         self.preferences_config = preferences_config
         self.text_model = text_model
+        self.image_model = ImageModel(preferences_config)
         self.quest_prompt = prompt
         self.is_interruption_requested = False
 
@@ -75,7 +71,7 @@ class Worker(QObject):
                         "Ошибка генерации текста. Проверьте вывод программы генерации."
                     ),
                 )
-            case IconGenerationError():
+            case ImageGenerationError():
                 self.handle_exception(
                     e, self.tr("Возникла ошибка генерации изображения."), str(e)
                 )
@@ -203,32 +199,10 @@ class Worker(QObject):
     @log_execution
     def create_icon_records(self, icon_prompt: str) -> IconRecords | None:
         self.status_update.emit(self.tr("Генерация иконки"))
-
-        kit = ComfyKit(comfyui_url=constants_config.comfy_ui_base_url)
-
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        try:
-            result = loop.run_until_complete(
-                kit.execute_json(
-                    json.loads(self.preferences_config.icon_workflow),
-                    {"prompt": icon_prompt},
-                )
-            )
-        finally:
-            loop.close()
-
-        if result.status == "error":
-            raise IconGenerationError(result.msg)
-
-        response = requests.get(result.images[0])
-        response.raise_for_status()
-        icon = Image.open(BytesIO(response.content))
-
+        icon = self.image_model.generate(icon_prompt)
         icon_soc = SoCObjectFactory.create_icon(icon)
         icon_records = IconRecords(icon=icon, icon_soc=icon_soc)
         self.icon_ready.emit(icon_records)
-
         return icon_records
 
     @log_execution

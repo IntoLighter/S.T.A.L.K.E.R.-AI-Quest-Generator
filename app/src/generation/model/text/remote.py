@@ -1,9 +1,9 @@
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
-from generation.model.main import Model
+from generation.model.text.main import TextModel
 
 
-class RemoteModel(Model):
+class RemoteTextModel(TextModel):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__(
             model=preferences_config.remote_model,

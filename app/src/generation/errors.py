@@ -1,2 +1,2 @@
-class IconGenerationError(Exception):
+class ImageGenerationError(Exception):
     pass
