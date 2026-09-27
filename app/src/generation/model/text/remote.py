@@ -1,5 +1,6 @@
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
+
 from generation.model.text.main import TextModel
 
 

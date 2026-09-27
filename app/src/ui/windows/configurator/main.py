@@ -2,8 +2,6 @@ from config.constants import constants_config
 from config.preferences import PreferencesConfig
 from generation.entity import ConfiguratorParameters
 from loguru import logger
-from ui.utils.layout import get_layout_with_scroll
-from ui.utils.message import show_generation_start_error
 from PySide6.QtWidgets import (
     QCheckBox,
     QHBoxLayout,
@@ -14,6 +12,8 @@ from PySide6.QtWidgets import (
 )
 
 from ui.dialog import BaseDialog
+from ui.utils.layout import get_layout_with_scroll
+from ui.utils.message import show_generation_start_error
 from ui.widgets.prompt import PromptEditor
 
 
