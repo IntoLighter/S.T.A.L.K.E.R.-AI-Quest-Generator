@@ -1,7 +1,7 @@
 from config.constants import constants_config
 from config.preferences import ModelType, PreferencesConfig
-from generation.model.local import LocalModel
-from generation.model.remote import RemoteModel
+from generation.model.text.local import LocalTextModel
+from generation.model.text.remote import RemoteTextModel
 from ui.utils.layout import get_layout_with_scroll
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
@@ -41,14 +41,14 @@ class ModelTab(Tab):
         row.addWidget(self.remote_model_button)
 
         self.local_model_dropdown = QComboBox()
-        model = LocalModel(preferences_config=preferences_config)
+        model = LocalTextModel(preferences_config=preferences_config)
         self.local_model_dropdown.addItems(model.get_models())
         index = self.local_model_dropdown.findText(preferences_config.local_model)
         self.local_model_dropdown.setCurrentIndex(index)
         self.layout.addWidget(self.local_model_dropdown)
 
         self.remote_model_dropdown = QComboBox()
-        model = RemoteModel(preferences_config=preferences_config)
+        model = RemoteTextModel(preferences_config=preferences_config)
         self.remote_model_dropdown.addItems(model.get_models())
         index = self.remote_model_dropdown.findText(preferences_config.remote_model)
         self.remote_model_dropdown.setCurrentIndex(index)

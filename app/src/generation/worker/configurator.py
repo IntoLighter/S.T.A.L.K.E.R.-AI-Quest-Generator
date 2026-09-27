@@ -1,7 +1,7 @@
 from config.preferences import PreferencesConfig
 from generation.engine.soc import SoCObjectFactory
 from generation.entity import ConfiguratorParameters, GenerationResult
-from generation.model.main import Model
+from generation.model.text.main import TextModel
 from generation.worker.main import Worker
 
 
@@ -9,7 +9,7 @@ class ConfiguratorWorker(Worker):
     def __init__(
         self,
         preferences_config: PreferencesConfig,
-        text_model: Model,
+        text_model: TextModel,
         prompt: str,
         parameters: ConfiguratorParameters,
     ) -> None:

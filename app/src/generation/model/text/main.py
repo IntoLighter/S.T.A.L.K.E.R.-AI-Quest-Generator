@@ -6,7 +6,7 @@ from openai.types.chat import ChatCompletionMessageParam
 from pydantic import BaseModel
 
 
-class Model:
+class TextModel:
     def __init__(self, model: str, base_url: str, api_key: str) -> None:
         self.client = OpenAI(api_key=api_key, base_url=base_url)
         self.model = model
