@@ -11,10 +11,10 @@ from PySide6.QtWidgets import (
     QSystemTrayIcon,
 )
 
+from ui.tray import Tray
 from ui.windows.configurator.main import ConfiguratorDialog
 from ui.windows.main.widget import MainWidget
 from ui.windows.preferences.main import PreferencesDialog
-from ui.tray import Tray
 
 
 class MainWindow(QMainWindow):

@@ -1,7 +1,7 @@
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
-from ui.utils.layout import get_layout_with_scroll
 
+from ui.utils.layout import get_layout_with_scroll
 from ui.widgets.system_custom_text_editor import SystemCustomTextEditor
 from ui.windows.preferences.tab.base import Tab
 

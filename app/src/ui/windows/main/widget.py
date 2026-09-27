@@ -8,11 +8,6 @@ from generation.model.text.remote import RemoteTextModel
 from generation.worker.configurator import ConfiguratorWorker
 from generation.worker.normal import NormalWorker
 from loguru import logger
-from ui.utils.layout import get_layout_with_scroll
-from ui.utils.message import show_generation_start_error
-from util.error import (
-    ErrorInfo,
-)
 from PySide6.QtCore import QThread, Signal, Slot
 from PySide6.QtWidgets import (
     QMessageBox,
@@ -20,7 +15,12 @@ from PySide6.QtWidgets import (
     QTabWidget,
     QWidget,
 )
+from util.error import (
+    ErrorInfo,
+)
 
+from ui.utils.layout import get_layout_with_scroll
+from ui.utils.message import show_generation_start_error
 from ui.widgets.prompt import PromptEditor
 from ui.windows.exception.main import ExceptionDialog
 from ui.windows.main.tab.base import Tab

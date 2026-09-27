@@ -1,4 +1,5 @@
 from config.preferences import PreferencesConfig
+
 from generation.engine.soc import SoCObjectFactory
 from generation.entity import ConfiguratorParameters, GenerationResult
 from generation.model.text.main import TextModel

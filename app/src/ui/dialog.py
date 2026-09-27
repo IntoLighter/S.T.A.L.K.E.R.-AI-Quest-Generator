@@ -1,7 +1,6 @@
+from config.constants import constants_config
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QDialog, QWidget
-
-from config.constants import constants_config
 
 
 class BaseDialog(QDialog):
