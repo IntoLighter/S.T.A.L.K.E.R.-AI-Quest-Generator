@@ -6,6 +6,7 @@ from typing import Self
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from config.constants import constants_config
+from config.resources import resources_config
 
 DEFAULT_PROMPT = """
 Тип: исследование
@@ -53,42 +54,42 @@ class PreferencesConfig(BaseSettings):
         return type_to_value[self.model_type]
 
     icon_workflow_source: ValueSource = ValueSource.SYSTEM
-    custom_icon_workflow: str = constants_config.default_icon_workflow
+    custom_icon_workflow: str = resources_config.default_icon_workflow
 
     @property
     def icon_workflow(self) -> str:
         if self.icon_workflow_source == ValueSource.SYSTEM:
-            return constants_config.default_icon_workflow
+            return resources_config.default_icon_workflow
         else:
             return self.custom_icon_workflow
 
     concept_prompt_source: ValueSource = ValueSource.SYSTEM
-    custom_concept_prompt: str = constants_config.default_concept_prompt
+    custom_concept_prompt: str = resources_config.default_concept_prompt
 
     @property
     def concept_prompt(self) -> str:
         if self.concept_prompt_source == ValueSource.SYSTEM:
-            return constants_config.default_concept_prompt
+            return resources_config.default_concept_prompt
         else:
             return self.custom_concept_prompt
 
     metadata_prompt_source: ValueSource = ValueSource.SYSTEM
-    custom_metadata_prompt: str = constants_config.default_metadata_prompt
+    custom_metadata_prompt: str = resources_config.default_metadata_prompt
 
     @property
     def metadata_prompt(self) -> str:
         if self.metadata_prompt_source == ValueSource.SYSTEM:
-            return constants_config.default_metadata_prompt
+            return resources_config.default_metadata_prompt
         else:
             return self.custom_metadata_prompt
 
     icon_prompt_source: ValueSource = ValueSource.SYSTEM
-    custom_icon_prompt: str = constants_config.default_icon_prompt
+    custom_icon_prompt: str = resources_config.default_icon_prompt
 
     @property
     def icon_prompt(self) -> str:
         if self.icon_prompt_source == ValueSource.SYSTEM:
-            return constants_config.default_icon_prompt
+            return resources_config.default_icon_prompt
         else:
             return self.custom_icon_prompt
 

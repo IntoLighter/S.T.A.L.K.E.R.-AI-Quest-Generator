@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
 from config.app import app_config
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
+from config.resources import resources_config
 from ui.windows.exception.main import ExceptionDialog
 from ui.windows.main.window import MainWindow
 
@@ -62,7 +63,7 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
     app.setApplicationName(app_config.name)
-    app.setWindowIcon(QIcon(constants_config.icon_path))
+    app.setWindowIcon(QIcon(resources_config.icon_path))
     app.aboutToQuit.connect(on_app_stopped)
 
     setup_logging()
