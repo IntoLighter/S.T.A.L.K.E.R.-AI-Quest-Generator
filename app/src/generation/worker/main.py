@@ -97,7 +97,7 @@ class Worker(QObject):
         messages = [
             {
                 "role": "system",
-                "content": self.preferences_config.concept_prompt,
+                "content": self.preferences_config.concept_prompt.value,
             },
             {
                 "role": "user",
@@ -123,7 +123,7 @@ class Worker(QObject):
         messages = [
             {
                 "role": "system",
-                "content": self.preferences_config.metadata_prompt,
+                "content": self.preferences_config.metadata_prompt.value,
             },
             {"role": "user", "content": concept},
         ]
@@ -177,7 +177,7 @@ class Worker(QObject):
         messages = [
             {
                 "role": "system",
-                "content": self.preferences_config.icon_prompt,
+                "content": self.preferences_config.icon_prompt.value,
             },
             {
                 "role": "user",

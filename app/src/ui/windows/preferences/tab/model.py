@@ -60,9 +60,9 @@ class ModelTab(Tab):
 
         self.icon_workflow_editor = SystemCustomTextEditor(
             label=self.tr("Workflow иконки"),
-            source=self.preferences_config.icon_workflow_source,
+            source=self.preferences_config.icon_workflow.source,
             system_content=resources_config.default_icon_workflow,
-            custom_content=self.preferences_config.custom_icon_workflow,
+            custom_content=self.preferences_config.icon_workflow.custom,
             height=layout_config.icon_workflow_height,
             stretch=layout_config.icon_workflow_stretch,
         )
@@ -92,7 +92,7 @@ class ModelTab(Tab):
         self.preferences_config.local_model = self.local_model_dropdown.currentText()
         self.preferences_config.remote_model = self.remote_model_dropdown.currentText()
 
-        self.preferences_config.icon_workflow_source = self.icon_workflow_editor.source
-        self.preferences_config.custom_icon_workflow = (
+        self.preferences_config.icon_workflow.source = self.icon_workflow_editor.source
+        self.preferences_config.icon_workflow.custom = (
             self.icon_workflow_editor.custom_content
         )
