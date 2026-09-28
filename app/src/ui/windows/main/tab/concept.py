@@ -1,4 +1,4 @@
-from config.ui import ui_config
+from config.constants.main import constants_config
 from generation.worker.main import Worker
 from PySide6.QtCore import Slot
 
@@ -10,8 +10,8 @@ class ConceptTab(Tab):
         super().__init__()
         self.concept_editor = self.create_plain_text_editor(
             self.tr("Концепт"),
-            ui_config.concept_height,
-            ui_config.concept_stretch,
+            constants_config.ui.concept_height,
+            constants_config.ui.concept_stretch,
         )
 
     def bind_worker(self, worker: Worker) -> None:

@@ -1,5 +1,4 @@
-from config.app import app_config
-from config.ui import ui_config
+from config.constants.main import constants_config
 from config.preferences import PreferencesConfig
 from PySide6.QtCore import Qt, Slot, qtTrId
 from PySide6.QtGui import QAction, QCloseEvent, QKeySequence
@@ -20,8 +19,8 @@ from ui.windows.preferences.main import PreferencesDialog
 class MainWindow(QMainWindow):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
-        self.resize(*ui_config.window_size)  # noqa
-        self.setWindowTitle(app_config.name)
+        self.resize(*constants_config.ui.window_size)  # noqa
+        self.setWindowTitle(constants_config.app.name)
         self.preferences_config = preferences_config
         self.close_requested = False
 
@@ -99,10 +98,10 @@ class MainWindow(QMainWindow):
 
     def show_generation_complete_tray_message(self) -> None:
         self.tray.showMessage(
-            app_config.name,
+            constants_config.app.name,
             "Квест сгенерирован",
             QSystemTrayIcon.MessageIcon.Information,
-            ui_config.quest_generated_tray_message_msecs,
+            constants_config.ui.quest_generated_tray_message_msecs,
         )
 
     def set_parameters_unspecified_restrictions(self) -> None:
@@ -128,9 +127,9 @@ class MainWindow(QMainWindow):
             self,
             self.tr("О программе"),
             f"""
-<h3>{app_config.name}</h3>
-<p>{self.tr("Версия")} {app_config.version}</p>
-<p>{self.tr("Repository")}: <a href="{app_config.repository}">{app_config.repository}</a></p>
+<h3>{constants_config.app.name}</h3>
+<p>{self.tr("Версия")} {constants_config.app.version}</p>
+<p>{self.tr("Repository")}: <a href="{constants_config.app.repository}">{constants_config.app.repository}</a></p>
             """,
         )
 
