@@ -1,4 +1,5 @@
 from config.constants import constants_config
+from config.layout import layout_config
 from config.preferences import ModelType, PreferencesConfig
 from generation.model.text.local import LocalTextModel
 from generation.model.text.remote import RemoteTextModel
@@ -62,8 +63,8 @@ class ModelTab(Tab):
             source=self.preferences_config.icon_workflow_source,
             system_content=constants_config.default_icon_workflow,
             custom_content=self.preferences_config.custom_icon_workflow,
-            height=constants_config.icon_workflow_height,
-            stretch=constants_config.icon_workflow_stretch,
+            height=layout_config.icon_workflow_height,
+            stretch=layout_config.icon_workflow_stretch,
         )
         self.layout.addWidget(self.icon_workflow_editor)
 

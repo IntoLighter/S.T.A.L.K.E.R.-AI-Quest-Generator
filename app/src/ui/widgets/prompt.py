@@ -1,4 +1,4 @@
-from config.constants import constants_config
+from config.layout import layout_config
 from config.parameters import parameters
 from config.preferences import PreferencesConfig
 from PySide6.QtCore import Slot
@@ -62,8 +62,8 @@ class PromptEditor(QWidget):
         self.layout.addWidget(label)
         self.prompt_editor = QPlainTextEdit()
         self.prompt_editor.setPlainText(self.preferences_config.prompt_message)
-        self.prompt_editor.setMinimumHeight(constants_config.editor_height)
-        self.layout.addWidget(self.prompt_editor, constants_config.editor_stretch)
+        self.prompt_editor.setMinimumHeight(layout_config.editor_height)
+        self.layout.addWidget(self.prompt_editor, layout_config.editor_stretch)
 
     @property
     def prompt(self) -> str:
