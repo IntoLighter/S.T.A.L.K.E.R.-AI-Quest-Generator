@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
 )
 
 from config.app import app_config
-from config.constants import constants_config
+from config.paths import paths_config
 from config.preferences import PreferencesConfig
 from config.resources import resources_config
 from ui.windows.exception.main import ExceptionDialog
@@ -37,7 +37,7 @@ def on_app_stopped() -> None:
 
 def setup_logging() -> None:
     logger.add(
-        constants_config.log_path,
+        paths_config.log_path,
         rotation="5 MB",
         retention=2,
         level="INFO",
@@ -75,8 +75,8 @@ if __name__ == "__main__":
     app.installTranslator(qt_translator)
 
     preferences_config = create_preferences_config()
-    logger.debug(f"preferences path: {constants_config.preferences_path}")
-    logger.debug(f"log path: {constants_config.log_path}")
+    logger.debug(f"preferences path: {paths_config.preferences_path}")
+    logger.debug(f"log path: {paths_config.log_path}")
     logger.debug(f"save path: {preferences_config.save_path}")
 
     window = MainWindow(preferences_config=preferences_config)

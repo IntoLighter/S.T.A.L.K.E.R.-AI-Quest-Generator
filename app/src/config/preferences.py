@@ -5,7 +5,7 @@ from typing import Self
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from config.constants import constants_config
+from config.paths import paths_config
 from config.resources import resources_config
 
 DEFAULT_PROMPT = """
@@ -97,14 +97,14 @@ class PreferencesConfig(BaseSettings):
 
     @classmethod
     def load(cls) -> Self:
-        if constants_config.preferences_path.exists():
+        if paths_config.preferences_path.exists():
             try:
                 instance = cls.model_validate_json(
-                    constants_config.preferences_path.read_text(encoding="utf-8")
+                    paths_config.preferences_path.read_text(encoding="utf-8")
                 )
             except:
                 if not __debug__:
-                    constants_config.preferences_path.unlink()
+                    paths_config.preferences_path.unlink()
                 raise
         else:
             instance = cls()
@@ -112,6 +112,6 @@ class PreferencesConfig(BaseSettings):
         return instance
 
     def save(self) -> None:
-        constants_config.preferences_path.write_text(
+        paths_config.preferences_path.write_text(
             self.model_dump_json(indent=2), encoding="utf-8"
         )
