@@ -1,6 +1,6 @@
-from config.ui import ui_config
-from config.parameters import parameters
 from config.preferences import PreferencesConfig
+from config.ui import ui_config
+from generation.parameters import parameters
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QComboBox,
