@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings
 class LayoutConfig(BaseSettings):
     window_size: tuple[int, int] = (1280, 720)
     dialog_size: tuple[int, int] = (1024, 576)
+    quest_generated_tray_message_msecs: int = 5000
 
     editor_stretch: int = 1
     concept_stretch: int = 4
