@@ -47,7 +47,6 @@ SYSTEM_BY_OPTION: dict[str, str] = {
 
 class PreferencesConfig(BaseSettings):
     model_config = SettingsConfigDict(
-        protected_namespaces=("settings_",),
         extra="ignore",
         validate_by_name=True,
     )
@@ -61,18 +60,18 @@ class PreferencesConfig(BaseSettings):
     prompt_message: str = DEFAULT_PROMPT
     save_path: Path | None = None
 
-    model_type: ModelType = ModelType.Local
-    local_model: str = ""
-    remote_model: str = ""
+    text_model_type: ModelType = ModelType.Local
+    text_model_local: str = ""
+    text_model_remote: str = ""
 
     @property
-    def current_model(self) -> str:
+    def current_text_model(self) -> str:
         type_to_value = {
-            ModelType.Local: self.local_model,
-            ModelType.Remote: self.remote_model,
+            ModelType.Local: self.text_model_local,
+            ModelType.Remote: self.text_model_remote,
         }
 
-        return type_to_value[self.model_type]
+        return type_to_value[self.text_model_type]
 
     icon_workflow: TextOption = Field(default_factory=TextOption)
     concept_prompt: TextOption = Field(default_factory=TextOption)

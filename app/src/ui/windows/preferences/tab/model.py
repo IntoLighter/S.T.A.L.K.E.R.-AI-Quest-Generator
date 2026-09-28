@@ -37,21 +37,21 @@ class ModelTab(Tab):
             ModelType.Local: self.local_model_button,
             ModelType.Remote: self.remote_model_button,
         }
-        type_to_button[preferences_config.model_type].setChecked(True)
+        type_to_button[preferences_config.text_model_type].setChecked(True)
         row.addWidget(self.local_model_button)
         row.addWidget(self.remote_model_button)
 
         self.local_model_dropdown = QComboBox()
         model = LocalTextModel(preferences_config=preferences_config)
         self.local_model_dropdown.addItems(model.get_models())
-        index = self.local_model_dropdown.findText(preferences_config.local_model)
+        index = self.local_model_dropdown.findText(preferences_config.text_model_local)
         self.local_model_dropdown.setCurrentIndex(index)
         self.layout.addWidget(self.local_model_dropdown)
 
         self.remote_model_dropdown = QComboBox()
         model = RemoteTextModel(preferences_config=preferences_config)
         self.remote_model_dropdown.addItems(model.get_models())
-        index = self.remote_model_dropdown.findText(preferences_config.remote_model)
+        index = self.remote_model_dropdown.findText(preferences_config.text_model_remote)
         self.remote_model_dropdown.setCurrentIndex(index)
         self.layout.addWidget(self.remote_model_dropdown)
 
@@ -87,10 +87,10 @@ class ModelTab(Tab):
             self.local_model_button: ModelType.Local,
             self.remote_model_button: ModelType.Remote,
         }
-        self.preferences_config.model_type = button_to_type[self.group.checkedButton()]
+        self.preferences_config.text_model_type = button_to_type[self.group.checkedButton()]
 
-        self.preferences_config.local_model = self.local_model_dropdown.currentText()
-        self.preferences_config.remote_model = self.remote_model_dropdown.currentText()
+        self.preferences_config.text_model_local = self.local_model_dropdown.currentText()
+        self.preferences_config.text_model_remote = self.remote_model_dropdown.currentText()
 
         self.preferences_config.icon_workflow.source = self.icon_workflow_editor.source
         self.preferences_config.icon_workflow.custom = (
