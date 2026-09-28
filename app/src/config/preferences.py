@@ -6,7 +6,6 @@ from typing import Self
 from pydantic import BaseModel, Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from config.paths import paths_config
 from config.resources import resources_config
 
 DEFAULT_PROMPT = """
@@ -88,24 +87,3 @@ class PreferencesConfig(BaseSettings):
     configurator_concept: str = ""
     configurator_metadata: str = ""
     configurator_icon_prompt: str = ""
-
-    @classmethod
-    def load(cls) -> Self:
-        if paths_config.preferences_path.exists():
-            try:
-                instance = cls.model_validate_json(
-                    paths_config.preferences_path.read_text(encoding="utf-8")
-                )
-            except:
-                if not __debug__:
-                    paths_config.preferences_path.unlink()
-                raise
-        else:
-            instance = cls()
-
-        return instance
-
-    def save(self) -> None:
-        paths_config.preferences_path.write_text(
-            self.model_dump_json(indent=2), encoding="utf-8"
-        )
