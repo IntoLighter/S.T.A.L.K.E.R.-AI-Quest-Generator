@@ -1,5 +1,4 @@
 from config.app import app_config
-from config.constants import constants_config
 from config.layout import layout_config
 from config.preferences import PreferencesConfig
 from PySide6.QtCore import Qt, Slot, qtTrId
@@ -104,7 +103,7 @@ class MainWindow(QMainWindow):
             app_config.name,
             "Квест сгенерирован",
             QSystemTrayIcon.MessageIcon.Information,
-            constants_config.quest_generated_tray_message_msecs,
+            layout_config.quest_generated_tray_message_msecs,
         )
 
     def set_parameters_unspecified_restrictions(self) -> None:
