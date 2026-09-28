@@ -22,7 +22,7 @@ class ImageModel:
         try:
             result = loop.run_until_complete(
                 self.kit.execute_json(
-                    json.loads(self.preferences_config.icon_workflow),
+                    json.loads(self.preferences_config.icon_workflow.value),
                     {"prompt": prompt},
                 )
             )
