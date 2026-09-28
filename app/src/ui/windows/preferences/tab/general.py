@@ -1,7 +1,8 @@
 import os
 import pathlib
 
-from config.preferences import DEFAULT_PROMPT, PreferencesConfig
+from config.preferences.main import PreferencesConfig
+from config.preferences.sections.general import DEFAULT_PROMPT
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -40,7 +41,7 @@ class GeneralTab(Tab):
         row.addWidget(label)
         self.show_notifications_editor = QCheckBox()
         self.show_notifications_editor.setChecked(
-            self.preferences_config.show_notifications
+            self.preferences_config.general.show_notifications
         )
         row.addWidget(self.show_notifications_editor)
         row.addStretch()
@@ -54,7 +55,7 @@ class GeneralTab(Tab):
         row.addWidget(label)
         self.should_generate_concept_editor = QCheckBox()
         self.should_generate_concept_editor.setChecked(
-            self.preferences_config.should_generate_concept
+            self.preferences_config.general.should_generate_concept
         )
         row.addWidget(self.should_generate_concept_editor)
         row.addStretch()
@@ -65,7 +66,7 @@ class GeneralTab(Tab):
         row.addWidget(label)
         self.should_generate_metadata_editor = QCheckBox()
         self.should_generate_metadata_editor.setChecked(
-            self.preferences_config.should_generate_metadata
+            self.preferences_config.general.should_generate_metadata
         )
         row.addWidget(self.should_generate_metadata_editor)
         row.addStretch()
@@ -76,7 +77,7 @@ class GeneralTab(Tab):
         row.addWidget(label)
         self.should_generate_icon_editor = QCheckBox()
         self.should_generate_icon_editor.setChecked(
-            self.preferences_config.should_generate_icon
+            self.preferences_config.general.should_generate_icon
         )
         row.addWidget(self.should_generate_icon_editor)
         row.addStretch()
@@ -89,7 +90,9 @@ class GeneralTab(Tab):
         row.addWidget(label)
 
         self.prompt_template_editor = QPlainTextEdit()
-        self.prompt_template_editor.setPlainText(self.preferences_config.prompt_message)
+        self.prompt_template_editor.setPlainText(
+            self.preferences_config.general.prompt_message
+        )
         row.addWidget(self.prompt_template_editor, stretch=1)
 
         reset_button = QPushButton(self.tr("Сбросить"))
@@ -110,8 +113,10 @@ class GeneralTab(Tab):
         self.save_path_editor = QLineEdit()
         self.save_path_editor.setReadOnly(True)
 
-        if self.preferences_config.save_path:
-            self.save_path_editor.setText(str(self.preferences_config.save_path))
+        if self.preferences_config.general.save_path:
+            self.save_path_editor.setText(
+                str(self.preferences_config.general.save_path)
+            )
 
         row.addWidget(self.save_path_editor, stretch=1)
 
@@ -139,24 +144,24 @@ class GeneralTab(Tab):
             self.save_path_editor.setText(folder)
 
     def save(self) -> None:
-        self.preferences_config.show_notifications = (
+        self.preferences_config.general.show_notifications = (
             self.show_notifications_editor.isChecked()
         )
 
-        self.preferences_config.should_generate_concept = (
+        self.preferences_config.general.should_generate_concept = (
             self.should_generate_concept_editor.isChecked()
         )
-        self.preferences_config.should_generate_metadata = (
+        self.preferences_config.general.should_generate_metadata = (
             self.should_generate_metadata_editor.isChecked()
         )
-        self.preferences_config.should_generate_icon = (
+        self.preferences_config.general.should_generate_icon = (
             self.should_generate_icon_editor.isChecked()
         )
 
-        self.preferences_config.prompt_message = (
+        self.preferences_config.general.prompt_message = (
             self.prompt_template_editor.toPlainText()
         )
 
         save_path_str = self.save_path_editor.text()
         save_path = pathlib.Path(save_path_str) if save_path_str else None
-        self.preferences_config.save_path = save_path
+        self.preferences_config.general.save_path = save_path
