@@ -6,7 +6,7 @@ from typing import Self
 from pydantic import BaseModel, Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from config.resources import resources_config
+from config.constants.main import constants_config
 
 DEFAULT_PROMPT = """
 Тип: исследование
@@ -38,10 +38,10 @@ class TextOption(BaseModel):
 
 
 SYSTEM_BY_OPTION: dict[str, str] = {
-    "icon_workflow": resources_config.default_icon_workflow,
-    "concept_prompt": resources_config.default_concept_prompt,
-    "metadata_prompt": resources_config.default_metadata_prompt,
-    "icon_prompt": resources_config.default_icon_prompt,
+    "icon_workflow": constants_config.resources.default_icon_workflow,
+    "concept_prompt": constants_config.resources.default_concept_prompt,
+    "metadata_prompt": constants_config.resources.default_metadata_prompt,
+    "icon_prompt": constants_config.resources.default_icon_prompt,
 }
 
 

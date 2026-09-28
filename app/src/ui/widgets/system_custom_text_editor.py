@@ -1,4 +1,4 @@
-from config.ui import ui_config
+from config.constants.main import constants_config
 from config.preferences import ValueSource
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
@@ -19,8 +19,8 @@ class SystemCustomTextEditor(QWidget):
         source: ValueSource,
         system_content: str,
         custom_content: str,
-        height: int = ui_config.editor_height,
-        stretch: int = ui_config.editor_stretch,
+        height: int = constants_config.ui.editor_height,
+        stretch: int = constants_config.ui.editor_stretch,
     ) -> None:
         super().__init__()
         self.source = source

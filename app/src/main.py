@@ -1,4 +1,4 @@
-import resource.rc_main # noqa: F401 I001
+import resource.rc_main  # noqa: F401 I001
 import signal
 import sys
 import traceback
@@ -12,11 +12,9 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 
-from config.app import app_config
-from config.paths import paths_config
+from config.constants.main import constants_config
 from config.preferences import PreferencesConfig
 from config.preferences_repository import preferences_repository
-from config.resources import resources_config
 from ui.windows.exception.main import ExceptionDialog
 from ui.windows.main.window import MainWindow
 
@@ -38,7 +36,7 @@ def on_app_stopped() -> None:
 
 def setup_logging() -> None:
     logger.add(
-        paths_config.log_path,
+        constants_config.paths.log_path,
         rotation="5 MB",
         retention=2,
         level="INFO",
@@ -63,8 +61,8 @@ if __name__ == "__main__":
     sys.excepthook = exception_hook
 
     app = QApplication(sys.argv)
-    app.setApplicationName(app_config.name)
-    app.setWindowIcon(QIcon(resources_config.icon_path))
+    app.setApplicationName(constants_config.app.name)
+    app.setWindowIcon(QIcon(constants_config.resources.icon_path))
     app.aboutToQuit.connect(on_app_stopped)
 
     setup_logging()
@@ -76,8 +74,8 @@ if __name__ == "__main__":
     app.installTranslator(qt_translator)
 
     preferences_config = create_preferences_config()
-    logger.debug(f"preferences path: {paths_config.preferences_path}")
-    logger.debug(f"log path: {paths_config.log_path}")
+    logger.debug(f"preferences path: {constants_config.paths.preferences_path}")
+    logger.debug(f"log path: {constants_config.paths.log_path}")
     logger.debug(f"save path: {preferences_config.save_path}")
 
     window = MainWindow(preferences_config=preferences_config)

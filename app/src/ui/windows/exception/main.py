@@ -2,7 +2,7 @@ import platform
 import webbrowser
 from urllib.parse import urlencode
 
-from config.app import app_config
+from config.constants.main import constants_config
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QApplication, QMessageBox, QWidget
 
@@ -42,7 +42,7 @@ class ExceptionDialog(QObject):
 
         system_info = "\n".join(f"{k}: {v}" for k, v in system_info_dict.items())
 
-        url = f"{app_config.repository}/issues/new?" + urlencode(
+        url = f"{constants_config.app.repository}/issues/new?" + urlencode(
             {
                 "template": "bug.yaml",
                 "stacktrace": self.stacktrace,

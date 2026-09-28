@@ -1,4 +1,4 @@
-from config.ui import ui_config
+from config.constants.main import constants_config
 from generation.entity import IconRecords
 from generation.worker.main import Worker
 from PySide6.QtCore import Slot
@@ -12,8 +12,8 @@ class IconTab(Tab):
         super().__init__()
         self.icon_prompt_editor = self.create_plain_text_editor(
             self.tr("Промпт"),
-            ui_config.icon_prompt_height,
-            ui_config.icon_prompt_stretch,
+            constants_config.ui.icon_prompt_height,
+            constants_config.ui.icon_prompt_stretch,
         )
         self.icon_soc_editor = self.create_label_editor(self.tr("SoC"))
         self.icon_editor = self.create_label_editor(self.tr("Оригинал"))

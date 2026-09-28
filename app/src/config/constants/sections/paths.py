@@ -1,11 +1,10 @@
 from pathlib import Path
 
-from pydantic import computed_field
-from pydantic_settings import BaseSettings
+from pydantic import BaseModel, computed_field
 from PySide6.QtCore import QStandardPaths
 
 
-class PathsConfig(BaseSettings):
+class PathsConfig(BaseModel):
     @computed_field
     def config_path(self) -> Path:
         path = Path(
@@ -35,6 +34,3 @@ class PathsConfig(BaseSettings):
         path: Path = self.local_data_path / "logs" / "app.log"
         path.parent.mkdir(parents=True, exist_ok=True)
         return path
-
-
-paths_config = PathsConfig()
