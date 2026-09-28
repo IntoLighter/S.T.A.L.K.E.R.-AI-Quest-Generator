@@ -1,6 +1,5 @@
-from config.ui import ui_config
+from config.constants.main import constants_config
 from config.preferences import PreferencesConfig
-from config.resources import resources_config
 
 from ui.utils.layout import get_layout_with_scroll
 from ui.widgets.system_custom_text_editor import SystemCustomTextEditor
@@ -16,30 +15,30 @@ class PromptTab(Tab):
         self.concept_editor = SystemCustomTextEditor(
             label=self.tr("Концепт"),
             source=self.preferences_config.concept_prompt.source,
-            system_content=resources_config.default_concept_prompt,
+            system_content=constants_config.resources.default_concept_prompt,
             custom_content=self.preferences_config.concept_prompt.custom,
-            height=ui_config.concept_height,
-            stretch=ui_config.concept_stretch,
+            height=constants_config.ui.concept_height,
+            stretch=constants_config.ui.concept_stretch,
         )
         self.layout.addWidget(self.concept_editor)
 
         self.metadata_editor = SystemCustomTextEditor(
             label=self.tr("Метаданные"),
             source=self.preferences_config.metadata_prompt.source,
-            system_content=resources_config.default_metadata_prompt,
+            system_content=constants_config.resources.default_metadata_prompt,
             custom_content=self.preferences_config.metadata_prompt.custom,
-            height=ui_config.metadata_height,
-            stretch=ui_config.metadata_stretch,
+            height=constants_config.ui.metadata_height,
+            stretch=constants_config.ui.metadata_stretch,
         )
         self.layout.addWidget(self.metadata_editor)
 
         self.icon_editor = SystemCustomTextEditor(
             label=self.tr("Иконка"),
             source=self.preferences_config.icon_prompt.source,
-            system_content=resources_config.default_icon_prompt,
+            system_content=constants_config.resources.default_icon_prompt,
             custom_content=self.preferences_config.icon_prompt.custom,
-            height=ui_config.icon_prompt_height,
-            stretch=ui_config.icon_prompt_stretch,
+            height=constants_config.ui.icon_prompt_height,
+            stretch=constants_config.ui.icon_prompt_stretch,
         )
         self.layout.addWidget(self.icon_editor)
 

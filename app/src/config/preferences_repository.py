@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from config.paths import paths_config
+from config.constants.main import constants_config
 from config.preferences import PreferencesConfig
 
 
@@ -18,7 +18,7 @@ class PreferencesRepository:
 
     @property
     def path(self) -> Path:
-        return paths_config.preferences_path
+        return constants_config.paths.preferences_path
 
 
 preferences_repository = PreferencesRepository()
