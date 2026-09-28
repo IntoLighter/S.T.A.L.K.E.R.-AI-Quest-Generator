@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from config.constants.main import constants_config
-from config.preferences import PreferencesConfig
+from config.preferences.main import PreferencesConfig
 
 
 class PreferencesRepository:

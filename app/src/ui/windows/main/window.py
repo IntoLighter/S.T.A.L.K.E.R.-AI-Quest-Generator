@@ -1,5 +1,5 @@
 from config.constants.main import constants_config
-from config.preferences import PreferencesConfig
+from config.preferences.main import PreferencesConfig
 from PySide6.QtCore import Qt, Slot, qtTrId
 from PySide6.QtGui import QAction, QCloseEvent, QKeySequence
 from PySide6.QtWidgets import (
@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def show_configurator(self) -> None:
-        if not self.preferences_config.current_text_model:
+        if not self.preferences_config.model.current_text_model:
             QMessageBox.warning(
                 self,
                 self.tr("Ошибка настроек"),
@@ -105,9 +105,9 @@ class MainWindow(QMainWindow):
         )
 
     def set_parameters_unspecified_restrictions(self) -> None:
-        if not self.preferences_config.current_text_model:
+        if not self.preferences_config.model.current_text_model:
             self.show_status(self.tr("Текстовая модель не задана"))
-        elif not self.preferences_config.save_path:
+        elif not self.preferences_config.general.save_path:
             self.show_status(self.tr("Путь сохранения не задан"))
         else:
             self.show_status("")

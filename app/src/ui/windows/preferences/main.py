@@ -1,5 +1,5 @@
-from config.preferences import PreferencesConfig
-from config.preferences_repository import preferences_repository
+from config.preferences.main import PreferencesConfig
+from config.preferences.repository import preferences_repository
 from loguru import logger
 from PySide6.QtWidgets import (
     QHBoxLayout,

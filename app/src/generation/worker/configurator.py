@@ -1,4 +1,4 @@
-from config.preferences import PreferencesConfig
+from config.preferences.main import PreferencesConfig
 
 from generation.engine.soc import SoCObjectFactory
 from generation.entity import ConfiguratorParameters, GenerationResult

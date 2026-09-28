@@ -1,5 +1,6 @@
 from config.constants.main import constants_config
-from config.preferences import ModelType, PreferencesConfig
+from config.preferences.main import PreferencesConfig
+from config.preferences.sections.model import ModelType
 from generation.model.text.local import LocalTextModel
 from generation.model.text.remote import RemoteTextModel
 from PySide6.QtCore import Slot
@@ -36,14 +37,16 @@ class ModelTab(Tab):
             ModelType.Local: self.local_model_button,
             ModelType.Remote: self.remote_model_button,
         }
-        type_to_button[preferences_config.text_model_type].setChecked(True)
+        type_to_button[preferences_config.model.text_model_type].setChecked(True)
         row.addWidget(self.local_model_button)
         row.addWidget(self.remote_model_button)
 
         self.local_model_dropdown = QComboBox()
         model = LocalTextModel(preferences_config=preferences_config)
         self.local_model_dropdown.addItems(model.get_models())
-        index = self.local_model_dropdown.findText(preferences_config.text_model_local)
+        index = self.local_model_dropdown.findText(
+            preferences_config.model.text_model_local
+        )
         self.local_model_dropdown.setCurrentIndex(index)
         self.layout.addWidget(self.local_model_dropdown)
 
@@ -51,7 +54,7 @@ class ModelTab(Tab):
         model = RemoteTextModel(preferences_config=preferences_config)
         self.remote_model_dropdown.addItems(model.get_models())
         index = self.remote_model_dropdown.findText(
-            preferences_config.text_model_remote
+            preferences_config.model.text_model_remote
         )
         self.remote_model_dropdown.setCurrentIndex(index)
         self.layout.addWidget(self.remote_model_dropdown)
@@ -61,9 +64,9 @@ class ModelTab(Tab):
 
         self.icon_workflow_editor = SystemCustomTextEditor(
             label=self.tr("Workflow иконки"),
-            source=self.preferences_config.icon_workflow.source,
+            source=self.preferences_config.model.icon_workflow.source,
             system_content=constants_config.resources.default_icon_workflow,
-            custom_content=self.preferences_config.icon_workflow.custom,
+            custom_content=self.preferences_config.model.icon_workflow.custom,
             height=constants_config.ui.icon_workflow_height,
             stretch=constants_config.ui.icon_workflow_stretch,
         )
@@ -88,18 +91,20 @@ class ModelTab(Tab):
             self.local_model_button: ModelType.Local,
             self.remote_model_button: ModelType.Remote,
         }
-        self.preferences_config.text_model_type = button_to_type[
+        self.preferences_config.model.text_model_type = button_to_type[
             self.group.checkedButton()
         ]
 
-        self.preferences_config.text_model_local = (
+        self.preferences_config.model.text_model_local = (
             self.local_model_dropdown.currentText()
         )
-        self.preferences_config.text_model_remote = (
+        self.preferences_config.model.text_model_remote = (
             self.remote_model_dropdown.currentText()
         )
 
-        self.preferences_config.icon_workflow.source = self.icon_workflow_editor.source
-        self.preferences_config.icon_workflow.custom = (
+        self.preferences_config.model.icon_workflow.source = (
+            self.icon_workflow_editor.source
+        )
+        self.preferences_config.model.icon_workflow.custom = (
             self.icon_workflow_editor.custom_content
         )
