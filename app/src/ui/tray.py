@@ -1,4 +1,4 @@
-from config.constants import constants_config
+from config.resources import resources_config
 from PySide6.QtCore import Signal, Slot
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtWidgets import (
@@ -14,7 +14,7 @@ class Tray(QSystemTrayIcon):
     def __init__(self) -> None:
         super().__init__()
 
-        self.setIcon(QIcon(constants_config.icon_path))
+        self.setIcon(QIcon(resources_config.icon_path))
 
         menu = QMenu()
 

@@ -1,6 +1,6 @@
-from config.constants import constants_config
 from config.layout import layout_config
 from config.preferences import PreferencesConfig
+from config.resources import resources_config
 
 from ui.utils.layout import get_layout_with_scroll
 from ui.widgets.system_custom_text_editor import SystemCustomTextEditor
@@ -16,7 +16,7 @@ class PromptTab(Tab):
         self.concept_editor = SystemCustomTextEditor(
             label=self.tr("Концепт"),
             source=self.preferences_config.concept_prompt_source,
-            system_content=constants_config.default_concept_prompt,
+            system_content=resources_config.default_concept_prompt,
             custom_content=self.preferences_config.custom_concept_prompt,
             height=layout_config.concept_height,
             stretch=layout_config.concept_stretch,
@@ -26,7 +26,7 @@ class PromptTab(Tab):
         self.metadata_editor = SystemCustomTextEditor(
             label=self.tr("Метаданные"),
             source=self.preferences_config.metadata_prompt_source,
-            system_content=constants_config.default_metadata_prompt,
+            system_content=resources_config.default_metadata_prompt,
             custom_content=self.preferences_config.custom_metadata_prompt,
             height=layout_config.metadata_height,
             stretch=layout_config.metadata_stretch,
@@ -36,7 +36,7 @@ class PromptTab(Tab):
         self.icon_editor = SystemCustomTextEditor(
             label=self.tr("Иконка"),
             source=self.preferences_config.icon_prompt_source,
-            system_content=constants_config.default_icon_prompt,
+            system_content=resources_config.default_icon_prompt,
             custom_content=self.preferences_config.custom_icon_prompt,
             height=layout_config.icon_prompt_height,
             stretch=layout_config.icon_prompt_stretch,

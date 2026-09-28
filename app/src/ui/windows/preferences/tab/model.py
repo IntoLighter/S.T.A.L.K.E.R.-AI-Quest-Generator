@@ -1,6 +1,6 @@
-from config.constants import constants_config
 from config.layout import layout_config
 from config.preferences import ModelType, PreferencesConfig
+from config.resources import resources_config
 from generation.model.text.local import LocalTextModel
 from generation.model.text.remote import RemoteTextModel
 from PySide6.QtCore import Slot
@@ -61,7 +61,7 @@ class ModelTab(Tab):
         self.icon_workflow_editor = SystemCustomTextEditor(
             label=self.tr("Workflow иконки"),
             source=self.preferences_config.icon_workflow_source,
-            system_content=constants_config.default_icon_workflow,
+            system_content=resources_config.default_icon_workflow,
             custom_content=self.preferences_config.custom_icon_workflow,
             height=layout_config.icon_workflow_height,
             stretch=layout_config.icon_workflow_stretch,
