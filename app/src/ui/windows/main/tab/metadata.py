@@ -1,4 +1,4 @@
-from config.constants import constants_config
+from config.layout import layout_config
 from generation.entity import GameRecords
 from generation.worker.main import Worker
 from PySide6.QtCore import Slot
@@ -11,23 +11,23 @@ class MetadataTab(Tab):
         super().__init__()
         self.metadata_editor = self.create_plain_text_editor(
             self.tr("Метаданные"),
-            constants_config.metadata_height,
-            constants_config.metadata_stretch,
+            layout_config.metadata_height,
+            layout_config.metadata_stretch,
         )
         self.task_editor = self.create_plain_text_editor(
             self.tr("Задание"),
-            constants_config.editor_height,
-            constants_config.editor_stretch,
+            layout_config.editor_height,
+            layout_config.editor_stretch,
         )
         self.article_editor = self.create_plain_text_editor(
             self.tr("Описание"),
-            constants_config.editor_height,
-            constants_config.editor_stretch,
+            layout_config.editor_height,
+            layout_config.editor_stretch,
         )
         self.infoportions_editor = self.create_plain_text_editor(
             self.tr("Инфопоршни"),
-            constants_config.editor_height,
-            constants_config.editor_stretch,
+            layout_config.editor_height,
+            layout_config.editor_stretch,
         )
 
     def bind_worker(self, worker: Worker) -> None:
