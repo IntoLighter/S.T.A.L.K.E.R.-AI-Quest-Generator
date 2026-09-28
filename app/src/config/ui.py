@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings
 
 
-class LayoutConfig(BaseSettings):
+class UIConfig(BaseSettings):
     window_size: tuple[int, int] = (1280, 720)
     dialog_size: tuple[int, int] = (1024, 576)
     quest_generated_tray_message_msecs: int = 5000
@@ -20,4 +20,4 @@ class LayoutConfig(BaseSettings):
     icon_workflow_height: int = editor_height * icon_workflow_stretch
 
 
-layout_config = LayoutConfig()
+ui_config = UIConfig()

@@ -1,4 +1,4 @@
-from config.layout import layout_config
+from config.ui import ui_config
 from config.preferences import PreferencesConfig
 from config.resources import resources_config
 
@@ -18,8 +18,8 @@ class PromptTab(Tab):
             source=self.preferences_config.concept_prompt.source,
             system_content=resources_config.default_concept_prompt,
             custom_content=self.preferences_config.concept_prompt.custom,
-            height=layout_config.concept_height,
-            stretch=layout_config.concept_stretch,
+            height=ui_config.concept_height,
+            stretch=ui_config.concept_stretch,
         )
         self.layout.addWidget(self.concept_editor)
 
@@ -28,8 +28,8 @@ class PromptTab(Tab):
             source=self.preferences_config.metadata_prompt.source,
             system_content=resources_config.default_metadata_prompt,
             custom_content=self.preferences_config.metadata_prompt.custom,
-            height=layout_config.metadata_height,
-            stretch=layout_config.metadata_stretch,
+            height=ui_config.metadata_height,
+            stretch=ui_config.metadata_stretch,
         )
         self.layout.addWidget(self.metadata_editor)
 
@@ -38,8 +38,8 @@ class PromptTab(Tab):
             source=self.preferences_config.icon_prompt.source,
             system_content=resources_config.default_icon_prompt,
             custom_content=self.preferences_config.icon_prompt.custom,
-            height=layout_config.icon_prompt_height,
-            stretch=layout_config.icon_prompt_stretch,
+            height=ui_config.icon_prompt_height,
+            stretch=ui_config.icon_prompt_stretch,
         )
         self.layout.addWidget(self.icon_editor)
 

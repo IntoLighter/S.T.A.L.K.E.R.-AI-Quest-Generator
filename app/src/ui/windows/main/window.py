@@ -1,5 +1,5 @@
 from config.app import app_config
-from config.layout import layout_config
+from config.ui import ui_config
 from config.preferences import PreferencesConfig
 from PySide6.QtCore import Qt, Slot, qtTrId
 from PySide6.QtGui import QAction, QCloseEvent, QKeySequence
@@ -20,7 +20,7 @@ from ui.windows.preferences.main import PreferencesDialog
 class MainWindow(QMainWindow):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
-        self.resize(*layout_config.window_size)  # noqa
+        self.resize(*ui_config.window_size)  # noqa
         self.setWindowTitle(app_config.name)
         self.preferences_config = preferences_config
         self.close_requested = False
@@ -103,7 +103,7 @@ class MainWindow(QMainWindow):
             app_config.name,
             "Квест сгенерирован",
             QSystemTrayIcon.MessageIcon.Information,
-            layout_config.quest_generated_tray_message_msecs,
+            ui_config.quest_generated_tray_message_msecs,
         )
 
     def set_parameters_unspecified_restrictions(self) -> None:

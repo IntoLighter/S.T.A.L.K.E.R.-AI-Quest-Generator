@@ -1,6 +1,6 @@
-from config.layout import layout_config
 from config.preferences import ModelType, PreferencesConfig
 from config.resources import resources_config
+from config.ui import ui_config
 from generation.model.text.local import LocalTextModel
 from generation.model.text.remote import RemoteTextModel
 from PySide6.QtCore import Slot
@@ -63,8 +63,8 @@ class ModelTab(Tab):
             source=self.preferences_config.icon_workflow.source,
             system_content=resources_config.default_icon_workflow,
             custom_content=self.preferences_config.icon_workflow.custom,
-            height=layout_config.icon_workflow_height,
-            stretch=layout_config.icon_workflow_stretch,
+            height=ui_config.icon_workflow_height,
+            stretch=ui_config.icon_workflow_stretch,
         )
         self.layout.addWidget(self.icon_workflow_editor)
 
