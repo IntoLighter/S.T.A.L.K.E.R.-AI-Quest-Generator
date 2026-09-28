@@ -1,4 +1,4 @@
-from config.layout import layout_config
+from config.ui import ui_config
 from config.preferences import PreferencesConfig
 from generation.entity import ConfiguratorParameters
 from loguru import logger
@@ -43,8 +43,8 @@ class ConfiguratorDialog(BaseDialog):
         row.addStretch()
         self.concept_editor = QPlainTextEdit()
         self.concept_editor.setPlainText(self.preferences_config.configurator_concept)
-        self.concept_editor.setMinimumHeight(layout_config.concept_height)
-        self.layout.addWidget(self.concept_editor, layout_config.concept_stretch)
+        self.concept_editor.setMinimumHeight(ui_config.concept_height)
+        self.layout.addWidget(self.concept_editor, ui_config.concept_stretch)
 
         label = QLabel(self.tr("Метаданные"))
         self.layout.addWidget(label)
@@ -60,8 +60,8 @@ class ConfiguratorDialog(BaseDialog):
         row.addStretch()
         self.metadata_editor = QPlainTextEdit()
         self.metadata_editor.setPlainText(self.preferences_config.configurator_metadata)
-        self.metadata_editor.setMinimumHeight(layout_config.metadata_height)
-        self.layout.addWidget(self.metadata_editor, layout_config.metadata_stretch)
+        self.metadata_editor.setMinimumHeight(ui_config.metadata_height)
+        self.layout.addWidget(self.metadata_editor, ui_config.metadata_stretch)
 
         label = QLabel(self.tr("Промпт иконки"))
         self.layout.addWidget(label)
@@ -79,9 +79,9 @@ class ConfiguratorDialog(BaseDialog):
         self.icon_prompt_editor.setPlainText(
             self.preferences_config.configurator_icon_prompt
         )
-        self.icon_prompt_editor.setMinimumHeight(layout_config.icon_prompt_height)
+        self.icon_prompt_editor.setMinimumHeight(ui_config.icon_prompt_height)
         self.layout.addWidget(
-            self.icon_prompt_editor, layout_config.icon_prompt_stretch
+            self.icon_prompt_editor, ui_config.icon_prompt_stretch
         )
 
         self.add_close_buttons()
