@@ -4,7 +4,7 @@ from io import BytesIO
 
 import requests
 from comfykit import ComfyKit
-from config.constants import constants_config
+from config.endpoints import endpoints_config
 from config.preferences import PreferencesConfig
 from PIL import Image
 
@@ -13,7 +13,7 @@ from generation.errors import ImageGenerationError
 
 class ImageModel:
     def __init__(self, preferences_config: PreferencesConfig) -> None:
-        self.kit = ComfyKit(comfyui_url=constants_config.comfy_ui_base_url)
+        self.kit = ComfyKit(comfyui_url=endpoints_config.comfy_ui_base_url)
         self.preferences_config = preferences_config
 
     def generate(self, prompt: str) -> None:
