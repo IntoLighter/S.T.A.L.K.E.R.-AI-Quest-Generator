@@ -50,7 +50,7 @@ class MainWidget(QWidget):
 
     @Slot()
     def generate_quest_normal(self) -> None:
-        if not self.preferences_config.current_model:
+        if not self.preferences_config.current_text_model:
             show_generation_start_error(
                 self,
                 self.tr(
@@ -95,7 +95,7 @@ class MainWidget(QWidget):
             ModelType.Remote: RemoteTextModel(preferences_config=self.preferences_config),
         }
 
-        return type_to_value[self.preferences_config.model_type]
+        return type_to_value[self.preferences_config.text_model_type]
 
     def generate_quest(self) -> None:
         self.set_generate_button_stop()
