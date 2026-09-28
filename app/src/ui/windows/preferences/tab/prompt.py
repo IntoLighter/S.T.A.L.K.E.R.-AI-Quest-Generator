@@ -1,4 +1,5 @@
 from config.constants import constants_config
+from config.layout import layout_config
 from config.preferences import PreferencesConfig
 
 from ui.utils.layout import get_layout_with_scroll
@@ -17,8 +18,8 @@ class PromptTab(Tab):
             source=self.preferences_config.concept_prompt_source,
             system_content=constants_config.default_concept_prompt,
             custom_content=self.preferences_config.custom_concept_prompt,
-            height=constants_config.concept_height,
-            stretch=constants_config.concept_stretch,
+            height=layout_config.concept_height,
+            stretch=layout_config.concept_stretch,
         )
         self.layout.addWidget(self.concept_editor)
 
@@ -27,8 +28,8 @@ class PromptTab(Tab):
             source=self.preferences_config.metadata_prompt_source,
             system_content=constants_config.default_metadata_prompt,
             custom_content=self.preferences_config.custom_metadata_prompt,
-            height=constants_config.metadata_height,
-            stretch=constants_config.metadata_stretch,
+            height=layout_config.metadata_height,
+            stretch=layout_config.metadata_stretch,
         )
         self.layout.addWidget(self.metadata_editor)
 
@@ -37,8 +38,8 @@ class PromptTab(Tab):
             source=self.preferences_config.icon_prompt_source,
             system_content=constants_config.default_icon_prompt,
             custom_content=self.preferences_config.custom_icon_prompt,
-            height=constants_config.icon_prompt_height,
-            stretch=constants_config.icon_prompt_stretch,
+            height=layout_config.icon_prompt_height,
+            stretch=layout_config.icon_prompt_stretch,
         )
         self.layout.addWidget(self.icon_editor)
 
