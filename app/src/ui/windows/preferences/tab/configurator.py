@@ -1,5 +1,5 @@
 from config.constants.main import constants_config
-from config.preferences import PreferencesConfig
+from config.preferences.main import PreferencesConfig
 from PySide6.QtWidgets import (
     QLabel,
     QPlainTextEdit,
@@ -18,14 +18,18 @@ class ConfiguratorTab(Tab):
         label = QLabel(self.tr("Концепт"))
         self.layout.addWidget(label)
         self.concept_editor = QPlainTextEdit()
-        self.concept_editor.setPlainText(self.preferences_config.configurator_concept)
+        self.concept_editor.setPlainText(
+            self.preferences_config.configurator.concept
+        )
         self.concept_editor.setMinimumHeight(constants_config.ui.concept_height)
         self.layout.addWidget(self.concept_editor, constants_config.ui.concept_stretch)
 
         label = QLabel(self.tr("Метаданные"))
         self.layout.addWidget(label)
         self.metadata_editor = QPlainTextEdit()
-        self.metadata_editor.setPlainText(self.preferences_config.configurator_metadata)
+        self.metadata_editor.setPlainText(
+            self.preferences_config.configurator.metadata
+        )
         self.metadata_editor.setMinimumHeight(constants_config.ui.metadata_height)
         self.layout.addWidget(
             self.metadata_editor, constants_config.ui.metadata_stretch
@@ -35,7 +39,7 @@ class ConfiguratorTab(Tab):
         self.layout.addWidget(label)
         self.icon_prompt_editor = QPlainTextEdit()
         self.icon_prompt_editor.setPlainText(
-            self.preferences_config.configurator_icon_prompt
+            self.preferences_config.configurator.icon_prompt
         )
         self.icon_prompt_editor.setMinimumHeight(constants_config.ui.icon_prompt_height)
         self.layout.addWidget(
@@ -43,10 +47,12 @@ class ConfiguratorTab(Tab):
         )
 
     def save(self) -> None:
-        self.preferences_config.configurator_concept = self.concept_editor.toPlainText()
-        self.preferences_config.configurator_metadata = (
+        self.preferences_config.configurator.concept = (
+            self.concept_editor.toPlainText()
+        )
+        self.preferences_config.configurator.metadata = (
             self.metadata_editor.toPlainText()
         )
-        self.preferences_config.configurator_icon_prompt = (
+        self.preferences_config.configurator.icon_prompt = (
             self.icon_prompt_editor.toPlainText()
         )

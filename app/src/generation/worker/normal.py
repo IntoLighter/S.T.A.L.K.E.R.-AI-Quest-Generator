@@ -14,7 +14,7 @@ class NormalWorker(Worker):
                 return result
 
             try:
-                if self.preferences_config.should_generate_metadata:
+                if self.preferences_config.general.should_generate_metadata:
                     result.metadata_text = self.create_metadata_text(result.concept)
 
                     if self.is_interruption_requested:
@@ -32,7 +32,7 @@ class NormalWorker(Worker):
                 self.handle_exception_perform_work(e)
 
             try:
-                if self.preferences_config.should_generate_icon:
+                if self.preferences_config.general.should_generate_icon:
                     result.icon_prompt = self.create_icon_prompt(result.concept)
 
                     if self.is_interruption_requested:

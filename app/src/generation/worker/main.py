@@ -3,7 +3,7 @@ import traceback
 from contextlib import suppress
 
 import openai
-from config.preferences import PreferencesConfig
+from config.preferences.main import PreferencesConfig
 from deep_translator import GoogleTranslator
 from loguru import logger
 from PySide6.QtCore import QObject, Signal, Slot
@@ -97,7 +97,7 @@ class Worker(QObject):
         messages = [
             {
                 "role": "system",
-                "content": self.preferences_config.concept_prompt.value,
+                "content": self.preferences_config.prompt.concept.value,
             },
             {
                 "role": "user",
@@ -123,7 +123,7 @@ class Worker(QObject):
         messages = [
             {
                 "role": "system",
-                "content": self.preferences_config.metadata_prompt.value,
+                "content": self.preferences_config.prompt.metadata.value,
             },
             {"role": "user", "content": concept},
         ]
@@ -177,7 +177,7 @@ class Worker(QObject):
         messages = [
             {
                 "role": "system",
-                "content": self.preferences_config.icon_prompt.value,
+                "content": self.preferences_config.prompt.icon.value,
             },
             {
                 "role": "user",
@@ -209,15 +209,17 @@ class Worker(QObject):
     def save_on_disk(self, result: GenerationResult) -> None:
         self.status_update.emit(self.tr("Сохранение данных"))
 
-        if not self.preferences_config.save_path:
+        if not self.preferences_config.general.save_path:
             return
 
         if result.metadata:
             quest_path = get_unique_name_path(
-                self.preferences_config.save_path / result.metadata.title
+                self.preferences_config.general.save_path / result.metadata.title
             )
         else:
-            quest_path = get_unique_counter_name_path(self.preferences_config.save_path)
+            quest_path = get_unique_counter_name_path(
+                self.preferences_config.general.save_path
+            )
 
         quest_path.mkdir(parents=True)
 

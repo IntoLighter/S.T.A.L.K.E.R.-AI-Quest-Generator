@@ -1,5 +1,5 @@
 from config.constants.main import constants_config
-from config.preferences import ValueSource
+from config.preferences.sections.types import ValueSource
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QButtonGroup,

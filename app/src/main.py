@@ -13,10 +13,11 @@ from PySide6.QtWidgets import (
 )
 
 from config.constants.main import constants_config
-from config.preferences import PreferencesConfig
-from config.preferences_repository import preferences_repository
+from config.preferences.main import PreferencesConfig
+from config.preferences.repository import preferences_repository
 from ui.windows.exception.main import ExceptionDialog
 from ui.windows.main.window import MainWindow
+
 
 
 def exception_hook(
@@ -76,7 +77,7 @@ if __name__ == "__main__":
     preferences_config = create_preferences_config()
     logger.debug(f"preferences path: {constants_config.paths.preferences_path}")
     logger.debug(f"log path: {constants_config.paths.log_path}")
-    logger.debug(f"save path: {preferences_config.save_path}")
+    logger.debug(f"save path: {preferences_config.general.save_path}")
 
     window = MainWindow(preferences_config=preferences_config)
     window.show()

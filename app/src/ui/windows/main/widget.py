@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from config.preferences import ModelType, PreferencesConfig
+from config.preferences.main import PreferencesConfig
+from config.preferences.sections.model import ModelType
 from generation.entity import ConfiguratorParameters
 from generation.model.text.local import LocalTextModel
 from generation.model.text.main import TextModel
@@ -50,7 +51,7 @@ class MainWidget(QWidget):
 
     @Slot()
     def generate_quest_normal(self) -> None:
-        if not self.preferences_config.current_text_model:
+        if not self.preferences_config.model.current_text_model:
             show_generation_start_error(
                 self,
                 self.tr(
@@ -59,7 +60,7 @@ class MainWidget(QWidget):
             )
             return
 
-        if not self.preferences_config.should_generate_concept:
+        if not self.preferences_config.general.should_generate_concept:
             show_generation_start_error(
                 self,
                 self.tr(
@@ -92,10 +93,12 @@ class MainWidget(QWidget):
     def model(self) -> TextModel:
         type_to_value = {
             ModelType.Local: LocalTextModel(preferences_config=self.preferences_config),
-            ModelType.Remote: RemoteTextModel(preferences_config=self.preferences_config),
+            ModelType.Remote: RemoteTextModel(
+                preferences_config=self.preferences_config
+            ),
         }
 
-        return type_to_value[self.preferences_config.text_model_type]
+        return type_to_value[self.preferences_config.model.text_model_type]
 
     def generate_quest(self) -> None:
         self.set_generate_button_stop()

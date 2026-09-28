@@ -1,5 +1,5 @@
 from config.constants.main import constants_config
-from config.preferences import PreferencesConfig
+from config.preferences.main import PreferencesConfig
 from generation.entity import ConfiguratorParameters
 from loguru import logger
 from PySide6.QtWidgets import (
@@ -37,12 +37,14 @@ class ConfiguratorDialog(BaseDialog):
         row.addWidget(label)
         self.should_generate_concept_editor = QCheckBox()
         self.should_generate_concept_editor.setChecked(
-            self.preferences_config.should_generate_concept
+            self.preferences_config.general.should_generate_concept
         )
         row.addWidget(self.should_generate_concept_editor)
         row.addStretch()
         self.concept_editor = QPlainTextEdit()
-        self.concept_editor.setPlainText(self.preferences_config.configurator_concept)
+        self.concept_editor.setPlainText(
+            self.preferences_config.configurator.concept
+        )
         self.concept_editor.setMinimumHeight(constants_config.ui.concept_height)
         self.layout.addWidget(self.concept_editor, constants_config.ui.concept_stretch)
 
@@ -54,12 +56,14 @@ class ConfiguratorDialog(BaseDialog):
         row.addWidget(label)
         self.should_generate_metadata_editor = QCheckBox()
         self.should_generate_metadata_editor.setChecked(
-            self.preferences_config.should_generate_metadata
+            self.preferences_config.general.should_generate_metadata
         )
         row.addWidget(self.should_generate_metadata_editor)
         row.addStretch()
         self.metadata_editor = QPlainTextEdit()
-        self.metadata_editor.setPlainText(self.preferences_config.configurator_metadata)
+        self.metadata_editor.setPlainText(
+            self.preferences_config.configurator.metadata
+        )
         self.metadata_editor.setMinimumHeight(constants_config.ui.metadata_height)
         self.layout.addWidget(
             self.metadata_editor, constants_config.ui.metadata_stretch
@@ -73,13 +77,13 @@ class ConfiguratorDialog(BaseDialog):
         row.addWidget(label)
         self.should_generate_icon_editor = QCheckBox()
         self.should_generate_icon_editor.setChecked(
-            self.preferences_config.should_generate_icon
+            self.preferences_config.general.should_generate_icon
         )
         row.addWidget(self.should_generate_icon_editor)
         row.addStretch()
         self.icon_prompt_editor = QPlainTextEdit()
         self.icon_prompt_editor.setPlainText(
-            self.preferences_config.configurator_icon_prompt
+            self.preferences_config.configurator.icon_prompt
         )
         self.icon_prompt_editor.setMinimumHeight(constants_config.ui.icon_prompt_height)
         self.layout.addWidget(

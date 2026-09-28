@@ -1,5 +1,5 @@
 from config.constants.main import constants_config
-from config.preferences import PreferencesConfig
+from config.preferences.main import PreferencesConfig
 
 from ui.utils.layout import get_layout_with_scroll
 from ui.widgets.system_custom_text_editor import SystemCustomTextEditor
@@ -14,9 +14,9 @@ class PromptTab(Tab):
 
         self.concept_editor = SystemCustomTextEditor(
             label=self.tr("Концепт"),
-            source=self.preferences_config.concept_prompt.source,
+            source=self.preferences_config.prompt.concept.source,
             system_content=constants_config.resources.default_concept_prompt,
-            custom_content=self.preferences_config.concept_prompt.custom,
+            custom_content=self.preferences_config.prompt.concept.custom,
             height=constants_config.ui.concept_height,
             stretch=constants_config.ui.concept_stretch,
         )
@@ -24,9 +24,9 @@ class PromptTab(Tab):
 
         self.metadata_editor = SystemCustomTextEditor(
             label=self.tr("Метаданные"),
-            source=self.preferences_config.metadata_prompt.source,
+            source=self.preferences_config.prompt.metadata.source,
             system_content=constants_config.resources.default_metadata_prompt,
-            custom_content=self.preferences_config.metadata_prompt.custom,
+            custom_content=self.preferences_config.prompt.metadata.custom,
             height=constants_config.ui.metadata_height,
             stretch=constants_config.ui.metadata_stretch,
         )
@@ -34,24 +34,25 @@ class PromptTab(Tab):
 
         self.icon_editor = SystemCustomTextEditor(
             label=self.tr("Иконка"),
-            source=self.preferences_config.icon_prompt.source,
+            source=self.preferences_config.prompt.icon.source,
             system_content=constants_config.resources.default_icon_prompt,
-            custom_content=self.preferences_config.icon_prompt.custom,
+            custom_content=self.preferences_config.prompt.icon.custom,
             height=constants_config.ui.icon_prompt_height,
             stretch=constants_config.ui.icon_prompt_stretch,
         )
         self.layout.addWidget(self.icon_editor)
 
     def save(self) -> None:
-        self.preferences_config.concept_prompt.source = self.concept_editor.source
-        self.preferences_config.concept_prompt.custom = (
+        self.preferences_config.prompt.concept.source = self.concept_editor.source
+        self.preferences_config.prompt.concept.custom = (
             self.concept_editor.custom_content
         )
 
-        self.preferences_config.metadata_prompt.source = self.metadata_editor.source
-        self.preferences_config.metadata_prompt.custom = (
+        self.preferences_config.prompt.metadata.source = self.metadata_editor.source
+        self.preferences_config.prompt.metadata.custom = (
             self.metadata_editor.custom_content
         )
 
-        self.preferences_config.icon_prompt.source = self.icon_editor.source
-        self.preferences_config.icon_prompt.custom = self.icon_editor.custom_content
+        self.preferences_config.prompt.icon.source = self.icon_editor.source
+        self.preferences_config.prompt.icon.custom = self.icon_editor.custom_content
+

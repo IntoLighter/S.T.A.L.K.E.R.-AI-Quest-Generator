@@ -5,7 +5,7 @@ from io import BytesIO
 import requests
 from comfykit import ComfyKit
 from config.constants.main import constants_config
-from config.preferences import PreferencesConfig
+from config.preferences.main import PreferencesConfig
 from PIL import Image
 
 from generation.errors import ImageGenerationError
@@ -22,7 +22,7 @@ class ImageModel:
         try:
             result = loop.run_until_complete(
                 self.kit.execute_json(
-                    json.loads(self.preferences_config.icon_workflow.value),
+                    json.loads(self.preferences_config.model.icon_workflow.value),
                     {"prompt": prompt},
                 )
             )
