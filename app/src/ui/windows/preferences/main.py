@@ -1,4 +1,5 @@
 from config.preferences import PreferencesConfig
+from config.preferences_repository import preferences_repository
 from loguru import logger
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -57,7 +58,7 @@ class PreferencesDialog(BaseDialog):
         for tab in self.tabs:
             tab.save()
 
-        self.preferences_config.save()
+        preferences_repository.save(self.preferences_config)
         logger.info("Window 'Settings' accepted")
         super().accept()
 
