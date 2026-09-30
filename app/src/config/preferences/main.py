@@ -9,7 +9,6 @@ from config.preferences.sections.prompt import PromptConfig
 class PreferencesConfig(BaseSettings):
     model_config = SettingsConfigDict(
         extra="ignore",
-        validate_by_name=True,
     )
 
     general: GeneralConfig = GeneralConfig()

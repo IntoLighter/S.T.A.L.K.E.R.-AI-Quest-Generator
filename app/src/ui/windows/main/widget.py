@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from config.preferences.main import PreferencesConfig
-from config.preferences.sections.model import ModelType
+from config.preferences.sections.types import ModelType
 from generation.entity import ConfiguratorParameters
 from generation.model.text.local import LocalTextModel
 from generation.model.text.main import TextModel
