@@ -11,13 +11,13 @@ from util.error import (
     ErrorInfo,
 )
 from util.logging import log_execution
-from util.path import get_unique_counter_name_path, get_unique_name_path
 
 from generation.engine.soc import SoCObjectFactory
 from generation.entity import GameRecords, GenerationResult, IconRecords, Metadata
 from generation.errors import ImageGenerationError
 from generation.model.image.main import ImageModel
 from generation.model.text.main import TextModel
+from generation.services.saving import QuestSaver
 
 
 class Worker(QObject):
@@ -209,83 +209,14 @@ class Worker(QObject):
     def save_on_disk(self, result: GenerationResult) -> None:
         self.status_update.emit(self.tr("Сохранение данных"))
 
-        if not self.preferences_config.general.save_path:
+        save_path = self.preferences_config.general.save_path
+
+        if not save_path:
             return
 
-        if result.metadata:
-            quest_path = get_unique_name_path(
-                self.preferences_config.general.save_path / result.metadata.title
-            )
-        else:
-            quest_path = get_unique_counter_name_path(
-                self.preferences_config.general.save_path
-            )
-
-        quest_path.mkdir(parents=True)
-
-        generation_path = quest_path / "generation"
-        generation_path.mkdir(parents=True)
-
-        resource_path = quest_path / "resource"
-        resource_path.mkdir(parents=True)
-
-        try:
-            quest_prompt_path = quest_path / "prompt.txt"
-            quest_prompt_path.write_text(self.quest_prompt, encoding="utf-8")
-        except Exception as e:
-            self.handle_unknown_exception(e)
-
-        if result.concept:
-            try:
-                concept_path = generation_path / "concept.txt"
-                concept_path.write_text(result.concept, encoding="utf-8")
-            except Exception as e:
-                self.handle_unknown_exception(e)
-
-        if result.metadata_text:
-            try:
-                metadata_path = generation_path / "metadata.json"
-                metadata_path.write_text(result.metadata_text, encoding="utf-8")
-            except Exception as e:
-                self.handle_unknown_exception(e)
-
-        if result.game_records:
-            try:
-                task_path = resource_path / "task.xml"
-                task_path.write_text(result.game_records.task, encoding="cp1251")
-            except Exception as e:
-                self.handle_unknown_exception(e)
-
-            try:
-                article_path = resource_path / "storyline_info.xml"
-                article_path.write_text(result.game_records.article, encoding="cp1251")
-            except Exception as e:
-                self.handle_unknown_exception(e)
-
-            try:
-                infoportions_path = resource_path / "info.xml"
-                infoportions_path.write_text(
-                    result.game_records.infoportions, encoding="cp1251"
-                )
-            except Exception as e:
-                self.handle_unknown_exception(e)
-
-        if result.icon_prompt:
-            try:
-                icon_prompt_path = generation_path / "icon_prompt.txt"
-                icon_prompt_path.write_text(result.icon_prompt, encoding="utf-8")
-            except Exception as e:
-                self.handle_unknown_exception(e)
-
-        if result.icon_records:
-            try:
-                icon_path = generation_path / "icon.png"
-                result.icon_records.icon.save(icon_path)
-            except Exception as e:
-                self.handle_unknown_exception(e)
-
-            try:
-                icon_soc_path = resource_path / "icon.png"
-                result.icon_records.icon_soc.save(icon_soc_path)
-            except Exception as e:
-                self.handle_unknown_exception(e)
+        saver = QuestSaver(
+            save_path=save_path,
+            quest_prompt=self.quest_prompt,
+            on_error=self.handle_unknown_exception,
+        )
+        saver.save(result)
