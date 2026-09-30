@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
 )
 
 from ui.utils.layout import get_layout_with_scroll
-from ui.widgets.system_custom_text_editor import SystemCustomTextEditor
+from ui.widgets.text_option import TextOptionEditor
 from ui.windows.preferences.tab.base import Tab
 
 
@@ -62,11 +62,9 @@ class ModelTab(Tab):
         self.group.buttonToggled.connect(self.update_text_model_dropdown)
         self.update_text_model_dropdown()
 
-        self.icon_workflow_editor = SystemCustomTextEditor(
+        self.icon_workflow_editor = TextOptionEditor(
             label=self.tr("Workflow иконки"),
-            source=self.preferences_config.model.icon_workflow.source,
-            system_content=constants_config.resources.default_icon_workflow,
-            custom_content=self.preferences_config.model.icon_workflow.custom,
+            option=self.preferences_config.model.icon_workflow,
             height=constants_config.ui.icon_workflow_height,
             stretch=constants_config.ui.icon_workflow_stretch,
         )
@@ -100,11 +98,4 @@ class ModelTab(Tab):
         )
         self.preferences_config.model.text_model_remote = (
             self.remote_model_dropdown.currentText()
-        )
-
-        self.preferences_config.model.icon_workflow.source = (
-            self.icon_workflow_editor.source
-        )
-        self.preferences_config.model.icon_workflow.custom = (
-            self.icon_workflow_editor.custom_content
         )

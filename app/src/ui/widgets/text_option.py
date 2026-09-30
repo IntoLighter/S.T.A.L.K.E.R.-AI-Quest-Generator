@@ -1,5 +1,5 @@
 from config.constants.main import constants_config
-from config.preferences.sections.types import ValueSource
+from config.preferences.sections.types import TextOption, ValueSource
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -12,20 +12,16 @@ from PySide6.QtWidgets import (
 )
 
 
-class SystemCustomTextEditor(QWidget):
+class TextOptionEditor(QWidget):
     def __init__(
         self,
         label: str,
-        source: ValueSource,
-        system_content: str,
-        custom_content: str,
+        option: TextOption,
         height: int = constants_config.ui.editor_height,
         stretch: int = constants_config.ui.editor_stretch,
     ) -> None:
         super().__init__()
-        self.source = source
-        self.system_content = system_content
-        self.custom_content = custom_content
+        self.option = option
 
         self.layout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
@@ -47,12 +43,12 @@ class SystemCustomTextEditor(QWidget):
 
         self.editor = QPlainTextEdit()
         mode_to_content = {
-            ValueSource.SYSTEM: self.system_content,
-            ValueSource.CUSTOM: self.custom_content,
+            ValueSource.SYSTEM: self.option.system,
+            ValueSource.CUSTOM: self.option.custom,
         }
-        self.editor.setPlainText(mode_to_content[self.source])
+        self.editor.setPlainText(mode_to_content[self.option.source])
         self.editor.setMinimumHeight(height)
-        self.editor.setReadOnly(self.source == ValueSource.SYSTEM)
+        self.editor.setReadOnly(self.option.source == ValueSource.SYSTEM)
         self.editor.textChanged.connect(self.on_text_changed)
         self.layout.addWidget(self.editor, stretch)
 
@@ -61,20 +57,20 @@ class SystemCustomTextEditor(QWidget):
             ValueSource.SYSTEM: self.system_button,
             ValueSource.CUSTOM: self.custom_button,
         }
-        source_to_button[self.source].setChecked(True)
+        source_to_button[self.option.source].setChecked(True)
 
     @Slot()
     def on_text_changed(self) -> None:
-        if self.source == ValueSource.CUSTOM:
-            self.custom_content = self.editor.toPlainText()
+        if self.option.source == ValueSource.CUSTOM:
+            self.option.custom = self.editor.toPlainText()
 
     @Slot()
     def on_source_changed(self) -> None:
         if self.system_button.isChecked():
-            self.source = ValueSource.SYSTEM
-            self.editor.setPlainText(self.system_content)
+            self.option.source = ValueSource.SYSTEM
+            self.editor.setPlainText(self.option.system)
             self.editor.setReadOnly(True)
         elif self.custom_button.isChecked():
-            self.source = ValueSource.CUSTOM
-            self.editor.setPlainText(self.custom_content)
+            self.option.source = ValueSource.CUSTOM
+            self.editor.setPlainText(self.option.custom)
             self.editor.setReadOnly(False)
