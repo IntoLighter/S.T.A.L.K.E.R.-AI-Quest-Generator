@@ -1,6 +1,6 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
-from config.preferences.sections.model import ModelType
+from config.preferences.sections.types import ModelType
 from generation.model.text.local import LocalTextModel
 from generation.model.text.remote import RemoteTextModel
 from PySide6.QtCore import Slot
