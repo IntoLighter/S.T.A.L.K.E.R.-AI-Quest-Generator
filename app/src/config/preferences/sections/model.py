@@ -1,18 +1,11 @@
-from enum import Enum, auto
-from typing import Self
-
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel
 
 from config.constants.main import constants_config
-from config.preferences.sections.prompt import TextOption
+from config.preferences.sections.types import ModelType, TextOption
+from config.utils.mixins import CodeDefaultSectionMixin
 
 
-class ModelType(Enum):
-    Local = auto()
-    Remote = auto()
-
-
-class ModelConfig(BaseModel):
+class ModelConfig(CodeDefaultSectionMixin, BaseModel):
     text_model_type: ModelType = ModelType.Local
     text_model_local: str = ""
     text_model_remote: str = ""
@@ -25,9 +18,6 @@ class ModelConfig(BaseModel):
         }
         return type_to_value[self.text_model_type]
 
-    icon_workflow: TextOption = Field(default_factory=TextOption)
-
-    @model_validator(mode="after")
-    def fill_systems(self) -> Self:
-        self.icon_workflow.system = constants_config.resources.default_icon_workflow
-        return self
+    icon_workflow: TextOption = TextOption(
+        system=constants_config.resources.default_icon_workflow
+    )
