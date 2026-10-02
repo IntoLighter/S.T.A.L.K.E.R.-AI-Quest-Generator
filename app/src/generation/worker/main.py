@@ -54,9 +54,68 @@ class Worker(QObject):
             self.finished.emit()
 
     def perform_work(self) -> GenerationResult:
-        return GenerationResult()
+        result = GenerationResult()
 
-    def handle_exception_perform_work(self, e: Exception) -> None:
+        try:
+            result.concept = self.build_concept()
+
+            if self.is_interruption_requested:
+                return result
+
+            try:
+                result.metadata_text = self.build_metadata_text(result.concept)
+
+                if self.is_interruption_requested:
+                    return result
+
+                if result.metadata_text is not None:
+                    result.metadata = self.create_metadata(result.metadata_text)
+
+                if result.metadata:
+                    title_english = self.create_title_english(result.metadata.title)
+                    result.game_records = SoCObjectFactory.create_game_records(
+                        result.metadata, title_english
+                    )
+                    self.game_records_ready.emit(result.game_records)
+            except Exception as e:
+                self.handle_stage_exception(e)
+
+            try:
+                result.icon_prompt = self.build_icon_prompt(result.concept)
+
+                if self.is_interruption_requested:
+                    return result
+
+                if result.icon_prompt and self.should_generate_icons:
+                    result.icon_records = self.create_icon_records(result.icon_prompt)
+            except Exception as e:
+                self.handle_stage_exception(e)
+
+        except Exception as e:
+            self.handle_stage_exception(e)
+
+        return result
+
+    def build_concept(self) -> str | None:
+        return self.create_concept()
+
+    def build_metadata_text(self, concept: str | None) -> str | None:
+        if not self.preferences_config.general.should_generate_metadata:
+            return None
+
+        return self.create_metadata_text(concept)
+
+    def build_icon_prompt(self, concept: str | None) -> str | None:
+        if not self.preferences_config.general.should_generate_icon:
+            return None
+
+        return self.create_icon_prompt(concept)
+
+    @property
+    def should_generate_icons(self) -> bool:
+        return self.preferences_config.general.should_generate_icon
+
+    def handle_stage_exception(self, e: Exception) -> None:
         match e:
             case openai.APIConnectionError():
                 self.handle_exception(
