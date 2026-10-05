@@ -108,43 +108,41 @@ class Worker(QObject):
 
         try:
             result.concept = self.build_concept()
+        except Exception as e:
+            self.handle_stage_exception(e)
+            return result
+
+        if self._is_interrupted():
+            return result
+
+        try:
+            result.metadata_text = self.build_metadata_text(result.concept)
 
             if self._is_interrupted():
                 return result
 
-            try:
-                result.metadata_text = self.build_metadata_text(result.concept)
+            if result.metadata_text is not None:
+                result.metadata = self.metadata_parse_stage.parse(result.metadata_text)
 
-                if self._is_interrupted():
-                    return result
+            if result.metadata:
+                title_english = self.title_stage.translate(result.metadata.title)
+                result.game_records = SoCObjectFactory.create_game_records(
+                    result.metadata, title_english
+                )
+                self.game_records_ready.emit(result.game_records)
+        except Exception as e:
+            self.handle_stage_exception(e)
 
-                if result.metadata_text is not None:
-                    result.metadata = self.metadata_parse_stage.parse(
-                        result.metadata_text
-                    )
+        try:
+            result.icon_prompt = self.build_icon_prompt(result.concept)
 
-                if result.metadata:
-                    title_english = self.title_stage.translate(result.metadata.title)
-                    result.game_records = SoCObjectFactory.create_game_records(
-                        result.metadata, title_english
-                    )
-                    self.game_records_ready.emit(result.game_records)
-            except Exception as e:
-                self.handle_stage_exception(e)
+            if self._is_interrupted():
+                return result
 
-            try:
-                result.icon_prompt = self.build_icon_prompt(result.concept)
-
-                if self._is_interrupted():
-                    return result
-
-                if result.icon_prompt and self.should_generate_icons:
-                    result.icon_records = self.icon_records_stage.generate(
-                        result.icon_prompt
-                    )
-            except Exception as e:
-                self.handle_stage_exception(e)
-
+            if result.icon_prompt and self.should_generate_icons:
+                result.icon_records = self.icon_records_stage.generate(
+                    result.icon_prompt
+                )
         except Exception as e:
             self.handle_stage_exception(e)
 
