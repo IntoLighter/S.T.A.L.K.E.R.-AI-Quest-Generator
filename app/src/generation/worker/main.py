@@ -1,10 +1,7 @@
-import json
 import traceback
-from contextlib import suppress
 
 import openai
 from config.preferences.main import PreferencesConfig
-from deep_translator import GoogleTranslator
 from loguru import logger
 from PySide6.QtCore import QObject, Signal, Slot
 from util.error import (
@@ -13,11 +10,18 @@ from util.error import (
 from util.logging import log_execution
 
 from generation.engine.soc import SoCObjectFactory
-from generation.entity import GameRecords, GenerationResult, IconRecords, Metadata
+from generation.entity import GameRecords, GenerationResult, IconRecords
 from generation.errors import ImageGenerationError
 from generation.model.image.main import ImageModel
 from generation.model.text.main import TextModel
 from generation.services.saving import QuestSaver
+from generation.stages.concept import ConceptStage
+from generation.stages.icon import IconPromptStage, IconRecordsStage
+from generation.stages.metadata import (
+    MetadataParseStage,
+    MetadataTextStage,
+    TitleStage,
+)
 
 
 class Worker(QObject):
@@ -41,6 +45,44 @@ class Worker(QObject):
         self.image_model = ImageModel(preferences_config)
         self.quest_prompt = prompt
         self.is_interruption_requested = False
+
+        self.concept_stage = ConceptStage(
+            text_model=text_model,
+            is_interrupted=self._is_interrupted,
+            system_prompt=preferences_config.prompt.concept.value,
+            quest_prompt=prompt,
+            emit_chunk=self.concept_chunk_ready.emit,
+            emit_status=self.status_update.emit,
+        )
+        self.metadata_text_stage = MetadataTextStage(
+            text_model=text_model,
+            is_interrupted=self._is_interrupted,
+            system_prompt=preferences_config.prompt.metadata.value,
+            emit_chunk=self.metadata_chunk_ready.emit,
+            emit_metadata_ready=self.metadata_ready.emit,
+            emit_status=self.status_update.emit,
+        )
+        self.metadata_parse_stage = MetadataParseStage(
+            handle_exception=self.handle_exception,
+        )
+        self.title_stage = TitleStage(
+            handle_exception=self.handle_exception,
+        )
+        self.icon_prompt_stage = IconPromptStage(
+            text_model=text_model,
+            is_interrupted=self._is_interrupted,
+            system_prompt=preferences_config.prompt.icon.value,
+            emit_chunk=self.icon_prompt_chunk_ready.emit,
+            emit_status=self.status_update.emit,
+        )
+        self.icon_records_stage = IconRecordsStage(
+            image_model=self.image_model,
+            emit_status=self.status_update.emit,
+            emit_icon_ready=self.icon_ready.emit,
+        )
+
+    def _is_interrupted(self) -> bool:
+        return self.is_interruption_requested
 
     @Slot()
     def run(self) -> None:
@@ -69,10 +111,12 @@ class Worker(QObject):
                     return result
 
                 if result.metadata_text is not None:
-                    result.metadata = self.create_metadata(result.metadata_text)
+                    result.metadata = self.metadata_parse_stage.parse(
+                        result.metadata_text
+                    )
 
                 if result.metadata:
-                    title_english = self.create_title_english(result.metadata.title)
+                    title_english = self.title_stage.translate(result.metadata.title)
                     result.game_records = SoCObjectFactory.create_game_records(
                         result.metadata, title_english
                     )
@@ -87,7 +131,9 @@ class Worker(QObject):
                     return result
 
                 if result.icon_prompt and self.should_generate_icons:
-                    result.icon_records = self.create_icon_records(result.icon_prompt)
+                    result.icon_records = self.icon_records_stage.generate(
+                        result.icon_prompt
+                    )
             except Exception as e:
                 self.handle_stage_exception(e)
 
@@ -97,19 +143,19 @@ class Worker(QObject):
         return result
 
     def build_concept(self) -> str | None:
-        return self.create_concept()
+        return self.concept_stage.generate()
 
     def build_metadata_text(self, concept: str | None) -> str | None:
         if not self.preferences_config.general.should_generate_metadata:
             return None
 
-        return self.create_metadata_text(concept)
+        return self.metadata_text_stage.generate(concept)
 
     def build_icon_prompt(self, concept: str | None) -> str | None:
         if not self.preferences_config.general.should_generate_icon:
             return None
 
-        return self.create_icon_prompt(concept)
+        return self.icon_prompt_stage.generate(concept)
 
     @property
     def should_generate_icons(self) -> bool:
@@ -148,121 +194,6 @@ class Worker(QObject):
     def handle_unknown_exception(self, e: Exception) -> None:
         logger.exception(e)
         self.unknown_error_occurred.emit(traceback.format_exc())
-
-    @log_execution
-    def create_concept(self) -> str | None:
-        self.status_update.emit(self.tr("Генерация концепта"))
-
-        messages = [
-            {
-                "role": "system",
-                "content": self.preferences_config.prompt.concept.value,
-            },
-            {
-                "role": "user",
-                "content": self.quest_prompt,
-            },
-        ]
-
-        concept = ""
-
-        for token in self.text_model.generate(messages):
-            if self.is_interruption_requested:
-                return
-
-            concept += token
-            self.concept_chunk_ready.emit(token)
-
-        return concept
-
-    @log_execution
-    def create_metadata_text(self, concept: str) -> str | None:
-        self.status_update.emit(self.tr("Генерация метаданных"))
-
-        messages = [
-            {
-                "role": "system",
-                "content": self.preferences_config.prompt.metadata.value,
-            },
-            {"role": "user", "content": concept},
-        ]
-
-        metadata = ""
-
-        for token in self.text_model.generate(messages, schema=Metadata):
-            if self.is_interruption_requested:
-                return
-
-            metadata += token
-            self.metadata_chunk_ready.emit(token)
-
-        with suppress(Exception):
-            parsed = json.loads(metadata)
-            formatted = json.dumps(parsed, ensure_ascii=False, indent=2)
-            metadata = formatted
-            self.metadata_ready.emit(metadata)
-
-        return metadata
-
-    def create_metadata(self, metadata_text: str) -> Metadata | None:
-        try:
-            return Metadata.model_validate_json(metadata_text)
-        except Exception as e:
-            self.handle_exception(
-                e,
-                self.tr("Невалидный json метаданных.")
-                + self.tr("Попробуйте исправить json через соотвествующие сайты ")
-                + self.tr("и прогоните его через конфигуратор."),
-            )
-
-    @log_execution
-    def create_title_english(self, title: str) -> str:
-        try:
-            title_english = GoogleTranslator(source="ru", target="en").translate(title)
-        except Exception as e:
-            self.handle_exception(
-                e, self.tr("Ошибка гугл переводчика. Название не будет переведено.")
-            )
-            title_english = title
-
-        title_english = title_english.lower()
-        title_english = title_english.replace(" ", "_")
-        return title_english
-
-    @log_execution
-    def create_icon_prompt(self, concept: str) -> str | None:
-        self.status_update.emit(self.tr("Генерация промпта иконки"))
-
-        messages = [
-            {
-                "role": "system",
-                "content": self.preferences_config.prompt.icon.value,
-            },
-            {
-                "role": "user",
-                "content": concept,
-            },
-        ]
-
-        icon_prompt = ""
-
-        for token in self.text_model.generate(messages):
-            if self.is_interruption_requested:
-                return
-
-            icon_prompt += token
-            self.icon_prompt_chunk_ready.emit(token)
-
-        return icon_prompt
-
-    @log_execution
-    def create_icon_records(self, icon_prompt: str) -> IconRecords | None:
-        self.status_update.emit(self.tr("Генерация иконки"))
-        icon = self.image_model.generate(icon_prompt)
-        icon_soc = SoCObjectFactory.create_icon(icon)
-        icon_records = IconRecords(icon=icon, icon_soc=icon_soc)
-        self.icon_ready.emit(icon_records)
-        return icon_records
 
     @log_execution
     def save_on_disk(self, result: GenerationResult) -> None:
