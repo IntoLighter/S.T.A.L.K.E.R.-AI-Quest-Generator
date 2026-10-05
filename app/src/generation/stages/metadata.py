@@ -10,10 +10,10 @@ from util.logging import log_execution
 
 from generation.entity import Metadata
 from generation.model.text.main import TextModel
-from generation.stages.streaming import stream_text
+from generation.stages.base import TextStage
 
 
-class MetadataTextStage(QObject):
+class MetadataTextStage(TextStage):
     def __init__(
         self,
         text_model: TextModel,
@@ -23,30 +23,16 @@ class MetadataTextStage(QObject):
         emit_metadata_ready: Callable[[str], None],
         emit_status: Callable[[str], None],
     ) -> None:
-        super().__init__()
-        self.text_model = text_model
-        self.is_interrupted = is_interrupted
-        self.system_prompt = system_prompt
-        self.emit_chunk = emit_chunk
+        super().__init__(
+            text_model, is_interrupted, system_prompt, emit_chunk, emit_status
+        )
         self.emit_metadata_ready = emit_metadata_ready
-        self.emit_status = emit_status
 
     @log_execution
     def generate(self, concept: str | None) -> str | None:
         self.emit_status(self.tr("Генерация метаданных"))
 
-        messages = [
-            {"role": "system", "content": self.system_prompt},
-            {"role": "user", "content": concept},
-        ]
-
-        metadata = stream_text(
-            self.text_model,
-            self.is_interrupted,
-            messages,
-            self.emit_chunk,
-            schema=Metadata,
-        )
+        metadata = self.stream(concept, schema=Metadata)
 
         if metadata is None:
             return None

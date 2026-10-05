@@ -54,7 +54,6 @@ class Worker(QObject):
             text_model=text_model,
             is_interrupted=self._is_interrupted,
             system_prompt=preferences_config.prompt.concept.value,
-            quest_prompt=prompt,
             emit_chunk=self.concept_chunk_ready.emit,
             emit_status=self.status_update.emit,
         )
