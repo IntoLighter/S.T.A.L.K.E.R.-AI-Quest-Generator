@@ -1,5 +1,5 @@
 from config.constants.main import constants_config
-from generation.entity import GameRecords
+from generation.entity import QuestData
 from generation.worker.main import Worker
 from PySide6.QtCore import Slot
 
@@ -33,7 +33,7 @@ class MetadataTab(Tab):
     def bind_worker(self, worker: Worker) -> None:
         worker.metadata_chunk_ready.connect(self.show_metadata_chunk)
         worker.metadata_ready.connect(self.update_metadata)
-        worker.game_records_ready.connect(self.show_game_records)
+        worker.quest_data_ready.connect(self.show_quest_data)
 
     @Slot(str)
     def show_metadata_chunk(self, chunk: str) -> None:
@@ -43,12 +43,12 @@ class MetadataTab(Tab):
     def update_metadata(self, metadata: str) -> None:
         self.metadata_editor.setPlainText(metadata)
 
-    @Slot(GameRecords)
-    def show_game_records(self, quest_records: GameRecords) -> None:
+    @Slot(QuestData)
+    def show_quest_data(self, quest_data: QuestData) -> None:
         editor_to_record = {
-            self.task_editor: quest_records.task,
-            self.article_editor: quest_records.article,
-            self.infoportions_editor: quest_records.infoportions,
+            self.task_editor: quest_data.task,
+            self.article_editor: quest_data.article,
+            self.infoportions_editor: quest_data.infoportions,
         }
 
         for editor, record in editor_to_record.items():

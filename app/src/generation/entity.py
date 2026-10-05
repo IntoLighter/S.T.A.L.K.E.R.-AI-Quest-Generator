@@ -16,7 +16,7 @@ class Metadata(BaseModel):
 
 
 @dataclass
-class GameRecords:
+class QuestData:
     task: str
     article: str
     infoportions: str
@@ -33,7 +33,7 @@ class GenerationResult:
     concept: str | None = None
     metadata_text: str | None = None
     metadata: Metadata | None = None
-    game_records: GameRecords | None = None
+    quest_data: QuestData | None = None
     icon_prompt: str | None = None
     icon_records: IconRecords | None = None
 

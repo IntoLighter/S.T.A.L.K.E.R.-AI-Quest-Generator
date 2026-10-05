@@ -10,11 +10,11 @@ from util.error import (
 )
 from util.logging import log_execution
 
-from generation.engine.soc import SoCObjectFactory
-from generation.entity import GameRecords, GenerationResult, IconRecords
+from generation.entity import GenerationResult, IconRecords, QuestData
 from generation.errors import ImageGenerationError
 from generation.model.image.main import ImageModel
 from generation.model.text.main import TextModel
+from generation.services.quest_builder import QuestBuilder
 from generation.services.saving import QuestSaver
 from generation.stages.concept import ConceptStage
 from generation.stages.icon import IconPromptStage, IconRecordsStage
@@ -29,7 +29,7 @@ class Worker(QObject):
     concept_chunk_ready = Signal(str)
     metadata_chunk_ready = Signal(str)
     metadata_ready = Signal(str)
-    game_records_ready = Signal(GameRecords)
+    quest_data_ready = Signal(QuestData)
     icon_prompt_chunk_ready = Signal(str)
     icon_ready = Signal(IconRecords)
     status_update = Signal(str)
@@ -125,10 +125,10 @@ class Worker(QObject):
 
             if result.metadata:
                 title_english = self.title_stage.translate(result.metadata.title)
-                result.game_records = SoCObjectFactory.create_game_records(
+                result.quest_data = QuestBuilder.create_quest_data(
                     result.metadata, title_english
                 )
-                self.game_records_ready.emit(result.game_records)
+                self.quest_data_ready.emit(result.quest_data)
         except Exception as e:
             self.handle_stage_exception(e)
 
