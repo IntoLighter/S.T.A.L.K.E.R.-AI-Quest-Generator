@@ -128,8 +128,7 @@ class MainWidget(QWidget):
         self.generate_button.clicked.connect(self.stop_generate)
 
     def stop_generate(self) -> None:
-        logger.info("Generation canceled")
-        self.worker.is_interruption_requested = True
+        self.worker.request_interruption()
         self.set_generate_button_generate()
 
     def set_generate_button_generate(self) -> None:
