@@ -14,7 +14,7 @@ class TextModel:
     def generate(
         self,
         messages: list[ChatCompletionMessageParam],
-        schema: BaseModel | None = None,
+        schema: type[BaseModel] | None = None,
         retries: int = 2,
         **kwargs: object,
     ) -> Iterator[str]:
