@@ -24,7 +24,7 @@ class ConfiguratorWorker(Worker):
             return self.parameters.concept
 
         if self.parameters.should_generate_concept:
-            return self.create_concept()
+            return self.concept_stage.generate()
 
         return None
 
@@ -34,7 +34,7 @@ class ConfiguratorWorker(Worker):
             return self.parameters.metadata
 
         if self.parameters.should_generate_metadata:
-            return self.create_metadata_text(concept)
+            return self.metadata_text_stage.generate(concept)
 
         return None
 
@@ -44,7 +44,7 @@ class ConfiguratorWorker(Worker):
             return self.parameters.icon_prompt
 
         if self.parameters.should_generate_icon:
-            return self.create_icon_prompt(concept)
+            return self.icon_prompt_stage.generate(concept)
 
         return None
 
