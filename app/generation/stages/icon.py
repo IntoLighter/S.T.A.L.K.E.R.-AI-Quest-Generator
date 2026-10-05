@@ -3,10 +3,10 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from PySide6.QtCore import QObject
-from util.logging import log_execution
+from utils.logging import log_execution
 
 from generation.entity import IconRecords
-from generation.model.image.main import ImageModel
+from generation.models.image.main import ImageModel
 from generation.services.quest_builder import QuestBuilder
 from generation.stages.base import TextStage
 

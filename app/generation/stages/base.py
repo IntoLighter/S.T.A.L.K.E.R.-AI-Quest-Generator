@@ -6,7 +6,7 @@ from openai.types.chat import ChatCompletionMessageParam
 from pydantic import BaseModel
 from PySide6.QtCore import QObject
 
-from generation.model.text.main import TextModel
+from generation.models.text.main import TextModel
 
 
 class TextStage(QObject):

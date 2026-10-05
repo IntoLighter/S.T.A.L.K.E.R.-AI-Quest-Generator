@@ -1,8 +1,8 @@
 from config.preferences.main import PreferencesConfig
 
 from generation.entity import ConfiguratorParameters, IconRecords
-from generation.model.text.main import TextModel
-from generation.worker.main import Worker
+from generation.models.text.main import TextModel
+from generation.workers.main import Worker
 
 
 class ConfiguratorWorker(Worker):

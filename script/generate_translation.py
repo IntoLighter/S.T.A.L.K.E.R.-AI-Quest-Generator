@@ -3,7 +3,7 @@ import subprocess
 from pathlib import Path
 
 SOURCE_DIR = Path("app/src")
-TRANSLATION_DIR = Path("app/resource/translation")
+TRANSLATION_DIR = Path("app/resources/translation")
 
 OUTPUT_FILES = {
     "ru": TRANSLATION_DIR / "ru.ts",

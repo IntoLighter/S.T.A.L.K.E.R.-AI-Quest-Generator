@@ -5,15 +5,15 @@ from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from loguru import logger
 from PySide6.QtCore import QObject, Signal, Slot
-from util.error import (
+from utils.error import (
     ErrorInfo,
 )
-from util.logging import log_execution
+from utils.logging import log_execution
 
 from generation.entity import GenerationResult, IconRecords, QuestData
 from generation.errors import ImageGenerationError
-from generation.model.image.main import ImageModel
-from generation.model.text.main import TextModel
+from generation.models.image.main import ImageModel
+from generation.models.text.main import TextModel
 from generation.services.quest_builder import QuestBuilder
 from generation.services.saving import QuestSaver
 from generation.stages.concept import ConceptStage

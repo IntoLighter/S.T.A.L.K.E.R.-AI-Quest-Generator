@@ -1,4 +1,4 @@
-from generation.worker.main import Worker
+from generation.workers.main import Worker
 from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import QLabel, QPlainTextEdit, QVBoxLayout, QWidget
 

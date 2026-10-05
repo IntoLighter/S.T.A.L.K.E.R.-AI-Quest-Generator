@@ -1,7 +1,7 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 
-from generation.model.text.main import TextModel
+from generation.models.text.main import TextModel
 
 
 class LocalTextModel(TextModel):

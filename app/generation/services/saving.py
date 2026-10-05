@@ -4,7 +4,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from util.path import get_unique_counter_name_path, get_unique_name_path
+from utils.path import get_unique_counter_name_path, get_unique_name_path
 
 from generation.entity import GenerationResult
 
