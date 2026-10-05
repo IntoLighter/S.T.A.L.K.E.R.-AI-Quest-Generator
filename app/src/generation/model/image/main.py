@@ -4,7 +4,6 @@ from io import BytesIO
 
 import requests
 from comfykit import ComfyKit
-from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from PIL import Image
 
@@ -12,11 +11,12 @@ from generation.errors import ImageGenerationError
 
 
 class ImageModel:
-    def __init__(self, preferences_config: PreferencesConfig) -> None:
-        self.kit = ComfyKit(comfyui_url=constants_config.endpoints.comfy_ui_base_url)
+    def __init__(self, preferences_config: PreferencesConfig, comfyui_url: str) -> None:
         self.preferences_config = preferences_config
+        self.comfyui_url = comfyui_url
+        self.kit = ComfyKit(comfyui_url=self.comfyui_url)
 
-    def generate(self, prompt: str) -> None:
+    def generate(self, prompt: str) -> Image.Image:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:
