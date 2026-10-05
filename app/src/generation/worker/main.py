@@ -139,10 +139,7 @@ class Worker(QObject):
             if self._is_interrupted():
                 return result
 
-            if result.icon_prompt and self.should_generate_icons:
-                result.icon_records = self.icon_records_stage.generate(
-                    result.icon_prompt
-                )
+            result.icon_records = self.build_icon_records(result.icon_prompt)
         except Exception as e:
             self.handle_stage_exception(e)
 
@@ -157,8 +154,7 @@ class Worker(QObject):
     def build_icon_prompt(self, concept: str | None) -> str | None:
         raise NotImplementedError
 
-    @property
-    def should_generate_icons(self) -> bool:
+    def build_icon_records(self, icon_prompt: str | None) -> IconRecords | None:
         raise NotImplementedError
 
     def handle_stage_exception(self, e: Exception) -> None:
