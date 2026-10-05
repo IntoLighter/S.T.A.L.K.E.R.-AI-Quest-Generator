@@ -48,7 +48,7 @@ class Worker(QObject):
             comfyui_url=constants_config.endpoints.comfyui_base_url,
         )
         self.quest_prompt = prompt
-        self.is_interruption_requested = False
+        self._is_interruption_requested = False
 
         self.concept_stage = ConceptStage(
             text_model=text_model,
@@ -85,8 +85,12 @@ class Worker(QObject):
             emit_icon_ready=self.icon_ready.emit,
         )
 
+    def request_interruption(self) -> None:
+        logger.info("Generation canceled")
+        self._is_interruption_requested = True
+
     def _is_interrupted(self) -> bool:
-        return self.is_interruption_requested
+        return self._is_interruption_requested
 
     @Slot()
     def run(self) -> None:
@@ -105,13 +109,13 @@ class Worker(QObject):
         try:
             result.concept = self.build_concept()
 
-            if self.is_interruption_requested:
+            if self._is_interrupted():
                 return result
 
             try:
                 result.metadata_text = self.build_metadata_text(result.concept)
 
-                if self.is_interruption_requested:
+                if self._is_interrupted():
                     return result
 
                 if result.metadata_text is not None:
@@ -131,7 +135,7 @@ class Worker(QObject):
             try:
                 result.icon_prompt = self.build_icon_prompt(result.concept)
 
-                if self.is_interruption_requested:
+                if self._is_interrupted():
                     return result
 
                 if result.icon_prompt and self.should_generate_icons:
