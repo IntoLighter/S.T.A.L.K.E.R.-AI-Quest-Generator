@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file alias="icon.ico">files/icon.ico</file>
+    </qresource>
+    <qresource prefix="/prompt">
+        <file alias="concept.txt">files/prompt/concept.txt</file>
+        <file alias="metadata.txt">files/prompt/metadata.txt</file>
+        <file alias="icon.txt">files/prompt/icon.txt</file>
+    </qresource>
+    <qresource prefix="/workflow">
+        <file alias="icon.json">files/workflow/icon.json</file>
+    </qresource>
+    <qresource prefix="/templates/quest_data">
+        <file alias="task.xml.j2">files/templates/quest_data/task.xml.j2</file>
+        <file alias="article.xml.j2">files/templates/quest_data/article.xml.j2</file>
+        <file alias="infoportions.xml.j2">files/templates/quest_data/infoportions.xml.j2</file>
+    </qresource>
+</RCC>

@@ -26,8 +26,8 @@ dev = [
 
 [tool.pyside6-project]
 files = [
-    "app/src/main.py",
-    "app/src/resource/main.qrc",
+    "app/main.py",
+    "app/resource/main.qrc",
 ]
 
 [tool.commitizen]
@@ -41,7 +41,7 @@ breaking_change_exclamation_in_title = true
 
 [tool.ruff]
 exclude = [
-    "app/src/resource/rc_main.py",
+    "app/resource/rc_main.py",
 ]
 
 [tool.ruff.lint]

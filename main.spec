@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 a = Analysis(
-    ['src\\main.py'],
+    ['app\\main.py'],
     pathex=[],
     binaries=[],
     datas=[],
@@ -38,5 +38,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['resource\\icon.ico'],
+    icon=['app\\resource\\files\\icon.ico'],
 )
