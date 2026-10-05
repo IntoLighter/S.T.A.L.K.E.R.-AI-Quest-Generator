@@ -10,3 +10,9 @@ class ResourcesConfig(BaseModel):
     icon_path: str = ":/icon/icon.ico"
 
     default_icon_workflow: str = read_resource(":/workflow/icon.json")
+
+    task_template: str = read_resource(":/templates/quest_data/task.xml.j2")
+    article_template: str = read_resource(":/templates/quest_data/article.xml.j2")
+    infoportions_template: str = read_resource(
+        ":/templates/quest_data/infoportions.xml.j2"
+    )

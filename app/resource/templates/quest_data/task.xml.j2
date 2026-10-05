@@ -1,0 +1,17 @@
+<game_task id="{{ title_id }}">
+    <title>{{ title }}</title>
+    <objective>
+        <text>{{ title }}</text>
+        <icon>{{ title_id }}_icon</icon>
+        <article>{{ title_id }}_article</article>
+        <infoportion_complete>{{ title_id }}_done_info</infoportion_complete>
+    </objective>
+{% for objective_title in objectives %}
+    <objective>
+        <text>{{ objective_title }}</text>
+{% if loop.last %}
+        <infoportion_complete>{{ title_id }}_done_info</infoportion_complete>
+{% endif %}
+    </objective>
+{% endfor %}
+</game_task>

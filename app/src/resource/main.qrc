@@ -10,4 +10,9 @@
     <qresource prefix="/workflow">
         <file alias="icon.json">../../resource/workflow/icon.json</file>
     </qresource>
+    <qresource prefix="/templates/quest_data">
+        <file alias="task.xml.j2">../../resource/templates/quest_data/task.xml.j2</file>
+        <file alias="article.xml.j2">../../resource/templates/quest_data/article.xml.j2</file>
+        <file alias="infoportions.xml.j2">../../resource/templates/quest_data/infoportions.xml.j2</file>
+    </qresource>
 </RCC>

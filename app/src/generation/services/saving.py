@@ -99,11 +99,11 @@ class QuestSaver:
                 )
             )
 
-        if result.game_records:
+        if result.quest_data:
             for name, content in (
-                ("task.xml", result.game_records.task),
-                ("storyline_info.xml", result.game_records.article),
-                ("info.xml", result.game_records.infoportions),
+                ("task.xml", result.quest_data.task),
+                ("storyline_info.xml", result.quest_data.article),
+                ("info.xml", result.quest_data.infoportions),
             ):
                 files.append(
                     TextFile(
