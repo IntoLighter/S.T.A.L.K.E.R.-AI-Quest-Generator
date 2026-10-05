@@ -24,7 +24,7 @@ class ConfiguratorWorker(Worker):
             return self.parameters.concept
 
         if self.parameters.should_generate_concept:
-            return self.concept_stage.generate()
+            return self.concept_stage.generate(self.quest_prompt)
 
         return None
 

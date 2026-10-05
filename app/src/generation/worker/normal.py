@@ -4,7 +4,7 @@ from generation.worker.main import Worker
 
 class NormalWorker(Worker):
     def build_concept(self) -> str | None:
-        return self.concept_stage.generate()
+        return self.concept_stage.generate(self.quest_prompt)
 
     def build_metadata_text(self, concept: str | None) -> str | None:
         if not self.preferences_config.general.should_generate_metadata:
