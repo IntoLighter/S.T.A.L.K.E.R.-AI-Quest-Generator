@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from util.resource import read_resource
+from utils.resource import read_resource
 
 
 class ResourcesConfig(BaseModel):

@@ -6,10 +6,10 @@ from collections.abc import Callable
 from deep_translator import GoogleTranslator
 from loguru import logger
 from PySide6.QtCore import QObject
-from util.logging import log_execution
+from utils.logging import log_execution
 
 from generation.entity import Metadata
-from generation.model.text.main import TextModel
+from generation.models.text.main import TextModel
 from generation.stages.base import TextStage
 
 

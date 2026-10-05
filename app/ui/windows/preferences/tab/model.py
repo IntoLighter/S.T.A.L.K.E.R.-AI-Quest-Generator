@@ -1,8 +1,8 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from config.preferences.sections.types import ModelType
-from generation.model.text.local import LocalTextModel
-from generation.model.text.remote import RemoteTextModel
+from generation.models.text.local import LocalTextModel
+from generation.models.text.remote import RemoteTextModel
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QButtonGroup,

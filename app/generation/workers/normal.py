@@ -1,5 +1,5 @@
 from generation.entity import IconRecords
-from generation.worker.main import Worker
+from generation.workers.main import Worker
 
 
 class NormalWorker(Worker):

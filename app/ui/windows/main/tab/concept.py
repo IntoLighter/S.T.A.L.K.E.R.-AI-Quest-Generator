@@ -1,5 +1,5 @@
 from config.constants.main import constants_config
-from generation.worker.main import Worker
+from generation.workers.main import Worker
 from PySide6.QtCore import Slot
 
 from ui.windows.main.tab.base import Tab

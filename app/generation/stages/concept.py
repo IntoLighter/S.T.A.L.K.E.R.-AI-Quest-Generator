@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from util.logging import log_execution
+from utils.logging import log_execution
 
 from generation.stages.base import TextStage
 

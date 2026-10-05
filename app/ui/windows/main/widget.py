@@ -3,11 +3,11 @@ from __future__ import annotations
 from config.preferences.main import PreferencesConfig
 from config.preferences.sections.types import ModelType
 from generation.entity import ConfiguratorParameters
-from generation.model.text.local import LocalTextModel
-from generation.model.text.main import TextModel
-from generation.model.text.remote import RemoteTextModel
-from generation.worker.configurator import ConfiguratorWorker
-from generation.worker.normal import NormalWorker
+from generation.models.text.local import LocalTextModel
+from generation.models.text.main import TextModel
+from generation.models.text.remote import RemoteTextModel
+from generation.workers.configurator import ConfiguratorWorker
+from generation.workers.normal import NormalWorker
 from loguru import logger
 from PySide6.QtCore import QThread, Signal, Slot
 from PySide6.QtWidgets import (
@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (
     QTabWidget,
     QWidget,
 )
-from util.error import (
+from utils.error import (
     ErrorInfo,
 )
 
