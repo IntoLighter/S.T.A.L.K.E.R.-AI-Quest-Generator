@@ -1,3 +1,4 @@
+from generation.entity import IconRecords
 from generation.worker.main import Worker
 
 
@@ -17,6 +18,8 @@ class NormalWorker(Worker):
 
         return self.icon_prompt_stage.generate(concept)
 
-    @property
-    def should_generate_icons(self) -> bool:
-        return self.preferences_config.general.should_generate_icon
+    def build_icon_records(self, icon_prompt: str | None) -> IconRecords | None:
+        if not icon_prompt:
+            return None
+
+        return self.icon_records_stage.generate(icon_prompt)

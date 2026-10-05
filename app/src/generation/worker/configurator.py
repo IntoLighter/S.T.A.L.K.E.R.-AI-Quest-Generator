@@ -1,6 +1,6 @@
 from config.preferences.main import PreferencesConfig
 
-from generation.entity import ConfiguratorParameters
+from generation.entity import ConfiguratorParameters, IconRecords
 from generation.model.text.main import TextModel
 from generation.worker.main import Worker
 
@@ -48,6 +48,8 @@ class ConfiguratorWorker(Worker):
 
         return None
 
-    @property
-    def should_generate_icons(self) -> bool:
-        return self.parameters.should_generate_icon
+    def build_icon_records(self, icon_prompt: str | None) -> IconRecords | None:
+        if not icon_prompt or not self.parameters.should_generate_icon:
+            return None
+
+        return self.icon_records_stage.generate(icon_prompt)
