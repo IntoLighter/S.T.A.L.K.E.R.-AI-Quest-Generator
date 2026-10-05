@@ -1,6 +1,7 @@
 import traceback
 
 import openai
+from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from loguru import logger
 from PySide6.QtCore import QObject, Signal, Slot
@@ -42,7 +43,10 @@ class Worker(QObject):
         super().__init__()
         self.preferences_config = preferences_config
         self.text_model = text_model
-        self.image_model = ImageModel(preferences_config)
+        self.image_model = ImageModel(
+            preferences_config,
+            comfyui_url=constants_config.endpoints.comfyui_base_url,
+        )
         self.quest_prompt = prompt
         self.is_interruption_requested = False
 
