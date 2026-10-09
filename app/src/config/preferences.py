@@ -30,6 +30,8 @@ class PreferencesConfig(BaseSettings):
         validate_by_name=True,
     )
 
+    show_notifications: bool = True
+
     should_generate_concept: bool = True
     should_generate_metadata: bool = True
     should_generate_icon: bool = True

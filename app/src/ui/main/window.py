@@ -8,6 +8,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QMainWindow,
     QMessageBox,
+    QSystemTrayIcon,
 )
 from tray import Tray
 
@@ -30,9 +31,7 @@ class MainWindow(QMainWindow):
 
         self.main_widget = MainWidget(preferences_config=self.preferences_config)
         self.main_widget.status_update_signal.connect(self.show_status)
-        self.main_widget.generation_completed.connect(
-            self.set_parameters_unspecified_restrictions
-        )
+        self.main_widget.generation_completed.connect(self.on_generation_completed)
         self.setCentralWidget(self.main_widget)
 
         self.status_label = QLabel()
@@ -92,6 +91,20 @@ class MainWindow(QMainWindow):
         result = dialog.exec()
         if result == QDialog.DialogCode.Accepted:
             self.set_parameters_unspecified_restrictions()
+
+    @Slot()
+    def on_generation_completed(self) -> None:
+        if self.preferences_config.show_notifications:
+            self.show_generation_complete_tray_message()
+        self.set_parameters_unspecified_restrictions()
+
+    def show_generation_complete_tray_message(self) -> None:
+        self.tray.showMessage(
+            app_config.name,
+            "Квест сгенерирован",
+            QSystemTrayIcon.MessageIcon.Information,
+            constants_config.quest_generated_tray_message_msecs,
+        )
 
     def set_parameters_unspecified_restrictions(self) -> None:
         if not self.preferences_config.current_model:
