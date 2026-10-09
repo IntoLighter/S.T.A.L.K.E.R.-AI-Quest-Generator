@@ -6,6 +6,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QCheckBox,
     QFileDialog,
+    QGroupBox,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -23,9 +24,28 @@ class GeneralTab(Tab):
         self.preferences_config = preferences_config
 
         self.layout = QVBoxLayout(self)
+
+        self.add_notifications_editor()
         self.add_should_generate_editors()
         self.add_prompt_template_editor()
         self.add_save_path_editor()
+
+    def add_notifications_editor(self) -> None:
+        group = QGroupBox(self.tr("Уведомления"))
+        group_layout = QVBoxLayout(group)
+
+        row = QHBoxLayout()
+        group_layout.addLayout(row)
+        label = QLabel(self.tr("Показывать уведомления"))
+        row.addWidget(label)
+        self.show_notifications_editor = QCheckBox()
+        self.show_notifications_editor.setChecked(
+            self.preferences_config.show_notifications
+        )
+        row.addWidget(self.show_notifications_editor)
+        row.addStretch()
+
+        self.layout.addWidget(group)
 
     def add_should_generate_editors(self) -> None:
         row = QHBoxLayout()
@@ -119,6 +139,10 @@ class GeneralTab(Tab):
             self.save_path_editor.setText(folder)
 
     def save(self) -> None:
+        self.preferences_config.show_notifications = (
+            self.show_notifications_editor.isChecked()
+        )
+
         self.preferences_config.should_generate_concept = (
             self.should_generate_concept_editor.isChecked()
         )
