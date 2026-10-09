@@ -12,7 +12,7 @@ hooks = [
   { id = "fix-byte-order-marker" },
   { id = "check-json" },
   { id = "check-json5" },
-  { id = "pretty-format-json", args = ["--no-sort-keys"] },
+  { id = "pretty-format-json", args = ["--no-sort-keys", "--autofix"] },
   { id = "check-toml" },
   { id = "check-vcs-permalinks" },
   { id = "check-yaml" },

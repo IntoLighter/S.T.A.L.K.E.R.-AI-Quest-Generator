@@ -54,9 +54,7 @@ class MainWidget(QWidget):
         if not self.preferences_config.model.current_text_model:
             show_generation_start_error(
                 self,
-                self.tr(
-                    "Невозможно запустить генерацию. Текстовая модель не задана."
-                ),
+                self.tr("Невозможно запустить генерацию. Текстовая модель не задана."),
             )
             return
 

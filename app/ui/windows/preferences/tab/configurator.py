@@ -18,18 +18,14 @@ class ConfiguratorTab(Tab):
         label = QLabel(self.tr("Концепт"))
         self.layout.addWidget(label)
         self.concept_editor = QPlainTextEdit()
-        self.concept_editor.setPlainText(
-            self.preferences_config.configurator.concept
-        )
+        self.concept_editor.setPlainText(self.preferences_config.configurator.concept)
         self.concept_editor.setMinimumHeight(constants_config.ui.concept_height)
         self.layout.addWidget(self.concept_editor, constants_config.ui.concept_stretch)
 
         label = QLabel(self.tr("Метаданные"))
         self.layout.addWidget(label)
         self.metadata_editor = QPlainTextEdit()
-        self.metadata_editor.setPlainText(
-            self.preferences_config.configurator.metadata
-        )
+        self.metadata_editor.setPlainText(self.preferences_config.configurator.metadata)
         self.metadata_editor.setMinimumHeight(constants_config.ui.metadata_height)
         self.layout.addWidget(
             self.metadata_editor, constants_config.ui.metadata_stretch
@@ -47,9 +43,7 @@ class ConfiguratorTab(Tab):
         )
 
     def save(self) -> None:
-        self.preferences_config.configurator.concept = (
-            self.concept_editor.toPlainText()
-        )
+        self.preferences_config.configurator.concept = self.concept_editor.toPlainText()
         self.preferences_config.configurator.metadata = (
             self.metadata_editor.toPlainText()
         )
