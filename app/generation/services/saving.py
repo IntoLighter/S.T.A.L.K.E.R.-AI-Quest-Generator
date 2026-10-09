@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -40,20 +39,26 @@ class QuestSaver:
         self,
         save_path: Path,
         quest_prompt: str,
-        on_error: Callable[[Exception], None],
     ) -> None:
         self.save_path = save_path
         self.quest_prompt = quest_prompt
-        self.on_error = on_error
+        self.errors: list[Exception] = []
 
-    def save(self, result: GenerationResult) -> None:
-        paths = QuestPaths.create(self.create_quest_path(result))
-        paths.create_dirs()
+    def save(self, result: GenerationResult) -> list[Exception]:
+        self.errors = []
+        try:
+            paths = QuestPaths.create(self.create_quest_path(result))
+            paths.create_dirs()
+        except Exception as e:
+            self.errors.append(e)
+            return self.errors
 
         for file in self.collect_text_files(result, paths):
             self.save_text_file(file)
 
         self.save_icon_records(result, paths)
+
+        return self.errors
 
     def create_quest_path(self, result: GenerationResult) -> Path:
         if result.metadata:
@@ -119,7 +124,7 @@ class QuestSaver:
         try:
             file.path.write_text(file.content, encoding=file.encoding)
         except Exception as e:
-            self.on_error(e)
+            self.errors.append(e)
 
     def save_icon_records(self, result: GenerationResult, paths: QuestPaths) -> None:
         if not result.icon_records:
@@ -132,4 +137,4 @@ class QuestSaver:
             try:
                 icon.save(path)
             except Exception as e:
-                self.on_error(e)
+                self.errors.append(e)

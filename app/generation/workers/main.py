@@ -190,6 +190,17 @@ class Worker(QObject):
         logger.exception(e)
         self.unknown_error_occurred.emit(traceback.format_exc())
 
+    def handle_save_errors(self, errors: list[Exception]) -> None:
+        if not errors:
+            return
+
+        msg = "Ошибки при сохранении файлов"
+        details = "\n\n".join(
+            f"{e.__class__.__name__}\n{e}"
+            for e in errors
+        )
+        self.error_occurred.emit(ErrorInfo(msg=msg, details=details))
+
     @log_execution
     def save_on_disk(self, result: GenerationResult) -> None:
         self.status_update.emit(self.tr("Сохранение данных"))
@@ -202,6 +213,8 @@ class Worker(QObject):
         saver = QuestSaver(
             save_path=save_path,
             quest_prompt=self.quest_prompt,
-            on_error=self.handle_unknown_exception,
         )
-        saver.save(result)
+        errors = saver.save(result)
+
+        if errors:
+            self.handle_save_errors(errors)
