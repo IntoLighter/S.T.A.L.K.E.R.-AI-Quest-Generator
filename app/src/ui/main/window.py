@@ -1,14 +1,15 @@
 from config.app import app_config
 from config.constants import constants_config
 from config.preferences import PreferencesConfig
-from PySide6.QtCore import Slot, qtTrId
-from PySide6.QtGui import QAction, QKeySequence
+from PySide6.QtCore import Qt, Slot, qtTrId
+from PySide6.QtGui import QAction, QCloseEvent, QKeySequence
 from PySide6.QtWidgets import (
     QDialog,
     QLabel,
     QMainWindow,
     QMessageBox,
 )
+from tray import Tray
 
 from ui.configurator import ConfiguratorDialog
 from ui.main.widget import MainWidget
@@ -21,6 +22,11 @@ class MainWindow(QMainWindow):
         self.resize(*constants_config.window_size)  # noqa
         self.setWindowTitle(app_config.name)
         self.preferences_config = preferences_config
+        self.close_requested = False
+
+        self.tray = Tray()
+        self.tray.openRequested.connect(self.open)
+        self.tray.quitRequested.connect(self.quit)
 
         self.main_widget = MainWidget(preferences_config=self.preferences_config)
         self.main_widget.status_update_signal.connect(self.show_status)
@@ -115,3 +121,23 @@ class MainWindow(QMainWindow):
 <p>{self.tr("Repository")}: <a href="{app_config.repository}">{app_config.repository}</a></p>
             """,
         )
+
+    @Slot()
+    def open(self) -> None:
+        self.show()
+        self.setWindowState(self.windowState() & ~Qt.WindowState.WindowMinimized)
+        self.raise_()
+        self.activateWindow()
+
+    @Slot()
+    def quit(self) -> None:
+        self.close_requested = True
+        self.close()
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        if self.close_requested or __debug__:
+            event.accept()
+            return
+
+        self.hide()
+        event.ignore()
