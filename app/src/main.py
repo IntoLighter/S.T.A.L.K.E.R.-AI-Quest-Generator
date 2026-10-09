@@ -14,10 +14,9 @@ from PySide6.QtWidgets import (
 
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
-from config.preferences.repository import preferences_repository
+from config.preferences.repository import PreferencesRepository
 from ui.windows.exception.main import ExceptionDialog
 from ui.windows.main.window import MainWindow
-
 
 
 def exception_hook(
@@ -46,8 +45,9 @@ def setup_logging() -> None:
 
 
 def create_preferences_config() -> PreferencesConfig:
+    repository = PreferencesRepository(constants_config.paths.preferences_path)
     try:
-        preferences_config = preferences_repository.load()
+        preferences_config = repository.load()
     except Exception as e:
         logger.exception(e)
         QMessageBox.warning(
