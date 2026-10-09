@@ -1,5 +1,5 @@
 {
-    "python.analysis.extraPaths": [
-        "${workspaceFolder}/app"
-    ]
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/app"
+  ]
 }

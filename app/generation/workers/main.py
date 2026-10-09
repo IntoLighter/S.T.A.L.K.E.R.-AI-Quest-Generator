@@ -128,9 +128,7 @@ class Worker(QObject):
 
             if result.metadata:
                 id = self.id_stage.generate(result.metadata.title)
-                result.quest_data = QuestBuilder.create_quest_data(
-                    result.metadata, id
-                )
+                result.quest_data = QuestBuilder.create_quest_data(result.metadata, id)
                 self.quest_data_ready.emit(result.quest_data)
         except Exception as e:
             self.handle_stage_exception(e)
@@ -198,10 +196,7 @@ class Worker(QObject):
             return
 
         msg = "Ошибки при сохранении файлов"
-        details = "\n\n".join(
-            f"{e.__class__.__name__}\n{e}"
-            for e in errors
-        )
+        details = "\n\n".join(f"{e.__class__.__name__}\n{e}" for e in errors)
         self.error_occurred.emit(ErrorInfo(msg=msg, details=details))
 
     @log_execution

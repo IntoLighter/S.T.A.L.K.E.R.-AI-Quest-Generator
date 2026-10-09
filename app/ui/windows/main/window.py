@@ -124,13 +124,14 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def show_about(self) -> None:
+        repo = constants_config.app.repository
         QMessageBox.about(
             self,
             self.tr("О программе"),
             f"""
 <h3>{constants_config.app.name}</h3>
 <p>{self.tr("Версия")} {constants_config.app.version}</p>
-<p>{self.tr("Repository")}: <a href="{constants_config.app.repository}">{constants_config.app.repository}</a></p>
+<p>{self.tr("Repository")}: <a href="{repo}">{repo}</a></p>
             """,
         )
 

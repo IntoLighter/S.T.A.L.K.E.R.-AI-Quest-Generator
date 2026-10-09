@@ -42,9 +42,7 @@ class ConfiguratorDialog(BaseDialog):
         row.addWidget(self.should_generate_concept_editor)
         row.addStretch()
         self.concept_editor = QPlainTextEdit()
-        self.concept_editor.setPlainText(
-            self.preferences_config.configurator.concept
-        )
+        self.concept_editor.setPlainText(self.preferences_config.configurator.concept)
         self.concept_editor.setMinimumHeight(constants_config.ui.concept_height)
         self.layout.addWidget(self.concept_editor, constants_config.ui.concept_stretch)
 
@@ -61,9 +59,7 @@ class ConfiguratorDialog(BaseDialog):
         row.addWidget(self.should_generate_metadata_editor)
         row.addStretch()
         self.metadata_editor = QPlainTextEdit()
-        self.metadata_editor.setPlainText(
-            self.preferences_config.configurator.metadata
-        )
+        self.metadata_editor.setPlainText(self.preferences_config.configurator.metadata)
         self.metadata_editor.setMinimumHeight(constants_config.ui.metadata_height)
         self.layout.addWidget(
             self.metadata_editor, constants_config.ui.metadata_stretch
