@@ -1,24 +1,16 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
+from PySide6.QtWidgets import QVBoxLayout
 
-from ui.utils.layout import get_layout_with_scroll
 from ui.widgets.text_option import TextOptionEditor
 from ui.windows.preferences.tab.base import Tab
 
 
-class PromptTab(Tab):
+class MetadataTab(Tab):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
-        self.layout = get_layout_with_scroll(self)
-
-        self.concept_editor = TextOptionEditor(
-            label=self.tr("Концепт"),
-            option=self.preferences_config.prompt.concept,
-            height=constants_config.ui.concept_height,
-            stretch=constants_config.ui.concept_stretch,
-        )
-        self.layout.addWidget(self.concept_editor)
+        self.layout = QVBoxLayout(self)
 
         self.metadata_editor = TextOptionEditor(
             label=self.tr("Метаданные"),
@@ -35,11 +27,3 @@ class PromptTab(Tab):
             stretch=constants_config.ui.id_stretch,
         )
         self.layout.addWidget(self.id_editor)
-
-        self.icon_editor = TextOptionEditor(
-            label=self.tr("Иконка"),
-            option=self.preferences_config.prompt.icon,
-            height=constants_config.ui.icon_prompt_height,
-            stretch=constants_config.ui.icon_prompt_stretch,
-        )
-        self.layout.addWidget(self.icon_editor)

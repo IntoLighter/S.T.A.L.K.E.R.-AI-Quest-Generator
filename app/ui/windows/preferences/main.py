@@ -15,7 +15,7 @@ from ui.windows.preferences.tab.base import Tab
 from ui.windows.preferences.tab.configurator import ConfiguratorTab
 from ui.windows.preferences.tab.general import GeneralTab
 from ui.windows.preferences.tab.model import ModelTab
-from ui.windows.preferences.tab.prompt import PromptTab
+from ui.windows.preferences.tab.prompt.main import PromptTab
 
 
 class PreferencesDialog(BaseDialog):
