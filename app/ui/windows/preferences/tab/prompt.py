@@ -28,6 +28,14 @@ class PromptTab(Tab):
         )
         self.layout.addWidget(self.metadata_editor)
 
+        self.id_editor = TextOptionEditor(
+            label=self.tr("ID"),
+            option=self.preferences_config.prompt.id,
+            height=constants_config.ui.id_height,
+            stretch=constants_config.ui.id_stretch,
+        )
+        self.layout.addWidget(self.id_editor)
+
         self.icon_editor = TextOptionEditor(
             label=self.tr("Иконка"),
             option=self.preferences_config.prompt.icon,

@@ -9,11 +9,13 @@ class UIConfig(BaseModel):
     editor_stretch: int = 1
     concept_stretch: int = 4
     metadata_stretch: int = 2
+    id_stretch: int = 2
     icon_prompt_stretch: int = 2
 
     editor_height: int = 100
     concept_height: int = editor_height * concept_stretch
     metadata_height: int = editor_height * metadata_stretch
+    id_height: int = editor_height * id_stretch
     icon_prompt_height: int = editor_height * icon_prompt_stretch
 
     icon_workflow_stretch: int = 4

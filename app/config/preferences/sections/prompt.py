@@ -12,4 +12,5 @@ class PromptConfig(CodeDefaultSectionMixin, BaseModel):
     metadata: TextOption = TextOption(
         system=constants_config.resources.default_metadata_prompt
     )
+    id: TextOption = TextOption(system=constants_config.resources.default_id_prompt)
     icon: TextOption = TextOption(system=constants_config.resources.default_icon_prompt)
