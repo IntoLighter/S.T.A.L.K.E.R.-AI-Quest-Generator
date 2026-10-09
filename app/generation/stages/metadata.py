@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 from collections.abc import Callable
 
-from deep_translator import GoogleTranslator
 from loguru import logger
 from PySide6.QtCore import QObject
 from utils.logging import log_execution
@@ -76,22 +75,29 @@ class MetadataParseStage(QObject):
         return None
 
 
-class TitleStage(QObject):
+class IdStage(TextStage):
     def __init__(
         self,
+        text_model: TextModel,
+        is_interrupted: Callable[[], bool],
+        system_prompt: str,
         handle_exception: Callable[[Exception, str, str | None], None],
     ) -> None:
-        super().__init__()
+        super().__init__(
+            text_model=text_model,
+            is_interrupted=is_interrupted,
+            system_prompt=system_prompt,
+            emit_chunk=lambda _: None,
+            emit_status=lambda _: None,
+        )
         self.handle_exception = handle_exception
 
     @log_execution
-    def translate(self, title: str) -> str:
+    def generate(self, title: str) -> str:
         try:
-            title_english = GoogleTranslator(source="ru", target="en").translate(title)
+            return self.stream(title).strip()
         except Exception as e:
             self.handle_exception(
-                e, self.tr("Ошибка гугл переводчика. Название не будет переведено.")
+                e, self.tr("Ошибка генерации ID квеста. Используется fallback.")
             )
-            title_english = title
-
-        return title_english.lower().replace(" ", "_")
+            return title.lower().replace(" ", "_").replace("'", "").replace('"', "")

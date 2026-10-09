@@ -6,6 +6,7 @@
         <file alias="concept.txt">files/prompt/concept.txt</file>
         <file alias="metadata.txt">files/prompt/metadata.txt</file>
         <file alias="icon.txt">files/prompt/icon.txt</file>
+        <file alias="id.txt">files/prompt/id.txt</file>
     </qresource>
     <qresource prefix="/workflow">
         <file alias="icon.json">files/workflow/icon.json</file>

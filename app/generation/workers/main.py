@@ -19,9 +19,9 @@ from generation.services.saving import QuestSaver
 from generation.stages.concept import ConceptStage
 from generation.stages.icon import IconPromptStage, IconRecordsStage
 from generation.stages.metadata import (
+    IdStage,
     MetadataParseStage,
     MetadataTextStage,
-    TitleStage,
 )
 
 
@@ -68,7 +68,10 @@ class Worker(QObject):
         self.metadata_parse_stage = MetadataParseStage(
             handle_exception=self.handle_exception,
         )
-        self.title_stage = TitleStage(
+        self.id_stage = IdStage(
+            text_model=text_model,
+            is_interrupted=self._is_interrupted,
+            system_prompt=preferences_config.prompt.id.value,
             handle_exception=self.handle_exception,
         )
         self.icon_prompt_stage = IconPromptStage(
@@ -124,9 +127,9 @@ class Worker(QObject):
                 result.metadata = self.metadata_parse_stage.parse(result.metadata_text)
 
             if result.metadata:
-                title_english = self.title_stage.translate(result.metadata.title)
+                id = self.id_stage.generate(result.metadata.title)
                 result.quest_data = QuestBuilder.create_quest_data(
-                    result.metadata, title_english
+                    result.metadata, id
                 )
                 self.quest_data_ready.emit(result.quest_data)
         except Exception as e:
