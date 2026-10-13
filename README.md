@@ -1,91 +1,131 @@
 ![Text logo](docs/image/text_logo.jpg)
 
-# First launch
+A quest generator for S.T.A.L.K.E.R. that helps mod makers develop story mods by generating quest ideas and code artifacts.
 
-## Text Generation
+# Getting Started
 
-The application provides two text generation modes: local and remote.
-Higher quality results are achieved when using larger models.
-The generation type is selected in the application settings.
+This guide walks you through the first-time setup of the generator. You need to configure **two independent parts**:
 
-### Local Text Generation
+1. [Text generation](#1-text-generation): open-source models (Ollama) **or** proprietary models (API key)
+2. [Icon generation](#2-icon-generation): local (ComfyUI)
 
-#### Installing Ollama
+## Contents
 
-Download and install: https://ollama.com
+- [1. Text Generation](#1-text-generation)
+  - [Option A: Open-source models (Ollama)](#option-a-open-source-models-ollama)
+  - [Option B: Proprietary models (API key)](#option-b-proprietary-models-api-key)
+- [2. Icon Generation](#2-icon-generation)
+- [3. Done](#3-done)
 
-Check installation:
-```
+---
+
+## 1. Text Generation
+
+The application supports two types of text generation: **open-source** models and **proprietary** models.
+Larger models produce higher-quality results. The generation type is selected in the application settings.
+
+| | Open-source (Ollama) | Proprietary (API) |
+|---|---|---|
+| Cost | Free | Free tiers available, see the [Free Models Guide](https://github.com/danclave/TALKER/blob/main/docs/Free_Models_Guide.md) |
+| Privacy | Everything stays on your PC (local versions) | Requests are sent to the provider |
+| Requirements | GPU / RAM depending on the model | Internet connection and an API key |
+
+### Option A: Open-source models (Ollama)
+
+**1. Install Ollama**
+
+Download and install it from [ollama.com](https://ollama.com), then verify:
+
+```bash
 ollama --version
 ```
 
-#### Downloading a Model
+**2. Download a model**
 
-It is recommended to use top-performing models from leaderboards:
+**Recommended: the Gemma 4 series (`gemma4`).** Among recent open models, only this series has good knowledge of the S.T.A.L.K.E.R. lore.
 
-https://artificialanalysis.ai/leaderboards/models?weights=open<br>
-https://llm-stats.com/leaderboards/open-llm-leaderboard
+| Model | Type | Notes |
+|---|---|---|
+| `gemma4:26b` | MoE | Runs well on a PC with **8 GB of VRAM**. Best choice for most users. |
+| `gemma4:31b` | Dense | Most likely, only the **cloud** version can be run on consumer hardware. |
 
-Example download:
+Local model:
+
+```bash
+ollama pull gemma4:26b
 ```
-ollama pull qwen3.6:35b
+
+Cloud model (requires an Ollama account):
+
+```bash
+ollama signin
+ollama pull gemma4:31b-cloud
 ```
 
-#### Running Ollama
+**3. Run Ollama**
 
-Launch Ollama from the Start menu.
+Launch Ollama from the Start menu. To check that it is running and the model is available:
 
-### Remote Text Generation
+```bash
+ollama list
+```
 
-#### Installing LLM API Key Proxy
+### Option B: Proprietary models (API key)
 
-Download and extract:
-https://github.com/Mirrowel/LLM-API-Key-Proxy/releases/tag/main%2Fbuild-20260123-1-bf7ab7e
+**1. Install LLM API Key Proxy**
 
-#### Obtaining an API Key
+Download the [release build](https://github.com/Mirrowel/LLM-API-Key-Proxy/releases/tag/main%2Fbuild-20260123-1-bf7ab7e) and extract it to any folder.
 
-Get an API key from any provider and enter it into the application.
-More details here:
-https://github.com/danclave/TALKER/blob/main/docs/Free_Models_Guide.md
+**2. Get an API key**
 
-## Icon Generation
+Get a key from any provider and enter it in the application settings.
+See the [Free Models Guide](https://github.com/danclave/TALKER/blob/main/docs/Free_Models_Guide.md) for a list of free options.
 
-Icons are generated locally using ComfyUI.
+---
 
-### Installing ComfyUI
+## 2. Icon Generation
 
-Download and install: https://www.comfy.org/download
+Icons are generated locally using [ComfyUI](https://www.comfy.org/download).
 
-### Installing models
+> **Tested hardware:** the diffusion model was tested on a GPU with **8 GB of VRAM**.
 
-Download and install models to specified locations.
+**1. Install ComfyUI**
 
-**diffusion_models**
+Download and install it from [comfy.org/download](https://www.comfy.org/download).
 
-- [flux-2-klein-9b-fp8.safetensors](https://huggingface.co/black-forest-labs/FLUX.2-klein-9b-fp8/resolve/main/flux-2-klein-9b-fp8.safetensors)
+**2. Download the models**
 
-**text_encoders**
+Put each file into the matching folder:
 
-- [qwen_3_8b_fp8mixed.safetensors](https://huggingface.co/Comfy-Org/flux2-klein-9B/resolve/main/split_files/text_encoders/qwen_3_8b_fp8mixed.safetensors)
+| Type | Folder | File |
+|---|---|---|
+| Diffusion model | `ComfyUI/models/diffusion_models/` | [flux-2-klein-9b-fp8.safetensors](https://huggingface.co/black-forest-labs/FLUX.2-klein-9b-fp8/resolve/main/flux-2-klein-9b-fp8.safetensors) |
+| Text encoder | `ComfyUI/models/text_encoders/` | [qwen_3_8b_fp8mixed.safetensors](https://huggingface.co/Comfy-Org/flux2-klein-9B/resolve/main/split_files/text_encoders/qwen_3_8b_fp8mixed.safetensors) |
+| VAE | `ComfyUI/models/vae/` | [full_encoder_small_decoder.safetensors](https://huggingface.co/black-forest-labs/FLUX.2-small-decoder/resolve/main/full_encoder_small_decoder.safetensors) |
 
-**vae**
-
-- [full_encoder_small_decoder.safetensors](https://huggingface.co/black-forest-labs/FLUX.2-small-decoder/resolve/main/full_encoder_small_decoder.safetensors)
-
-
-#### Model Storage Location
+Expected structure:
 
 ```
 📂 ComfyUI/
-├── 📂 models/
-│   ├── 📂 diffusion_models/
-│   │   └── flux-2-klein-9b-fp8.safetensors
-│   ├── 📂 text_encoders/
-│   │   └── qwen_3_8b_fp8mixed.safetensors
-│   └── 📂 vae/
-│       └── full_encoder_small_decoder.safetensors
+└── 📂 models/
+    ├── 📂 diffusion_models/
+    │   └── flux-2-klein-9b-fp8.safetensors
+    ├── 📂 text_encoders/
+    │   └── qwen_3_8b_fp8mixed.safetensors
+    └── 📂 vae/
+        └── full_encoder_small_decoder.safetensors
 ```
 
-## Conclusion
+**3. Restart ComfyUI** so it picks up the new models.
 
-After completing the setup, you can safely launch the generator!
+---
+
+## 3. Done
+
+Setup is complete. Make sure that:
+
+- [ ] The text model is configured in settings.
+- [ ] The LLM engine is running.
+- [ ] ComfyUI is running with all three models in place
+
+Now you can launch the generator!
