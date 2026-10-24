@@ -1,18 +1,14 @@
-from __future__ import annotations
-
 import json
 from collections.abc import Callable
 
-from loguru import logger
 from PySide6.QtCore import QObject
-from utils.logging import log_execution
 
 from generation.entity import Metadata
 from generation.models.text.main import TextModel
-from generation.stages.base import TextStage
+from generation.stages.base import TextGenerationStage, TextStreamingStage
 
 
-class MetadataTextStage(TextStage):
+class MetadataTextStage(TextStreamingStage):
     def __init__(
         self,
         text_model: TextModel,
@@ -21,17 +17,22 @@ class MetadataTextStage(TextStage):
         emit_chunk: Callable[[str], None],
         emit_metadata_ready: Callable[[str], None],
         emit_status: Callable[[str], None],
+        handle_exception: Callable[[Exception, str, str | None], None],
+        status_message: str,
     ) -> None:
         super().__init__(
-            text_model, is_interrupted, system_prompt, emit_chunk, emit_status
+            text_model,
+            is_interrupted,
+            system_prompt,
+            emit_chunk,
+            emit_status,
+            status_message,
         )
         self.emit_metadata_ready = emit_metadata_ready
+        self.handle_exception = handle_exception
 
-    @log_execution
-    def generate(self, concept: str | None) -> str | None:
-        self.emit_status(self.tr("Генерация метаданных"))
-
-        metadata = self.stream(concept, schema=Metadata)
+    def create(self, concept: str) -> str | None:
+        metadata = super().create(concept, schema=Metadata)
 
         if metadata is None:
             return None
@@ -44,13 +45,12 @@ class MetadataTextStage(TextStage):
         self.emit_metadata_ready(formatted)
         return formatted
 
-    @staticmethod
-    def _format(raw: str) -> str | None:
+    def _format(self, metadata: str) -> str | None:
         try:
-            parsed = json.loads(raw)
+            parsed = json.loads(metadata)
             return json.dumps(parsed, ensure_ascii=False, indent=2)
-        except Exception:
-            logger.debug("Failed to format metadata JSON, keeping raw text")
+        except Exception as e:
+            self.handle_exception(e, self.tr("Ошибка форматирования метаданных."))
             return None
 
 
@@ -75,27 +75,26 @@ class MetadataParseStage(QObject):
         return None
 
 
-class IdStage(TextStage):
+class IdStage(TextGenerationStage):
     def __init__(
         self,
         text_model: TextModel,
-        is_interrupted: Callable[[], bool],
         system_prompt: str,
+        emit_status: Callable[[str], None],
         handle_exception: Callable[[Exception, str, str | None], None],
+        status_message: str,
     ) -> None:
         super().__init__(
             text_model=text_model,
-            is_interrupted=is_interrupted,
             system_prompt=system_prompt,
-            emit_chunk=lambda _: None,
-            emit_status=lambda _: None,
+            emit_status=emit_status,
+            status_message=status_message,
         )
         self.handle_exception = handle_exception
 
-    @log_execution
-    def generate(self, title: str) -> str:
+    def create(self, title: str) -> str:
         try:
-            return self.stream(title).strip()
+            return super().create(title).strip()
         except Exception as e:
             self.handle_exception(
                 e, self.tr("Ошибка генерации ID квеста. Используется fallback.")

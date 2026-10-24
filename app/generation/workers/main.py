@@ -56,6 +56,7 @@ class Worker(QObject):
             system_prompt=preferences_config.prompt.concept.value,
             emit_chunk=self.concept_chunk_ready.emit,
             emit_status=self.status_update.emit,
+            status_message=self.tr("Генерация концепта"),
         )
         self.metadata_text_stage = MetadataTextStage(
             text_model=text_model,
@@ -64,15 +65,18 @@ class Worker(QObject):
             emit_chunk=self.metadata_chunk_ready.emit,
             emit_metadata_ready=self.metadata_ready.emit,
             emit_status=self.status_update.emit,
+            handle_exception=self.handle_exception,
+            status_message=self.tr("Генерация метаданных"),
         )
         self.metadata_parse_stage = MetadataParseStage(
             handle_exception=self.handle_exception,
         )
         self.id_stage = IdStage(
             text_model=text_model,
-            is_interrupted=self._is_interrupted,
             system_prompt=preferences_config.prompt.id.value,
+            emit_status=self.status_update.emit,
             handle_exception=self.handle_exception,
+            status_message=self.tr("Генерация ID квеста"),
         )
         self.icon_prompt_stage = IconPromptStage(
             text_model=text_model,
@@ -80,11 +84,13 @@ class Worker(QObject):
             system_prompt=preferences_config.prompt.icon.value,
             emit_chunk=self.icon_prompt_chunk_ready.emit,
             emit_status=self.status_update.emit,
+            status_message=self.tr("Генерация промпта иконки"),
         )
         self.icon_records_stage = IconRecordsStage(
             image_model=self.image_model,
             emit_status=self.status_update.emit,
             emit_icon_ready=self.icon_ready.emit,
+            status_message=self.tr("Генерация иконки"),
         )
 
     def request_interruption(self) -> None:
@@ -117,8 +123,10 @@ class Worker(QObject):
         if self._is_interrupted():
             return result
 
+        concept = result.concept or ""
+
         try:
-            result.metadata_text = self.build_metadata_text(result.concept)
+            result.metadata_text = self.build_metadata_text(concept)
 
             if self._is_interrupted():
                 return result
@@ -127,19 +135,21 @@ class Worker(QObject):
                 result.metadata = self.metadata_parse_stage.parse(result.metadata_text)
 
             if result.metadata:
-                id = self.id_stage.generate(result.metadata.title)
-                result.quest_data = QuestBuilder.create_quest_data(result.metadata, id)
+                quest_id = self.id_stage.create(result.metadata.title)
+                result.quest_data = QuestBuilder.create_quest_data(
+                    result.metadata, quest_id
+                )
                 self.quest_data_ready.emit(result.quest_data)
         except Exception as e:
             self.handle_stage_exception(e)
 
         try:
-            result.icon_prompt = self.build_icon_prompt(result.concept)
+            result.icon_prompt = self.build_icon_prompt(concept)
 
             if self._is_interrupted():
                 return result
 
-            result.icon_records = self.build_icon_records(result.icon_prompt)
+            result.icon_records = self.build_icon_records(result.icon_prompt or "")
         except Exception as e:
             self.handle_stage_exception(e)
 
@@ -148,13 +158,13 @@ class Worker(QObject):
     def build_concept(self) -> str | None:
         raise NotImplementedError
 
-    def build_metadata_text(self, concept: str | None) -> str | None:
+    def build_metadata_text(self, concept: str) -> str | None:
         raise NotImplementedError
 
-    def build_icon_prompt(self, concept: str | None) -> str | None:
+    def build_icon_prompt(self, concept: str) -> str | None:
         raise NotImplementedError
 
-    def build_icon_records(self, icon_prompt: str | None) -> IconRecords | None:
+    def build_icon_records(self, icon_prompt: str) -> IconRecords | None:
         raise NotImplementedError
 
     def handle_stage_exception(self, e: Exception) -> None:
