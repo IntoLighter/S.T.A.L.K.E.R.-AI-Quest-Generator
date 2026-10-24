@@ -17,6 +17,34 @@ class TextModel:
         schema: type[BaseModel] | None = None,
         retries: int = 2,
         **kwargs: object,
+    ) -> str:
+        if schema:
+            kwargs["response_format"] = {
+                "type": "json_schema",
+                "json_schema": {
+                    "name": schema.__name__,
+                    "strict": True,
+                    "schema": schema.model_json_schema(),
+                },
+            }
+
+        response = self.client.with_options(
+            max_retries=retries
+        ).chat.completions.create(
+            model=self.model,
+            messages=messages,
+            reasoning_effort="none",
+            **kwargs,
+        )
+
+        return response.choices[0].message.content or ""
+
+    def stream(
+        self,
+        messages: list[ChatCompletionMessageParam],
+        schema: type[BaseModel] | None = None,
+        retries: int = 2,
+        **kwargs: object,
     ) -> Iterator[str]:
         if schema:
             kwargs["response_format"] = {

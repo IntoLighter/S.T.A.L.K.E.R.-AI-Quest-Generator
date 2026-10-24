@@ -1,15 +1,14 @@
-from __future__ import annotations
-
 from collections.abc import Callable
 
 from openai.types.chat import ChatCompletionMessageParam
 from pydantic import BaseModel
 from PySide6.QtCore import QObject
+from utils.logging import log_execution
 
 from generation.models.text.main import TextModel
 
 
-class TextStage(QObject):
+class TextStreamingStage(QObject):
     def __init__(
         self,
         text_model: TextModel,
@@ -17,6 +16,7 @@ class TextStage(QObject):
         system_prompt: str,
         emit_chunk: Callable[[str], None],
         emit_status: Callable[[str], None],
+        status_message: str,
     ) -> None:
         super().__init__()
         self.text_model = text_model
@@ -24,12 +24,16 @@ class TextStage(QObject):
         self.system_prompt = system_prompt
         self.emit_chunk = emit_chunk
         self.emit_status = emit_status
+        self.status_message = status_message
 
-    def stream(
+    @log_execution
+    def create(
         self,
-        user_content: str | None,
+        user_content: str,
         schema: type[BaseModel] | None = None,
     ) -> str | None:
+        self.emit_status(self.status_message)
+
         messages: list[ChatCompletionMessageParam] = [
             {"role": "system", "content": self.system_prompt},
             {"role": "user", "content": user_content},
@@ -37,7 +41,7 @@ class TextStage(QObject):
 
         text = ""
 
-        for token in self.text_model.generate(messages, schema=schema):
+        for token in self.text_model.stream(messages, schema=schema):
             if self.is_interrupted():
                 return None
 
@@ -45,3 +49,33 @@ class TextStage(QObject):
             self.emit_chunk(token)
 
         return text
+
+
+class TextGenerationStage(QObject):
+    def __init__(
+        self,
+        text_model: TextModel,
+        system_prompt: str,
+        emit_status: Callable[[str], None],
+        status_message: str,
+    ) -> None:
+        super().__init__()
+        self.text_model = text_model
+        self.system_prompt = system_prompt
+        self.emit_status = emit_status
+        self.status_message = status_message
+
+    @log_execution
+    def create(
+        self,
+        user_content: str,
+        schema: type[BaseModel] | None = None,
+    ) -> str:
+        self.emit_status(self.status_message)
+
+        messages: list[ChatCompletionMessageParam] = [
+            {"role": "system", "content": self.system_prompt},
+            {"role": "user", "content": user_content},
+        ]
+
+        return self.text_model.generate(messages, schema=schema)
