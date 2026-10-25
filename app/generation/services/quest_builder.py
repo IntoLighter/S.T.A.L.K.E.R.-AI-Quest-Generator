@@ -2,7 +2,6 @@ from functools import lru_cache
 
 from config.constants.main import constants_config
 from jinja2 import DictLoader, Environment, Template
-from PIL import Image
 
 from generation.entity import Metadata, QuestData
 
@@ -10,42 +9,36 @@ TASK_TEMPLATE = "task.xml.j2"
 ARTICLE_TEMPLATE = "article.xml.j2"
 INFOPORTIONS_TEMPLATE = "infoportions.xml.j2"
 
-ICON_SIZE = (83, 47)
-
 
 class QuestBuilder:
     @classmethod
-    def create_quest_data(cls, metadata: Metadata, title_english: str) -> QuestData:
+    def create_quest_data(cls, metadata: Metadata, quest_id: str) -> QuestData:
         return QuestData(
-            task=cls.create_task(metadata, title_english),
-            article=cls.create_article(metadata, title_english),
-            infoportions=cls.create_infoportions(title_english),
+            task=cls.create_task(metadata, quest_id),
+            article=cls.create_article(metadata, quest_id),
+            infoportions=cls.create_infoportions(quest_id),
         )
 
     @classmethod
-    def create_task(cls, metadata: Metadata, title_english: str) -> str:
+    def create_task(cls, metadata: Metadata, quest_id: str) -> str:
         return cls._render(
             TASK_TEMPLATE,
-            title_id=title_english,
+            title_id=quest_id,
             title=metadata.title,
             objectives=[objective.title for objective in metadata.objectives],
         )
 
     @classmethod
-    def create_article(cls, metadata: Metadata, title_english: str) -> str:
+    def create_article(cls, metadata: Metadata, quest_id: str) -> str:
         return cls._render(
             ARTICLE_TEMPLATE,
-            title_id=title_english,
+            title_id=quest_id,
             description=metadata.description,
         )
 
     @classmethod
-    def create_infoportions(cls, title_english: str) -> str:
-        return cls._render(INFOPORTIONS_TEMPLATE, title_id=title_english)
-
-    @classmethod
-    def create_icon(cls, icon: Image.Image) -> Image.Image:
-        return icon.resize(ICON_SIZE, Image.Resampling.LANCZOS)
+    def create_infoportions(cls, quest_id: str) -> str:
+        return cls._render(INFOPORTIONS_TEMPLATE, title_id=quest_id)
 
     @classmethod
     def _render(cls, template_name: str, **context: str | list[str]) -> str:
