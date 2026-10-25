@@ -25,7 +25,7 @@ class QuestData:
 @dataclass
 class IconRecords:
     icon: Image.Image
-    icon_soc: Image.Image
+    icon_game: Image.Image
 
 
 @dataclass

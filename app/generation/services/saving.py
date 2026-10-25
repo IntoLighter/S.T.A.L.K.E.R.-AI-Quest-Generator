@@ -132,7 +132,7 @@ class QuestSaver:
 
         for path, icon in (
             (paths.generation / "icon.png", result.icon_records.icon),
-            (paths.resource / "icon.png", result.icon_records.icon_soc),
+            (paths.resource / "icon.png", result.icon_records.icon_game),
         ):
             try:
                 icon.save(path)

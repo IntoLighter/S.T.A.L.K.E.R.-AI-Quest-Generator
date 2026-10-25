@@ -15,7 +15,7 @@ class IconTab(Tab):
             constants_config.ui.icon_prompt_height,
             constants_config.ui.icon_prompt_stretch,
         )
-        self.icon_soc_editor = self.create_label_editor(self.tr("SoC"))
+        self.icon_game_editor = self.create_label_editor(self.tr("Игра"))
         self.icon_editor = self.create_label_editor(self.tr("Оригинал"))
 
     def bind_worker(self, worker: Worker) -> None:
@@ -29,9 +29,9 @@ class IconTab(Tab):
     @Slot(IconRecords)
     def show_icon(self, icon_records: IconRecords) -> None:
         self.icon_editor.setPixmap(get_pixmap(icon_records.icon))
-        self.icon_soc_editor.setPixmap(get_pixmap(icon_records.icon_soc))
+        self.icon_game_editor.setPixmap(get_pixmap(icon_records.icon_game))
 
     def clear(self) -> None:
         self.icon_prompt_editor.clear()
-        self.icon_soc_editor.clear()
+        self.icon_game_editor.clear()
         self.icon_editor.clear()
