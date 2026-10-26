@@ -8,3 +8,6 @@ class GenerationConfig(BaseModel):
 
     generation_encoding: str = "utf-8"
     game_encoding: str = "cp1251"
+
+    quest_id_max_length: int = 50
+    quest_id_fallback: str = "quest"
