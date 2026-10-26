@@ -1,11 +1,14 @@
+from collections.abc import Callable
+
 from config.preferences.main import PreferencesConfig
 
 from generation.entity import ConfiguratorParameters, IconRecords
 from generation.models.text.main import TextModel
-from generation.workers.main import Worker
+from generation.stages.base import TextStreamingStage
+from generation.workers.base import BaseWorker
 
 
-class ConfiguratorWorker(Worker):
+class ConfiguratorWorker(BaseWorker):
     def __init__(
         self,
         preferences_config: PreferencesConfig,
@@ -19,37 +22,56 @@ class ConfiguratorWorker(Worker):
         self.parameters = parameters
 
     def build_concept(self) -> str | None:
-        if self.parameters.concept:
-            self.concept_chunk_ready.emit(self.parameters.concept)
-            return self.parameters.concept
-
-        if self.parameters.should_generate_concept:
-            return self.concept_stage.create(self.quest_prompt)
-
-        return None
+        return self._build_text(
+            self.parameters.concept,
+            self.parameters.should_generate_concept,
+            self.concept_stage,
+            self.quest_prompt,
+        )
 
     def build_metadata_text(self, concept: str) -> str | None:
-        if self.parameters.metadata:
-            self.metadata_chunk_ready.emit(self.parameters.metadata)
-            return self.parameters.metadata
-
-        if self.parameters.should_generate_metadata:
-            return self.metadata_text_stage.create(concept)
-
-        return None
+        return self._build_text(
+            self.parameters.metadata,
+            self.parameters.should_generate_metadata,
+            self.metadata_text_stage,
+            concept,
+        )
 
     def build_icon_prompt(self, concept: str) -> str | None:
-        if self.parameters.icon_prompt:
-            self.icon_prompt_chunk_ready.emit(self.parameters.icon_prompt)
-            return self.parameters.icon_prompt
-
-        if self.parameters.should_generate_icon:
-            return self.icon_prompt_stage.create(concept)
-
-        return None
+        return self._build_text(
+            self.parameters.icon_prompt,
+            self.parameters.should_generate_icon,
+            self.icon_prompt_stage,
+            concept,
+        )
 
     def build_icon_records(self, icon_prompt: str) -> IconRecords | None:
-        if self.parameters.should_generate_icon:
-            return self.icon_records_stage.create(icon_prompt)
+        return self._build_artifact(
+            self.parameters.should_generate_icon,
+            self.icon_records_stage.create,
+            icon_prompt,
+        )
+
+    def _build_text(
+        self,
+        value: str,
+        should_generate: bool,
+        stage: TextStreamingStage,
+        user_content: str,
+    ) -> str | None:
+        if value:
+            stage.emit_chunk(value)
+            return value
+
+        return self._build_artifact(should_generate, stage.create, user_content)
+
+    def _build_artifact[T](
+        self,
+        should_generate: bool,
+        create: Callable[[str], T | None],
+        user_content: str,
+    ) -> T | None:
+        if should_generate:
+            return create(user_content)
 
         return None

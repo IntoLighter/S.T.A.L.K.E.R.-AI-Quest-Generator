@@ -5,9 +5,7 @@ from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from loguru import logger
 from PySide6.QtCore import QObject, Signal, Slot
-from utils.error import (
-    ErrorInfo,
-)
+from utils.error import ErrorInfo
 from utils.logging import log_execution
 
 from generation.entity import GenerationResult, IconRecords, QuestData
@@ -25,7 +23,7 @@ from generation.stages.metadata import (
 )
 
 
-class Worker(QObject):
+class BaseWorker(QObject):
     concept_chunk_ready = Signal(str)
     metadata_chunk_ready = Signal(str)
     metadata_ready = Signal(str)
@@ -202,21 +200,18 @@ class Worker(QObject):
         self.unknown_error_occurred.emit(traceback.format_exc())
 
     def handle_save_errors(self, errors: list[Exception]) -> None:
-        if not errors:
-            return
-
-        msg = "Ошибки при сохранении файлов"
+        msg = self.tr("Ошибки при сохранении файлов")
         details = "\n\n".join(f"{e.__class__.__name__}\n{e}" for e in errors)
         self.error_occurred.emit(ErrorInfo(msg=msg, details=details))
 
     @log_execution
     def save_on_disk(self, result: GenerationResult) -> None:
-        self.status_update.emit(self.tr("Сохранение данных"))
-
         save_path = self.preferences_config.general.save_path
 
         if not save_path:
             return
+
+        self.status_update.emit(self.tr("Сохранение данных"))
 
         saver = QuestSaver(
             save_path=save_path,

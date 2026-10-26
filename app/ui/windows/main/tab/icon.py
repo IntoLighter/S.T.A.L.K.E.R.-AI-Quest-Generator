@@ -1,6 +1,6 @@
 from config.constants.main import constants_config
 from generation.entity import IconRecords
-from generation.workers.main import Worker
+from generation.workers.base import BaseWorker
 from PySide6.QtCore import Slot
 
 from ui.utils.image import get_pixmap
@@ -18,7 +18,7 @@ class IconTab(Tab):
         self.icon_game_editor = self.create_label_editor(self.tr("Игра"))
         self.icon_editor = self.create_label_editor(self.tr("Оригинал"))
 
-    def bind_worker(self, worker: Worker) -> None:
+    def bind_worker(self, worker: BaseWorker) -> None:
         worker.icon_prompt_chunk_ready.connect(self.show_icon_prompt_chunk)
         worker.icon_ready.connect(self.show_icon)
 

@@ -1,6 +1,6 @@
 from config.constants.main import constants_config
 from generation.entity import QuestData
-from generation.workers.main import Worker
+from generation.workers.base import BaseWorker
 from PySide6.QtCore import Slot
 
 from ui.windows.main.tab.base import Tab
@@ -30,7 +30,7 @@ class MetadataTab(Tab):
             constants_config.ui.editor_stretch,
         )
 
-    def bind_worker(self, worker: Worker) -> None:
+    def bind_worker(self, worker: BaseWorker) -> None:
         worker.metadata_chunk_ready.connect(self.show_metadata_chunk)
         worker.metadata_ready.connect(self.update_metadata)
         worker.quest_data_ready.connect(self.show_quest_data)

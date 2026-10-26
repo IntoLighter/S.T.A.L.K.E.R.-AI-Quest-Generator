@@ -1,4 +1,4 @@
-from generation.workers.main import Worker
+from generation.workers.base import BaseWorker
 from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import QLabel, QPlainTextEdit, QVBoxLayout, QWidget
 
@@ -8,7 +8,7 @@ class Tab(QWidget):
         super().__init__()
         self.layout = QVBoxLayout(self)
 
-    def bind_worker(self, worker: Worker) -> None:
+    def bind_worker(self, worker: BaseWorker) -> None:
         pass
 
     def create_plain_text_editor(

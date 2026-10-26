@@ -1,5 +1,5 @@
 from config.constants.main import constants_config
-from generation.workers.main import Worker
+from generation.workers.base import BaseWorker
 from PySide6.QtCore import Slot
 
 from ui.windows.main.tab.base import Tab
@@ -14,7 +14,7 @@ class ConceptTab(Tab):
             constants_config.ui.concept_stretch,
         )
 
-    def bind_worker(self, worker: Worker) -> None:
+    def bind_worker(self, worker: BaseWorker) -> None:
         worker.concept_chunk_ready.connect(self.show_concept_chunk)
 
     @Slot(str)
