@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from config.constants.main import constants_config
 from utils.path import get_unique_counter_name_path, get_unique_name_path
 
 from generation.entity import GenerationResult
@@ -69,56 +70,37 @@ class QuestSaver:
     def collect_text_files(
         self, result: GenerationResult, paths: QuestPaths
     ) -> list[TextFile]:
-        files = [
-            TextFile(
-                path=paths.quest / "prompt.txt",
-                content=self.quest_prompt,
-                encoding="utf-8",
-            )
-        ]
+        generation_encoding = constants_config.generation.generation_encoding
+        game_encoding = constants_config.generation.game_encoding
 
-        if result.concept:
-            files.append(
-                TextFile(
-                    path=paths.generation / "concept.txt",
-                    content=result.concept,
-                    encoding="utf-8",
-                )
-            )
+        generation_files = {
+            "concept.txt": result.concept,
+            "metadata.json": result.metadata_text,
+            "icon_prompt.txt": result.icon_prompt,
+        }
 
-        if result.metadata_text:
-            files.append(
-                TextFile(
-                    path=paths.generation / "metadata.json",
-                    content=result.metadata_text,
-                    encoding="utf-8",
-                )
-            )
-
-        if result.icon_prompt:
-            files.append(
-                TextFile(
-                    path=paths.generation / "icon_prompt.txt",
-                    content=result.icon_prompt,
-                    encoding="utf-8",
-                )
-            )
-
+        resource_files: dict[str, str] = {}
         if result.quest_data:
-            for name, content in (
-                ("task.xml", result.quest_data.task),
-                ("storyline_info.xml", result.quest_data.article),
-                ("info.xml", result.quest_data.infoportions),
-            ):
-                files.append(
-                    TextFile(
-                        path=paths.resource / name,
-                        content=content,
-                        encoding="cp1251",
-                    )
-                )
+            resource_files = {
+                "task.xml": result.quest_data.task,
+                "storyline_info.xml": result.quest_data.article,
+                "info.xml": result.quest_data.infoportions,
+            }
 
-        return files
+        return [
+            TextFile(
+                paths.quest / "prompt.txt", self.quest_prompt, generation_encoding
+            ),
+            *(
+                TextFile(paths.generation / name, content, generation_encoding)
+                for name, content in generation_files.items()
+                if content
+            ),
+            *(
+                TextFile(paths.resource / name, content, game_encoding)
+                for name, content in resource_files.items()
+            ),
+        ]
 
     def save_text_file(self, file: TextFile) -> None:
         try:
