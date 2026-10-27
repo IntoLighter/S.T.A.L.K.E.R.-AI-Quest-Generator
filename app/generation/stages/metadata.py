@@ -3,9 +3,9 @@ import re
 from collections.abc import Callable
 
 from config.constants.main import constants_config
-from PySide6.QtCore import QObject
 
 from generation.entity import Metadata
+from generation.errors import InvalidQuestIdError, MetadataParseError
 from generation.models.text.main import TextModel
 from generation.stages.base import TextGenerationStage, TextStreamingStage
 
@@ -33,7 +33,6 @@ class MetadataTextStage(TextStreamingStage):
         emit_chunk: Callable[[str], None],
         emit_metadata_ready: Callable[[str], None],
         emit_status: Callable[[str], None],
-        handle_exception: Callable[[Exception, str, str | None], None],
         status_message: str,
     ) -> None:
         super().__init__(
@@ -45,7 +44,6 @@ class MetadataTextStage(TextStreamingStage):
             status_message,
         )
         self.emit_metadata_ready = emit_metadata_ready
-        self.handle_exception = handle_exception
 
     def create(self, concept: str) -> str | None:
         metadata = super().create(concept, schema=Metadata)
@@ -65,60 +63,26 @@ class MetadataTextStage(TextStreamingStage):
         try:
             parsed = json.loads(metadata)
             return json.dumps(parsed, ensure_ascii=False, indent=2)
-        except Exception as e:
-            self.handle_exception(e, self.tr("Ошибка форматирования метаданных."))
+        except json.JSONDecodeError:
             return None
 
 
-class MetadataParseStage(QObject):
-    def __init__(
-        self,
-        handle_exception: Callable[[Exception, str, str | None], None],
-    ) -> None:
-        super().__init__()
-        self.handle_exception = handle_exception
-
-    def parse(self, metadata_text: str) -> Metadata | None:
+class MetadataParseStage:
+    def parse(self, metadata_text: str) -> Metadata:
         try:
             return Metadata.model_validate_json(metadata_text)
         except Exception as e:
-            self.handle_exception(
-                e,
-                self.tr("Невалидный json метаданных.")
-                + self.tr("Попробуйте исправить json через соотвествующие сайты ")
-                + self.tr("и прогоните его через конфигуратор."),
-            )
-        return None
+            raise MetadataParseError(e) from e
 
 
 class IdStage(TextGenerationStage):
-    def __init__(
-        self,
-        text_model: TextModel,
-        system_prompt: str,
-        emit_status: Callable[[str], None],
-        handle_exception: Callable[[Exception, str, str | None], None],
-        status_message: str,
-    ) -> None:
-        super().__init__(
-            text_model=text_model,
-            system_prompt=system_prompt,
-            emit_status=emit_status,
-            status_message=status_message,
-        )
-        self.handle_exception = handle_exception
-
     def create(self, title: str) -> str:
-        try:
-            quest_id = super().create(title).strip()
-            if not self._is_valid(quest_id):
-                raise ValueError(f"Invalid quest ID: {quest_id!r}")
-            return quest_id
-        except Exception as e:
-            self.handle_exception(
-                e, self.tr("Ошибка генерации ID квеста. Используется fallback.")
-            )
-            return self._create_fallback(title)
+        quest_id = super().create(title).strip()
+
+        if not self._is_valid(quest_id):
+            raise InvalidQuestIdError(f"Invalid quest ID: {quest_id!r}")
+
+        return quest_id
 
     def _is_valid(self, quest_id: str) -> bool:
         return (
@@ -126,7 +90,7 @@ class IdStage(TextGenerationStage):
             and ID_PATTERN.fullmatch(quest_id) is not None
         )
 
-    def _create_fallback(self, title: str) -> str:
+    def create_fallback(self, title: str) -> str:
         max_length = constants_config.generation.quest_id_max_length
         fallback = constants_config.generation.quest_id_fallback
 
