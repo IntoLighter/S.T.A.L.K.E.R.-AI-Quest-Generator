@@ -9,7 +9,7 @@ from utils.error import ErrorInfo
 from utils.logging import log_execution
 
 from generation.entity import GenerationResult, IconRecords, QuestData
-from generation.errors import ImageGenerationError
+from generation.errors import ImageGenerationError, MetadataParseError
 from generation.models.image.main import ImageModel
 from generation.models.text.main import TextModel
 from generation.services.quest_builder import QuestBuilder
@@ -63,17 +63,13 @@ class BaseWorker(QObject):
             emit_chunk=self.metadata_chunk_ready.emit,
             emit_metadata_ready=self.metadata_ready.emit,
             emit_status=self.status_update.emit,
-            handle_exception=self.handle_exception,
             status_message=self.tr("Генерация метаданных"),
         )
-        self.metadata_parse_stage = MetadataParseStage(
-            handle_exception=self.handle_exception,
-        )
+        self.metadata_parse_stage = MetadataParseStage()
         self.id_stage = IdStage(
             text_model=text_model,
             system_prompt=preferences_config.prompt.id.value,
             emit_status=self.status_update.emit,
-            handle_exception=self.handle_exception,
             status_message=self.tr("Генерация ID квеста"),
         )
         self.icon_prompt_stage = IconPromptStage(
@@ -133,7 +129,7 @@ class BaseWorker(QObject):
                 result.metadata = self.metadata_parse_stage.parse(result.metadata_text)
 
             if result.metadata:
-                quest_id = self.id_stage.create(result.metadata.title)
+                quest_id = self.create_quest_id(result.metadata.title)
                 result.quest_data = QuestBuilder.create_quest_data(
                     result.metadata, quest_id
                 )
@@ -165,6 +161,15 @@ class BaseWorker(QObject):
     def build_icon_records(self, icon_prompt: str) -> IconRecords | None:
         raise NotImplementedError
 
+    def create_quest_id(self, title: str) -> str:
+        try:
+            return self.id_stage.create(title)
+        except Exception as e:
+            self.handle_exception(
+                e, self.tr("Ошибка генерации ID квеста. Используется fallback.")
+            )
+            return self.id_stage.create_fallback(title)
+
     def handle_stage_exception(self, e: Exception) -> None:
         match e:
             case openai.APIConnectionError():
@@ -179,6 +184,13 @@ class BaseWorker(QObject):
                     self.tr(
                         "Ошибка генерации текста. Проверьте вывод программы генерации."
                     ),
+                )
+            case MetadataParseError():
+                self.handle_exception(
+                    e,
+                    self.tr("Невалидный json метаданных.")
+                    + self.tr("Попробуйте исправить json через соотвествующие сайты ")
+                    + self.tr("и прогоните его через конфигуратор."),
                 )
             case ImageGenerationError():
                 self.handle_exception(
