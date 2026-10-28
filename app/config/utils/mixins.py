@@ -1,16 +1,16 @@
-from pydantic import model_validator
+from pydantic import BaseModel, model_validator
 
 
-class CodeDefaultOptionMixin:
+class CodeDefaultOptionMixin(BaseModel):
     def code_defaults(self) -> dict[str, object]:
         return {
             name: getattr(self, name)
-            for name, field in self.model_fields.items()
+            for name, field in type(self).model_fields.items()
             if field.exclude
         }
 
 
-class CodeDefaultSectionMixin:
+class CodeDefaultSectionMixin(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def seed_code_defaults(cls, data: object) -> object:

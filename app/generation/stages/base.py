@@ -9,6 +9,8 @@ from generation.models.text.main import TextModel
 
 
 class TextStreamingStage(QObject):
+    schema: type[BaseModel] | None = None
+
     def __init__(
         self,
         text_model: TextModel,
@@ -27,11 +29,7 @@ class TextStreamingStage(QObject):
         self.status_message = status_message
 
     @log_execution
-    def create(
-        self,
-        user_content: str,
-        schema: type[BaseModel] | None = None,
-    ) -> str | None:
+    def create(self, user_content: str, /) -> str | None:
         self.emit_status(self.status_message)
 
         messages: list[ChatCompletionMessageParam] = [
@@ -41,7 +39,7 @@ class TextStreamingStage(QObject):
 
         text = ""
 
-        for token in self.text_model.stream(messages, schema=schema):
+        for token in self.text_model.stream(messages, schema=self.schema):
             if self.is_interrupted():
                 return None
 
@@ -52,6 +50,8 @@ class TextStreamingStage(QObject):
 
 
 class TextGenerationStage(QObject):
+    schema: type[BaseModel] | None = None
+
     def __init__(
         self,
         text_model: TextModel,
@@ -66,11 +66,7 @@ class TextGenerationStage(QObject):
         self.status_message = status_message
 
     @log_execution
-    def create(
-        self,
-        user_content: str,
-        schema: type[BaseModel] | None = None,
-    ) -> str:
+    def create(self, user_content: str, /) -> str:
         self.emit_status(self.status_message)
 
         messages: list[ChatCompletionMessageParam] = [
@@ -78,4 +74,4 @@ class TextGenerationStage(QObject):
             {"role": "user", "content": user_content},
         ]
 
-        return self.text_model.generate(messages, schema=schema)
+        return self.text_model.generate(messages, schema=self.schema)

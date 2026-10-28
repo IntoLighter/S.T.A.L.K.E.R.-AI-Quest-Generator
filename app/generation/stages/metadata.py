@@ -25,6 +25,8 @@ TRANSLITERATION = str.maketrans(
 
 
 class MetadataTextStage(TextStreamingStage):
+    schema = Metadata
+
     def __init__(
         self,
         text_model: TextModel,
@@ -45,8 +47,8 @@ class MetadataTextStage(TextStreamingStage):
         )
         self.emit_metadata_ready = emit_metadata_ready
 
-    def create(self, concept: str) -> str | None:
-        metadata = super().create(concept, schema=Metadata)
+    def create(self, concept: str, /) -> str | None:
+        metadata = super().create(concept)
 
         if metadata is None:
             return None
@@ -76,7 +78,7 @@ class MetadataParseStage:
 
 
 class IdStage(TextGenerationStage):
-    def create(self, title: str) -> str:
+    def create(self, title: str, /) -> str:
         quest_id = super().create(title).strip()
 
         if not self._is_valid(quest_id):

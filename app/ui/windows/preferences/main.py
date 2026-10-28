@@ -25,9 +25,9 @@ class PreferencesDialog(BaseDialog):
         self.preferences_config = preferences_config
         logger.info("Window 'Settings' opened")
 
-        self.layout = QVBoxLayout(self)
+        self.main_layout = QVBoxLayout(self)
         self.tab_widget = QTabWidget()
-        self.layout.addWidget(self.tab_widget)
+        self.main_layout.addWidget(self.tab_widget)
 
         self.general_tab = GeneralTab(self.preferences_config)
         self.tab_widget.addTab(self.general_tab, self.tr("Основные"))
@@ -45,7 +45,7 @@ class PreferencesDialog(BaseDialog):
 
     def add_close_buttons(self) -> None:
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
 
         ok_btn = QPushButton(self.tr("ОК"))
         ok_btn.clicked.connect(self.accept)
@@ -66,7 +66,11 @@ class PreferencesDialog(BaseDialog):
 
     @property
     def tabs(self) -> list[Tab]:
-        return [self.tab_widget.widget(i) for i in range(self.tab_widget.count())]
+        return [
+            tab
+            for i in range(self.tab_widget.count())
+            if isinstance(tab := self.tab_widget.widget(i), Tab)
+        ]
 
     def reject(self) -> None:
         logger.info("Window 'Settings' rejected")

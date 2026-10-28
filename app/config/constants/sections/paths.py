@@ -1,11 +1,12 @@
+from functools import cached_property
 from pathlib import Path
 
-from pydantic import BaseModel, computed_field
+from pydantic import BaseModel
 from PySide6.QtCore import QStandardPaths
 
 
 class PathsConfig(BaseModel):
-    @computed_field
+    @cached_property
     def config_path(self) -> Path:
         path = Path(
             QStandardPaths.writableLocation(
@@ -15,11 +16,11 @@ class PathsConfig(BaseModel):
         path.mkdir(parents=True, exist_ok=True)
         return path
 
-    @computed_field
+    @cached_property
     def preferences_path(self) -> Path:
         return self.config_path / "preferences.json"
 
-    @computed_field
+    @cached_property
     def local_data_path(self) -> Path:
         path = Path(
             QStandardPaths.writableLocation(
@@ -29,7 +30,7 @@ class PathsConfig(BaseModel):
         path.mkdir(parents=True, exist_ok=True)
         return path
 
-    @computed_field
+    @cached_property
     def log_path(self) -> Path:
         path: Path = self.local_data_path / "logs" / "app.log"
         path.parent.mkdir(parents=True, exist_ok=True)

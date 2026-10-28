@@ -17,15 +17,15 @@ class PromptEditor(QWidget):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
-        self.layout = QVBoxLayout(self)
-        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout = QVBoxLayout(self)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
 
         self.add_parameters_editor()
         self.add_prompt_editor()
 
     def add_parameters_editor(self) -> None:
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
 
         self.parameter_names_combo = QComboBox()
         self.parameter_names_combo.addItems(list(parameters))
@@ -55,15 +55,17 @@ class PromptEditor(QWidget):
     def add_parameter(self) -> None:
         name = self.parameter_names_combo.currentText()
         value = self.parameter_values_combo.currentText()
-        self.prompt_editor.append(f"{name}: {value}")
+        self.prompt_editor.appendPlainText(f"{name}: {value}")
 
     def add_prompt_editor(self) -> None:
         label = QLabel(self.tr("Промпт"))
-        self.layout.addWidget(label)
+        self.main_layout.addWidget(label)
         self.prompt_editor = QPlainTextEdit()
         self.prompt_editor.setPlainText(self.preferences_config.general.prompt_message)
         self.prompt_editor.setMinimumHeight(constants_config.ui.editor_height)
-        self.layout.addWidget(self.prompt_editor, constants_config.ui.editor_stretch)
+        self.main_layout.addWidget(
+            self.prompt_editor, constants_config.ui.editor_stretch
+        )
 
     @property
     def prompt(self) -> str:

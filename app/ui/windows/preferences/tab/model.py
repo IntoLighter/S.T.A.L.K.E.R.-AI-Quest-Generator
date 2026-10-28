@@ -21,14 +21,14 @@ class ModelTab(Tab):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
-        self.layout = get_layout_with_scroll(self)
+        self.main_layout = get_layout_with_scroll(self)
 
         label = QLabel(self.tr("Текст"))
-        self.layout.addWidget(label)
+        self.main_layout.addWidget(label)
 
         self.group = QButtonGroup(self)
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
         self.local_model_button = QRadioButton(self.tr("Локальная"))
         self.remote_model_button = QRadioButton(self.tr("Удаленная"))
         self.group.addButton(self.local_model_button)
@@ -48,7 +48,7 @@ class ModelTab(Tab):
             preferences_config.model.text_model_local
         )
         self.local_model_dropdown.setCurrentIndex(index)
-        self.layout.addWidget(self.local_model_dropdown)
+        self.main_layout.addWidget(self.local_model_dropdown)
 
         self.remote_model_dropdown = QComboBox()
         model = RemoteTextModel(preferences_config=preferences_config)
@@ -57,7 +57,7 @@ class ModelTab(Tab):
             preferences_config.model.text_model_remote
         )
         self.remote_model_dropdown.setCurrentIndex(index)
-        self.layout.addWidget(self.remote_model_dropdown)
+        self.main_layout.addWidget(self.remote_model_dropdown)
 
         self.group.buttonToggled.connect(self.update_text_model_dropdown)
         self.update_text_model_dropdown()
@@ -68,30 +68,18 @@ class ModelTab(Tab):
             height=constants_config.ui.icon_workflow_height,
             stretch=constants_config.ui.icon_workflow_stretch,
         )
-        self.layout.addWidget(self.icon_workflow_editor)
+        self.main_layout.addWidget(self.icon_workflow_editor)
 
     @Slot()
     def update_text_model_dropdown(self) -> None:
-        button_to_dropdown = {
-            self.local_model_button: self.local_model_dropdown,
-            self.remote_model_button: self.remote_model_dropdown,
-        }
-
-        current_dropdown = button_to_dropdown[self.group.checkedButton()]
-        other_dropdown = next(
-            v for v in button_to_dropdown.values() if v != current_dropdown
-        )
-        current_dropdown.show()
-        other_dropdown.hide()
+        is_local = self.local_model_button.isChecked()
+        self.local_model_dropdown.setVisible(is_local)
+        self.remote_model_dropdown.setVisible(not is_local)
 
     def save(self) -> None:
-        button_to_type = {
-            self.local_model_button: ModelType.Local,
-            self.remote_model_button: ModelType.Remote,
-        }
-        self.preferences_config.model.text_model_type = button_to_type[
-            self.group.checkedButton()
-        ]
+        self.preferences_config.model.text_model_type = (
+            ModelType.Local if self.local_model_button.isChecked() else ModelType.Remote
+        )
 
         self.preferences_config.model.text_model_local = (
             self.local_model_dropdown.currentText()
