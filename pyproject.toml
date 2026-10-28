@@ -22,6 +22,7 @@ dev = [
     "prek>=0.4.4",
     "pyinstaller>=6.22.2",
     "ruff>=0.15.17",
+    "ty>=0.0.93",
 ]
 
 [tool.pyside6-project]
@@ -49,3 +50,10 @@ select = ["E", "F", "I", "B", "UP", "SIM", "W", "C4", "ANN"]
 
 [tool.typos.default.extend-words]
 datas = "datas"
+
+[tool.ty.environment]
+extra-paths = ["app"]
+
+[tool.ty.src]
+include = ["app"]
+exclude = ["app/resources/rc_main.py"]
