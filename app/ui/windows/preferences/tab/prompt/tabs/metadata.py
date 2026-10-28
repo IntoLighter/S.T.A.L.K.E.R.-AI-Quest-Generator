@@ -10,7 +10,7 @@ class MetadataTab(Tab):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
-        self.layout = QVBoxLayout(self)
+        self.main_layout = QVBoxLayout(self)
 
         self.metadata_editor = TextOptionEditor(
             label=self.tr("Метаданные"),
@@ -18,7 +18,7 @@ class MetadataTab(Tab):
             height=constants_config.ui.metadata_height,
             stretch=constants_config.ui.metadata_stretch,
         )
-        self.layout.addWidget(self.metadata_editor)
+        self.main_layout.addWidget(self.metadata_editor)
 
         self.id_editor = TextOptionEditor(
             label=self.tr("ID"),
@@ -26,4 +26,4 @@ class MetadataTab(Tab):
             height=constants_config.ui.id_height,
             stretch=constants_config.ui.id_stretch,
         )
-        self.layout.addWidget(self.id_editor)
+        self.main_layout.addWidget(self.id_editor)

@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
 
     def get_configurator(self) -> QAction:
         action = QAction(self.tr("Конфигуратор"), self)
-        action.setShortcuts(QKeySequence("Ctrl+s"))
+        action.setShortcut(QKeySequence("Ctrl+s"))
         action.triggered.connect(self.show_configurator)
         return action
 

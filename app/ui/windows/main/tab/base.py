@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QLabel, QPlainTextEdit, QVBoxLayout, QWidget
 class Tab(QWidget):
     def __init__(self) -> None:
         super().__init__()
-        self.layout = QVBoxLayout(self)
+        self.main_layout = QVBoxLayout(self)
 
     def bind_worker(self, worker: BaseWorker) -> None:
         pass
@@ -15,21 +15,21 @@ class Tab(QWidget):
         self, title: str, height: int, stretch: int
     ) -> QPlainTextEdit:
         label = QLabel(title)
-        self.layout.addWidget(label)
+        self.main_layout.addWidget(label)
 
         editor = QPlainTextEdit()
         editor.setReadOnly(True)
         editor.setMinimumHeight(height)
-        self.layout.addWidget(editor, stretch)
+        self.main_layout.addWidget(editor, stretch)
 
         return editor
 
     def create_label_editor(self, title: str) -> QLabel:
         label = QLabel(title)
-        self.layout.addWidget(label)
+        self.main_layout.addWidget(label)
 
         editor = QLabel()
-        self.layout.addWidget(editor)
+        self.main_layout.addWidget(editor)
 
         return editor
 

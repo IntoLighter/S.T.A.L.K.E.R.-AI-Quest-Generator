@@ -24,7 +24,7 @@ class GeneralTab(Tab):
         super().__init__()
         self.preferences_config = preferences_config
 
-        self.layout = QVBoxLayout(self)
+        self.main_layout = QVBoxLayout(self)
 
         self.add_notifications_editor()
         self.add_should_generate_editors()
@@ -46,11 +46,11 @@ class GeneralTab(Tab):
         row.addWidget(self.show_notifications_editor)
         row.addStretch()
 
-        self.layout.addWidget(group)
+        self.main_layout.addWidget(group)
 
     def add_should_generate_editors(self) -> None:
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
         label = QLabel(self.tr("Генерировать концепт"))
         row.addWidget(label)
         self.should_generate_concept_editor = QCheckBox()
@@ -61,7 +61,7 @@ class GeneralTab(Tab):
         row.addStretch()
 
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
         label = QLabel(self.tr("Генерировать метаданные"))
         row.addWidget(label)
         self.should_generate_metadata_editor = QCheckBox()
@@ -72,7 +72,7 @@ class GeneralTab(Tab):
         row.addStretch()
 
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
         label = QLabel(self.tr("Генерировать иконку"))
         row.addWidget(label)
         self.should_generate_icon_editor = QCheckBox()
@@ -84,7 +84,7 @@ class GeneralTab(Tab):
 
     def add_prompt_template_editor(self) -> None:
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
 
         label = QLabel(self.tr("Шаблон промпта"))
         row.addWidget(label)
@@ -105,7 +105,7 @@ class GeneralTab(Tab):
 
     def add_save_path_editor(self) -> None:
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
 
         label = QLabel(self.tr("Путь сохранения"))
         row.addWidget(label)

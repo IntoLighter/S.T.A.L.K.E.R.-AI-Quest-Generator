@@ -8,6 +8,6 @@ def read_resource(path: str) -> str:
         raise RuntimeError(f"Не удалось открыть ресурс: {path}")
 
     try:
-        return bytes(file.readAll()).decode("utf-8")
+        return bytes(file.readAll().data()).decode("utf-8")
     finally:
         file.close()

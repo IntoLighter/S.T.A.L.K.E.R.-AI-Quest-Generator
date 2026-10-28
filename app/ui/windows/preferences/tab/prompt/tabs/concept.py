@@ -10,7 +10,7 @@ class ConceptTab(Tab):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
-        self.layout = QVBoxLayout(self)
+        self.main_layout = QVBoxLayout(self)
 
         self.editor = TextOptionEditor(
             label=self.tr("Концепт"),
@@ -18,4 +18,4 @@ class ConceptTab(Tab):
             height=constants_config.ui.concept_height,
             stretch=constants_config.ui.concept_stretch,
         )
-        self.layout.addWidget(self.editor)
+        self.main_layout.addWidget(self.editor)

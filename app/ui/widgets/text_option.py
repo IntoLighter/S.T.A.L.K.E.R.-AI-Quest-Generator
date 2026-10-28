@@ -23,14 +23,14 @@ class TextOptionEditor(QWidget):
         super().__init__()
         self.option = option
 
-        self.layout = QVBoxLayout(self)
-        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout = QVBoxLayout(self)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
 
         label_widget = QLabel(label)
-        self.layout.addWidget(label_widget)
+        self.main_layout.addWidget(label_widget)
 
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
         self.group = QButtonGroup(self)
 
         self.system_button = QRadioButton(self.tr("Системный"))
@@ -50,7 +50,7 @@ class TextOptionEditor(QWidget):
         self.editor.setMinimumHeight(height)
         self.editor.setReadOnly(self.option.source == ValueSource.SYSTEM)
         self.editor.textChanged.connect(self.on_text_changed)
-        self.layout.addWidget(self.editor, stretch)
+        self.main_layout.addWidget(self.editor, stretch)
 
         self.group.buttonToggled.connect(self.on_source_changed)
         source_to_button = {

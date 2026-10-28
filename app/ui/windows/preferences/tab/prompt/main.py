@@ -12,10 +12,10 @@ class PromptTab(Tab):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
-        self.layout = get_layout_with_scroll(self)
+        self.main_layout = get_layout_with_scroll(self)
 
         self.tab_widget = QTabWidget()
-        self.layout.addWidget(self.tab_widget)
+        self.main_layout.addWidget(self.tab_widget)
 
         self.concept_tab = ConceptTab(preferences_config)
         self.tab_widget.addTab(self.concept_tab, self.tr("Концепт"))

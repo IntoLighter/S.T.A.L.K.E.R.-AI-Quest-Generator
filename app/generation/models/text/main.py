@@ -1,8 +1,9 @@
 from collections.abc import Iterator
 
 from loguru import logger
-from openai import OpenAI
+from openai import Omit, OpenAI, omit
 from openai.types.chat import ChatCompletionMessageParam
+from openai.types.shared_params import ResponseFormatJSONSchema
 from pydantic import BaseModel
 
 
@@ -16,25 +17,14 @@ class TextModel:
         messages: list[ChatCompletionMessageParam],
         schema: type[BaseModel] | None = None,
         retries: int = 2,
-        **kwargs: object,
     ) -> str:
-        if schema:
-            kwargs["response_format"] = {
-                "type": "json_schema",
-                "json_schema": {
-                    "name": schema.__name__,
-                    "strict": True,
-                    "schema": schema.model_json_schema(),
-                },
-            }
-
         response = self.client.with_options(
             max_retries=retries
         ).chat.completions.create(
             model=self.model,
             messages=messages,
             reasoning_effort="none",
-            **kwargs,
+            response_format=self._response_format(schema),
         )
 
         return response.choices[0].message.content or ""
@@ -44,28 +34,33 @@ class TextModel:
         messages: list[ChatCompletionMessageParam],
         schema: type[BaseModel] | None = None,
         retries: int = 2,
-        **kwargs: object,
     ) -> Iterator[str]:
-        if schema:
-            kwargs["response_format"] = {
-                "type": "json_schema",
-                "json_schema": {
-                    "name": schema.__name__,
-                    "strict": True,
-                    "schema": schema.model_json_schema(),
-                },
-            }
-
         stream = self.client.with_options(max_retries=retries).chat.completions.create(
             model=self.model,
             messages=messages,
             stream=True,
             reasoning_effort="none",
-            **kwargs,
+            response_format=self._response_format(schema),
         )
 
         for response in stream:
             yield response.choices[0].delta.content or ""
+
+    @staticmethod
+    def _response_format(
+        schema: type[BaseModel] | None,
+    ) -> ResponseFormatJSONSchema | Omit:
+        if not schema:
+            return omit
+
+        return {
+            "type": "json_schema",
+            "json_schema": {
+                "name": schema.__name__,
+                "strict": True,
+                "schema": schema.model_json_schema(),
+            },
+        }
 
     def get_models(self, retries: int = 0) -> list[str]:
         try:

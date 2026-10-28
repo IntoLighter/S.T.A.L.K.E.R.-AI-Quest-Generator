@@ -24,15 +24,15 @@ class ConfiguratorDialog(BaseDialog):
         self.preferences_config = preferences_config
         logger.info("Window 'Configurator' created")
 
-        self.layout = get_layout_with_scroll(self)
+        self.main_layout = get_layout_with_scroll(self)
 
         self.prompt_editor = PromptEditor(preferences_config)
-        self.layout.addWidget(self.prompt_editor)
+        self.main_layout.addWidget(self.prompt_editor)
 
         label = QLabel(self.tr("Концепт"))
-        self.layout.addWidget(label)
+        self.main_layout.addWidget(label)
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
         label = QLabel(self.tr("Генерировать концепт"))
         row.addWidget(label)
         self.should_generate_concept_editor = QCheckBox()
@@ -44,12 +44,14 @@ class ConfiguratorDialog(BaseDialog):
         self.concept_editor = QPlainTextEdit()
         self.concept_editor.setPlainText(self.preferences_config.configurator.concept)
         self.concept_editor.setMinimumHeight(constants_config.ui.concept_height)
-        self.layout.addWidget(self.concept_editor, constants_config.ui.concept_stretch)
+        self.main_layout.addWidget(
+            self.concept_editor, constants_config.ui.concept_stretch
+        )
 
         label = QLabel(self.tr("Метаданные"))
-        self.layout.addWidget(label)
+        self.main_layout.addWidget(label)
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
         label = QLabel(self.tr("Генерировать метаданные"))
         row.addWidget(label)
         self.should_generate_metadata_editor = QCheckBox()
@@ -61,14 +63,14 @@ class ConfiguratorDialog(BaseDialog):
         self.metadata_editor = QPlainTextEdit()
         self.metadata_editor.setPlainText(self.preferences_config.configurator.metadata)
         self.metadata_editor.setMinimumHeight(constants_config.ui.metadata_height)
-        self.layout.addWidget(
+        self.main_layout.addWidget(
             self.metadata_editor, constants_config.ui.metadata_stretch
         )
 
         label = QLabel(self.tr("Промпт иконки"))
-        self.layout.addWidget(label)
+        self.main_layout.addWidget(label)
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
         label = QLabel(self.tr("Генерировать иконку"))
         row.addWidget(label)
         self.should_generate_icon_editor = QCheckBox()
@@ -82,7 +84,7 @@ class ConfiguratorDialog(BaseDialog):
             self.preferences_config.configurator.icon_prompt
         )
         self.icon_prompt_editor.setMinimumHeight(constants_config.ui.icon_prompt_height)
-        self.layout.addWidget(
+        self.main_layout.addWidget(
             self.icon_prompt_editor, constants_config.ui.icon_prompt_stretch
         )
 
@@ -90,7 +92,7 @@ class ConfiguratorDialog(BaseDialog):
 
     def add_close_buttons(self) -> None:
         row = QHBoxLayout()
-        self.layout.addLayout(row)
+        self.main_layout.addLayout(row)
 
         ok_btn = QPushButton(self.tr("Сгенерировать"))
         ok_btn.clicked.connect(self.accept)

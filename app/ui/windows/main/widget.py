@@ -6,6 +6,7 @@ from generation.entity import ConfiguratorParameters
 from generation.models.text.local import LocalTextModel
 from generation.models.text.main import TextModel
 from generation.models.text.remote import RemoteTextModel
+from generation.workers.base import BaseWorker
 from generation.workers.configurator import ConfiguratorWorker
 from generation.workers.normal import NormalWorker
 from loguru import logger
@@ -38,14 +39,14 @@ class MainWidget(QWidget):
         super().__init__()
         self.preferences_config = preferences_config
 
-        self.layout = get_layout_with_scroll(self)
+        self.main_layout = get_layout_with_scroll(self)
 
         self.prompt_editor = PromptEditor(preferences_config)
-        self.layout.addWidget(self.prompt_editor)
+        self.main_layout.addWidget(self.prompt_editor)
 
         self.generate_button = QPushButton(self.tr("Сгенерировать квест"))
         self.generate_button.clicked.connect(self.generate_quest_normal)
-        self.layout.addWidget(self.generate_button)
+        self.main_layout.addWidget(self.generate_button)
 
         self.add_tabs()
 
@@ -69,23 +70,23 @@ class MainWidget(QWidget):
 
         logger.info("Normal generation started")
 
-        self.worker = NormalWorker(
+        worker = NormalWorker(
             preferences_config=self.preferences_config,
             text_model=self.model,
             prompt=self.prompt_editor.prompt,
         )
-        self.generate_quest()
+        self.generate_quest(worker)
 
     def generate_quest_configurator(self, parameters: ConfiguratorParameters) -> None:
         logger.info("Configurator generation started")
 
-        self.worker = ConfiguratorWorker(
+        worker = ConfiguratorWorker(
             preferences_config=self.preferences_config,
             text_model=self.model,
             prompt=parameters.prompt,
             parameters=parameters,
         )
-        self.generate_quest()
+        self.generate_quest(worker)
 
     @property
     def model(self) -> TextModel:
@@ -98,35 +99,35 @@ class MainWidget(QWidget):
 
         return type_to_value[self.preferences_config.model.text_model_type]
 
-    def generate_quest(self) -> None:
-        self.set_generate_button_stop()
+    def generate_quest(self, worker: BaseWorker) -> None:
+        self.set_generate_button_stop(worker)
         for tab in self.tabs:
             tab.clear()
 
-        self.worker_thread = QThread()
-        self.worker.moveToThread(self.worker_thread)
+        worker_thread = QThread(self)
+        worker.moveToThread(worker_thread)
 
         for tab in self.tabs:
-            tab.bind_worker(self.worker)
-        self.worker.status_update.connect(self.status_update_signal)
-        self.worker.error_occurred.connect(self.show_generation_error)
-        self.worker.unknown_error_occurred.connect(self.show_generation_unknown_error)
+            tab.bind_worker(worker)
+        worker.status_update.connect(self.status_update_signal)
+        worker.error_occurred.connect(self.show_generation_error)
+        worker.unknown_error_occurred.connect(self.show_generation_unknown_error)
 
-        self.worker_thread.started.connect(self.worker.run)
-        self.worker.finished.connect(self.worker_thread.quit)
-        self.worker.finished.connect(self.worker.deleteLater)
-        self.worker_thread.finished.connect(self.worker_thread.deleteLater)
-        self.worker_thread.finished.connect(self.thread_complete)
+        worker_thread.started.connect(worker.run)
+        worker.finished.connect(worker_thread.quit)
+        worker.finished.connect(worker.deleteLater)
+        worker_thread.finished.connect(worker_thread.deleteLater)
+        worker_thread.finished.connect(self.thread_complete)
 
-        self.worker_thread.start()
+        worker_thread.start()
 
-    def set_generate_button_stop(self) -> None:
+    def set_generate_button_stop(self, worker: BaseWorker) -> None:
         self.generate_button.setText(self.tr("Остановить генерацию квеста"))
         self.generate_button.clicked.disconnect()
-        self.generate_button.clicked.connect(self.stop_generate)
+        self.generate_button.clicked.connect(lambda: self.stop_generate(worker))
 
-    def stop_generate(self) -> None:
-        self.worker.request_interruption()
+    def stop_generate(self, worker: BaseWorker) -> None:
+        worker.request_interruption()
         self.set_generate_button_generate()
 
     def set_generate_button_generate(self) -> None:
@@ -156,12 +157,9 @@ class MainWidget(QWidget):
         self.set_generate_button_generate()
         self.generation_completed.emit()
 
-        self.worker = None
-        self.worker_thread = None
-
     def add_tabs(self) -> None:
         self.tab_widget = QTabWidget()
-        self.layout.addWidget(self.tab_widget)
+        self.main_layout.addWidget(self.tab_widget)
 
         self.concept_tab = ConceptTab()
         self.tab_widget.addTab(self.concept_tab, self.tr("Концепт"))
@@ -174,4 +172,8 @@ class MainWidget(QWidget):
 
     @property
     def tabs(self) -> list[Tab]:
-        return [self.tab_widget.widget(i) for i in range(self.tab_widget.count())]
+        return [
+            tab
+            for i in range(self.tab_widget.count())
+            if isinstance(tab := self.tab_widget.widget(i), Tab)
+        ]
