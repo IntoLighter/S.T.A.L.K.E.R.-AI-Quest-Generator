@@ -1,18 +1,20 @@
 exclude = '^app/resources/rc_main\.py$'
+default_stages = ["pre-commit"]
 default_install_hook_types = ["pre-commit", "commit-msg", "pre-push"]
 
 [[repos]]
 repo = "builtin"
 hooks = [
   # Fixers
-  { id = "trailing-whitespace" },
+  { id = "trailing-whitespace", args = ["--markdown-linebreak-ext=md"] },
   { id = "end-of-file-fixer" },
   { id = "mixed-line-ending" },
   { id = "fix-byte-order-marker" },
-  { id = "pretty-format-json", args = ["--no-sort-keys", "--autofix"] },
+  { id = "pretty-format-json", args = ["--no-sort-keys", "--autofix"], exclude = '^\.vscode/' },
 
   # Syntax
-  { id = "check-json" },
+  { id = "check-json", exclude = '^\.vscode/' },
+  { id = "check-jsonc", files = '^\.vscode/.*\.json$', types = ["json"] },
   { id = "check-json5" },
   { id = "check-toml" },
   { id = "check-yaml" },
@@ -21,6 +23,7 @@ hooks = [
   # Repository
   { id = "check-added-large-files" },
   { id = "check-case-conflict" },
+  { id = "check-illegal-windows-names" },
   { id = "check-merge-conflict" },
   { id = "check-symlinks" },
   { id = "destroyed-symlinks" },
@@ -38,6 +41,29 @@ hooks = [{ id = "typos" }]
 # Tools from the project environment, versions are pinned in uv.lock
 [[repos]]
 repo = "local"
+
+[[repos.hooks]]
+id = "uv-lock"
+name = "uv lock check"
+entry = "uv lock --check"
+language = "system"
+files = '^(pyproject\.toml|uv\.lock)$'
+pass_filenames = false
+
+[[repos.hooks]]
+id = "pyproject-fmt"
+name = "pyproject-fmt"
+entry = "uv run pyproject-fmt"
+language = "system"
+files = '^pyproject\.toml$'
+
+[[repos.hooks]]
+id = "rumdl"
+name = "rumdl check"
+entry = "uv run rumdl check --fix"
+language = "system"
+types = ["markdown"]
+exclude = '^CHANGELOG\.md$'
 
 [[repos.hooks]]
 id = "ruff-check"
@@ -75,7 +101,7 @@ stages = ["commit-msg"]
 id = "commitizen-branch"
 name = "commitizen check branch"
 entry = "uv run cz check"
-args = ["--rev-range", "$PRE_COMMIT_FROM_REF..$PRE_COMMIT_TO_REF"]
+args = ["--rev-range", "origin/HEAD..HEAD"]
 language = "system"
 stages = ["pre-push"]
 always_run = true

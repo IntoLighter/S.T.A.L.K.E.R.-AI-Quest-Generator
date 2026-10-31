@@ -17,48 +17,56 @@ dependencies = [
 ]
 
 [dependency-groups]
+dev = [
+    "commitizen>=4.16.3",
+    "prek>=0.5.9",
+    "pyproject-fmt>=2.30.3",
+    "ruff>=0.15.17",
+    "rumdl>=0.3.2",
+    "ty>=0.0.93",
+]
 build = [
     "pyinstaller>=6.22.3",
 ]
-dev = [
-    "commitizen>=4.16.3",
-    "prek>=0.4.4",
-    "ruff>=0.15.17",
-    "ty>=0.0.93",
-]
 
 [tool.uv]
-default-groups = ["dev", "build"]
+default-groups = [ "dev", "build" ]
+
+[tool.ruff]
+exclude = [
+    "app/resources/rc_main.py",
+]
+[tool.ruff.lint]
+select = [ "ANN", "B", "C4", "E", "F", "I", "SIM", "UP", "W" ]
+
+[tool.pyproject-fmt]
+indent = 4
+keep_full_version = true
+generate_python_version_classifiers = false
+table_format = "long"
+sub_table_spacing = "\n"
+
+[tool.typos.default.extend-words]
+datas = "datas"
+
+[tool.ty.src]
+include = [ "app" ]
+exclude = [ "app/resources/rc_main.py" ]
+
+[tool.ty.environment]
+extra-paths = [ "app" ]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version_scheme = "semver2"
+version_provider = "scm"
+tag_format = "$version"
+changelog_incremental = true
+update_changelog_on_bump = true
+breaking_change_exclamation_in_title = true
 
 [tool.pyside6-project]
 files = [
     "app/main.py",
     "app/resources/main.qrc",
 ]
-
-[tool.commitizen]
-name = "cz_conventional_commits"
-tag_format = "$version"
-version_scheme = "semver2"
-version_provider = "scm"
-update_changelog_on_bump = true
-changelog_incremental = true
-breaking_change_exclamation_in_title = true
-
-[tool.ruff]
-exclude = [
-    "app/resources/rc_main.py",
-]
-
-[tool.ruff.lint]
-select = ["E", "F", "I", "B", "UP", "SIM", "W", "C4", "ANN"]
-
-[tool.typos.default.extend-words]
-datas = "datas"
-
-[tool.ty.environment]
-extra-paths = ["app"]
-
-[tool.ty.src]
-include = ["app"]
-exclude = ["app/resources/rc_main.py"]
