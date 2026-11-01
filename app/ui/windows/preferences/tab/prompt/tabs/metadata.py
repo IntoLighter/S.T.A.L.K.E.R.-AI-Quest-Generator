@@ -1,6 +1,7 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from PySide6.QtWidgets import QVBoxLayout
+from utils.translation import ui
 
 from ui.widgets.text_option import TextOptionEditor
 from ui.windows.preferences.tab.base import Tab
@@ -13,7 +14,7 @@ class MetadataTab(Tab):
         self.main_layout = QVBoxLayout(self)
 
         self.metadata_editor = TextOptionEditor(
-            label="Метаданные",
+            label=ui("Metadata"),
             option=self.preferences_config.prompt.metadata,
             height=constants_config.ui.metadata_height,
             stretch=constants_config.ui.metadata_stretch,

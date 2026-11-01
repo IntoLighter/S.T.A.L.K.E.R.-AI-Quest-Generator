@@ -1,5 +1,6 @@
 from config.preferences.main import PreferencesConfig
 from PySide6.QtWidgets import QTabWidget
+from utils.translation import ui
 
 from ui.utils.layout import get_layout_with_scroll
 from ui.windows.preferences.tab.base import Tab
@@ -18,10 +19,10 @@ class PromptTab(Tab):
         self.main_layout.addWidget(self.tab_widget)
 
         self.concept_tab = ConceptTab(preferences_config)
-        self.tab_widget.addTab(self.concept_tab, "Концепт")
+        self.tab_widget.addTab(self.concept_tab, ui("Concept"))
 
         self.metadata_tab = MetadataTab(preferences_config)
-        self.tab_widget.addTab(self.metadata_tab, "Метаданные")
+        self.tab_widget.addTab(self.metadata_tab, ui("Metadata"))
 
         self.icon_tab = IconTab(preferences_config)
-        self.tab_widget.addTab(self.icon_tab, "Иконка")
+        self.tab_widget.addTab(self.icon_tab, ui("Icon"))

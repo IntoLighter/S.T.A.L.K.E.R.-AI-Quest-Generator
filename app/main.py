@@ -5,7 +5,6 @@ import traceback
 import types
 
 from loguru import logger
-from PySide6.QtCore import QLibraryInfo, QTranslator
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QApplication,
@@ -17,6 +16,7 @@ from config.preferences.main import PreferencesConfig
 from config.preferences.repository import PreferencesRepository
 from ui.windows.exception.main import ExceptionDialog
 from ui.windows.main.window import MainWindow
+from utils.translation import set_language, ui
 
 
 def exception_hook(
@@ -50,7 +50,7 @@ def create_preferences_config() -> PreferencesConfig:
         preferences_config = repository.load()
     except Exception as e:
         logger.exception(e)
-        QMessageBox.warning(None, "Ошибка файла настроек", str(e))
+        QMessageBox.warning(None, ui("Preferences file error"), str(e))
         preferences_config = PreferencesConfig()
     return preferences_config
 
@@ -66,13 +66,9 @@ if __name__ == "__main__":
 
     setup_logging()
 
-    qt_translator = QTranslator()
-    qt_translator.load(
-        "qt_ru", QLibraryInfo.path(QLibraryInfo.LibraryPath.TranslationsPath)
-    )
-    app.installTranslator(qt_translator)
-
     preferences_config = create_preferences_config()
+    set_language(preferences_config.general.interface_language)
+
     logger.debug(f"preferences path: {constants_config.paths.preferences_path}")
     logger.debug(f"log path: {constants_config.paths.log_path}")
     logger.debug(f"save path: {preferences_config.general.save_path}")

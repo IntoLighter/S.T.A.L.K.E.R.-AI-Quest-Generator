@@ -10,6 +10,11 @@ class ModelType(enum.StrEnum):
     Remote = "remote"
 
 
+class Language(enum.StrEnum):
+    RU = "ru"
+    EN = "en"
+
+
 class ValueSource(enum.StrEnum):
     SYSTEM = "system"
     CUSTOM = "custom"

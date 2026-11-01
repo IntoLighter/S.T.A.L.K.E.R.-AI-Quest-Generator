@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from utils.translation import set_language, ui
 
 from ui.dialog import BaseDialog
 from ui.windows.preferences.tab.base import Tab
@@ -21,7 +22,7 @@ from ui.windows.preferences.tab.prompt.main import PromptTab
 class PreferencesDialog(BaseDialog):
     def __init__(self, parent: QWidget, preferences_config: PreferencesConfig) -> None:
         super().__init__(parent)
-        self.setWindowTitle("Настройки")
+        self.setWindowTitle(ui("Settings"))
         self.preferences_config = preferences_config
         logger.info("Window 'Settings' opened")
 
@@ -30,16 +31,16 @@ class PreferencesDialog(BaseDialog):
         self.main_layout.addWidget(self.tab_widget)
 
         self.general_tab = GeneralTab(self.preferences_config)
-        self.tab_widget.addTab(self.general_tab, "Основные")
+        self.tab_widget.addTab(self.general_tab, ui("General"))
 
         self.model_tab = ModelTab(self.preferences_config)
-        self.tab_widget.addTab(self.model_tab, "Модели")
+        self.tab_widget.addTab(self.model_tab, ui("Models"))
 
         self.prompt_tab = PromptTab(self.preferences_config)
-        self.tab_widget.addTab(self.prompt_tab, "Промпты")
+        self.tab_widget.addTab(self.prompt_tab, ui("Prompts"))
 
         self.configurator_tab = ConfiguratorTab(self.preferences_config)
-        self.tab_widget.addTab(self.configurator_tab, "Конфигуратор")
+        self.tab_widget.addTab(self.configurator_tab, ui("Configurator"))
 
         self.add_close_buttons()
 
@@ -47,15 +48,16 @@ class PreferencesDialog(BaseDialog):
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
 
-        ok_btn = QPushButton("ОК")
+        ok_btn = QPushButton(ui("OK"))
         ok_btn.clicked.connect(self.accept)
         row.addWidget(ok_btn, stretch=1)
 
-        cancel_btn = QPushButton("Отмена")
+        cancel_btn = QPushButton(ui("Cancel"))
         cancel_btn.clicked.connect(self.reject)
         row.addWidget(cancel_btn, stretch=1)
 
     def accept(self) -> None:
+        previous_interface_language = self.preferences_config.general.interface_language
         for tab in self.tabs:
             tab.save()
 
@@ -63,6 +65,12 @@ class PreferencesDialog(BaseDialog):
         repository.save(self.preferences_config)
         logger.info("Window 'Settings' accepted")
         super().accept()
+
+        if (
+            self.preferences_config.general.interface_language
+            != previous_interface_language
+        ):
+            set_language(self.preferences_config.general.interface_language)
 
     @property
     def tabs(self) -> list[Tab]:

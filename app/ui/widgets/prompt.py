@@ -1,7 +1,7 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from generation.parameters import parameters
-from PySide6.QtCore import Slot
+from PySide6.QtCore import QEvent, Slot
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from utils.translation import ui
 
 
 class PromptEditor(QWidget):
@@ -22,6 +23,16 @@ class PromptEditor(QWidget):
 
         self.add_parameters_editor()
         self.add_prompt_editor()
+        self.retranslate_ui()
+
+    def changeEvent(self, event: QEvent) -> None:
+        if event.type() == QEvent.Type.LanguageChange:
+            self.retranslate_ui()
+        super().changeEvent(event)
+
+    def retranslate_ui(self) -> None:
+        self.add_parameter_button.setText(ui("Add"))
+        self.prompt_label.setText(ui("Prompt"))
 
     def add_parameters_editor(self) -> None:
         row = QHBoxLayout()
@@ -40,7 +51,7 @@ class PromptEditor(QWidget):
         )
         row.addWidget(self.parameter_values_combo, stretch=1)
 
-        self.add_parameter_button = QPushButton("Добавить")
+        self.add_parameter_button = QPushButton()
         self.add_parameter_button.clicked.connect(self.add_parameter)
         row.addWidget(self.add_parameter_button)
 
@@ -58,8 +69,8 @@ class PromptEditor(QWidget):
         self.prompt_editor.appendPlainText(f"{name}: {value}")
 
     def add_prompt_editor(self) -> None:
-        label = QLabel("Промпт")
-        self.main_layout.addWidget(label)
+        self.prompt_label = QLabel()
+        self.main_layout.addWidget(self.prompt_label)
         self.prompt_editor = QPlainTextEdit()
         self.prompt_editor.setPlainText(self.preferences_config.general.prompt_message)
         self.prompt_editor.setMinimumHeight(constants_config.ui.editor_height)

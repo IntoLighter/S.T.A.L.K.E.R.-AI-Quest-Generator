@@ -10,7 +10,7 @@ from generation.workers.base import BaseWorker
 from generation.workers.configurator import ConfiguratorWorker
 from generation.workers.normal import NormalWorker
 from loguru import logger
-from PySide6.QtCore import QThread, Signal, Slot
+from PySide6.QtCore import QEvent, QThread, Signal, Slot
 from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
 from utils.error import (
     ErrorInfo,
 )
+from utils.translation import err, ui
 
 from ui.utils.layout import get_layout_with_scroll
 from ui.utils.message import show_generation_start_error
@@ -38,31 +39,54 @@ class MainWidget(QWidget):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
+        self.is_generating = False
 
         self.main_layout = get_layout_with_scroll(self)
 
         self.prompt_editor = PromptEditor(preferences_config)
         self.main_layout.addWidget(self.prompt_editor)
 
-        self.generate_button = QPushButton("Сгенерировать квест")
+        self.generate_button = QPushButton()
         self.generate_button.clicked.connect(self.generate_quest_normal)
         self.main_layout.addWidget(self.generate_button)
 
         self.add_tabs()
+        self.retranslate_ui()
+
+    def changeEvent(self, event: QEvent) -> None:
+        if event.type() == QEvent.Type.LanguageChange:
+            self.retranslate_ui()
+        super().changeEvent(event)
+
+    def retranslate_ui(self) -> None:
+        self.update_generate_button_text()
+        self.tab_widget.setTabText(
+            self.tab_widget.indexOf(self.concept_tab), ui("Concept")
+        )
+        self.tab_widget.setTabText(
+            self.tab_widget.indexOf(self.metadata_tab), ui("Metadata")
+        )
+        self.tab_widget.setTabText(self.tab_widget.indexOf(self.icon_tab), ui("Icon"))
+
+    def update_generate_button_text(self) -> None:
+        if self.is_generating:
+            self.generate_button.setText(ui("Stop quest generation"))
+        else:
+            self.generate_button.setText(ui("Generate quest"))
 
     @Slot()
     def generate_quest_normal(self) -> None:
         if not self.preferences_config.model.current_text_model:
             show_generation_start_error(
                 self,
-                "Невозможно запустить генерацию. Текстовая модель не задана.",
+                err("generation_text_model_not_set"),
             )
             return
 
         if not self.preferences_config.general.should_generate_concept:
             show_generation_start_error(
                 self,
-                "Невозможно запустить генерацию. Отключенна генерация концепта.",
+                err("generation_concept_disabled"),
             )
             return
 
@@ -120,7 +144,8 @@ class MainWidget(QWidget):
         worker_thread.start()
 
     def set_generate_button_stop(self, worker: BaseWorker) -> None:
-        self.generate_button.setText("Остановить генерацию квеста")
+        self.is_generating = True
+        self.update_generate_button_text()
         self.generate_button.clicked.disconnect()
         self.generate_button.clicked.connect(lambda: self.stop_generate(worker))
 
@@ -129,7 +154,8 @@ class MainWidget(QWidget):
         self.set_generate_button_generate()
 
     def set_generate_button_generate(self) -> None:
-        self.generate_button.setText("Сгенерировать квест")
+        self.is_generating = False
+        self.update_generate_button_text()
         self.generate_button.clicked.disconnect()
         self.generate_button.clicked.connect(self.generate_quest_normal)
 
@@ -137,7 +163,7 @@ class MainWidget(QWidget):
     def show_generation_error(self, error_result: ErrorInfo) -> None:
         dialog = QMessageBox(
             QMessageBox.Icon.Warning,
-            "Ошибка",
+            ui("Error"),
             error_result.msg,
             parent=self,
             detailedText=error_result.details,
@@ -160,13 +186,13 @@ class MainWidget(QWidget):
         self.main_layout.addWidget(self.tab_widget)
 
         self.concept_tab = ConceptTab()
-        self.tab_widget.addTab(self.concept_tab, "Концепт")
+        self.tab_widget.addTab(self.concept_tab, "")
 
         self.metadata_tab = MetadataTab()
-        self.tab_widget.addTab(self.metadata_tab, "Метаданные")
+        self.tab_widget.addTab(self.metadata_tab, "")
 
         self.icon_tab = IconTab()
-        self.tab_widget.addTab(self.icon_tab, "Иконка")
+        self.tab_widget.addTab(self.icon_tab, "")
 
     @property
     def tabs(self) -> list[Tab]:

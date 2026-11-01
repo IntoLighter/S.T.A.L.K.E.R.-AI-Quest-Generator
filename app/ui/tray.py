@@ -5,6 +5,7 @@ from PySide6.QtWidgets import (
     QMenu,
     QSystemTrayIcon,
 )
+from utils.translation import ui
 
 
 class Tray(QSystemTrayIcon):
@@ -18,21 +19,26 @@ class Tray(QSystemTrayIcon):
 
         menu = QMenu()
 
-        open_action = QAction("Открыть", self)
-        open_action.triggered.connect(self.openRequested)
+        self.open_action = QAction(self)
+        self.open_action.triggered.connect(self.openRequested)
 
-        quit_action = QAction("Выход", self)
-        quit_action.triggered.connect(self.quitRequested)
+        self.quit_action = QAction(self)
+        self.quit_action.triggered.connect(self.quitRequested)
 
-        menu.addAction(open_action)
+        menu.addAction(self.open_action)
         menu.addSeparator()
-        menu.addAction(quit_action)
+        menu.addAction(self.quit_action)
 
         self.setContextMenu(menu)
 
         self.activated.connect(self.on_activated)
 
+        self.retranslate_ui()
         self.show()
+
+    def retranslate_ui(self) -> None:
+        self.open_action.setText(ui("Open"))
+        self.quit_action.setText(ui("Quit"))
 
     @Slot(QSystemTrayIcon.ActivationReason)
     def on_activated(self, reason: QSystemTrayIcon.ActivationReason) -> None:

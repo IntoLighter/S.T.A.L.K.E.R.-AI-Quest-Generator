@@ -2,6 +2,7 @@ from config.constants.main import constants_config
 from generation.entity import IconRecords
 from generation.workers.base import BaseWorker
 from PySide6.QtCore import Slot
+from utils.translation import ui
 
 from ui.utils.image import get_pixmap
 from ui.windows.main.tab.base import Tab
@@ -10,13 +11,18 @@ from ui.windows.main.tab.base import Tab
 class IconTab(Tab):
     def __init__(self) -> None:
         super().__init__()
-        self.icon_prompt_editor = self.create_plain_text_editor(
-            "Промпт",
+        self.icon_prompt_label, self.icon_prompt_editor = self.create_plain_text_editor(
             constants_config.ui.icon_prompt_height,
             constants_config.ui.icon_prompt_stretch,
         )
-        self.icon_game_editor = self.create_label_editor("Игра")
-        self.icon_editor = self.create_label_editor("Оригинал")
+        self.icon_game_label, self.icon_game_editor = self.create_label_editor()
+        self.icon_label, self.icon_editor = self.create_label_editor()
+        self.retranslate_ui()
+
+    def retranslate_ui(self) -> None:
+        self.icon_prompt_label.setText(ui("Prompt"))
+        self.icon_game_label.setText(ui("Game"))
+        self.icon_label.setText(ui("Original"))
 
     def bind_worker(self, worker: BaseWorker) -> None:
         worker.icon_prompt_chunk_ready.connect(self.show_icon_prompt_chunk)

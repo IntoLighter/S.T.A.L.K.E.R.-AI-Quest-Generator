@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QWidget,
 )
+from utils.translation import err, ui
 
 from ui.dialog import BaseDialog
 from ui.utils.layout import get_layout_with_scroll
@@ -20,7 +21,7 @@ from ui.widgets.prompt import PromptEditor
 class ConfiguratorDialog(BaseDialog):
     def __init__(self, parent: QWidget, preferences_config: PreferencesConfig) -> None:
         super().__init__(parent)
-        self.setWindowTitle("Конфигуратор")
+        self.setWindowTitle(ui("Configurator"))
         self.preferences_config = preferences_config
         logger.info("Window 'Configurator' created")
 
@@ -29,11 +30,11 @@ class ConfiguratorDialog(BaseDialog):
         self.prompt_editor = PromptEditor(preferences_config)
         self.main_layout.addWidget(self.prompt_editor)
 
-        label = QLabel("Концепт")
+        label = QLabel(ui("Concept"))
         self.main_layout.addWidget(label)
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
-        label = QLabel("Генерировать концепт")
+        label = QLabel(ui("Generate concept"))
         row.addWidget(label)
         self.should_generate_concept_editor = QCheckBox()
         self.should_generate_concept_editor.setChecked(
@@ -48,11 +49,11 @@ class ConfiguratorDialog(BaseDialog):
             self.concept_editor, constants_config.ui.concept_stretch
         )
 
-        label = QLabel("Метаданные")
+        label = QLabel(ui("Metadata"))
         self.main_layout.addWidget(label)
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
-        label = QLabel("Генерировать метаданные")
+        label = QLabel(ui("Generate metadata"))
         row.addWidget(label)
         self.should_generate_metadata_editor = QCheckBox()
         self.should_generate_metadata_editor.setChecked(
@@ -67,11 +68,11 @@ class ConfiguratorDialog(BaseDialog):
             self.metadata_editor, constants_config.ui.metadata_stretch
         )
 
-        label = QLabel("Промпт иконки")
+        label = QLabel(ui("Icon prompt"))
         self.main_layout.addWidget(label)
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
-        label = QLabel("Генерировать иконку")
+        label = QLabel(ui("Generate icon"))
         row.addWidget(label)
         self.should_generate_icon_editor = QCheckBox()
         self.should_generate_icon_editor.setChecked(
@@ -94,11 +95,11 @@ class ConfiguratorDialog(BaseDialog):
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
 
-        ok_btn = QPushButton("Сгенерировать")
+        ok_btn = QPushButton(ui("Generate"))
         ok_btn.clicked.connect(self.accept)
         row.addWidget(ok_btn, stretch=1)
 
-        cancel_btn = QPushButton("Отмена")
+        cancel_btn = QPushButton(ui("Cancel"))
         cancel_btn.clicked.connect(self.reject)
         row.addWidget(cancel_btn, stretch=1)
 
@@ -110,7 +111,7 @@ class ConfiguratorDialog(BaseDialog):
             or parameters.should_generate_metadata
             or parameters.should_generate_icon
         ):
-            show_generation_start_error(self, "Невозможно запустить пустую генерацию.")
+            show_generation_start_error(self, err("generation_empty"))
             return
 
         if (
@@ -118,9 +119,7 @@ class ConfiguratorDialog(BaseDialog):
             and not parameters.metadata
             and not (parameters.should_generate_concept or parameters.concept)
         ):
-            show_generation_start_error(
-                self, "Невозможно сгенерировать метаданные без концепта."
-            )
+            show_generation_start_error(self, err("metadata_without_concept"))
             return
 
         if (
@@ -128,9 +127,7 @@ class ConfiguratorDialog(BaseDialog):
             and not parameters.icon_prompt
             and not (parameters.should_generate_concept or parameters.concept)
         ):
-            show_generation_start_error(
-                self, "Невозможно сгенерировать промпт иконки без концепта."
-            )
+            show_generation_start_error(self, err("icon_prompt_without_concept"))
             return
 
         logger.info("Window 'Settings' accepted")

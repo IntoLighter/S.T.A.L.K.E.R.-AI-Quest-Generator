@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QRadioButton,
 )
+from utils.translation import ui
 
 from ui.utils.layout import get_layout_with_scroll
 from ui.widgets.text_option import TextOptionEditor
@@ -23,14 +24,14 @@ class ModelTab(Tab):
         self.preferences_config = preferences_config
         self.main_layout = get_layout_with_scroll(self)
 
-        label = QLabel("Текст")
+        label = QLabel(ui("Text"))
         self.main_layout.addWidget(label)
 
         self.group = QButtonGroup(self)
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
-        self.local_model_button = QRadioButton("Локальная")
-        self.remote_model_button = QRadioButton("Удаленная")
+        self.local_model_button = QRadioButton(ui("Local"))
+        self.remote_model_button = QRadioButton(ui("Remote"))
         self.group.addButton(self.local_model_button)
         self.group.addButton(self.remote_model_button)
         type_to_button = {
@@ -63,7 +64,7 @@ class ModelTab(Tab):
         self.update_text_model_dropdown()
 
         self.icon_workflow_editor = TextOptionEditor(
-            label="Workflow иконки",
+            label=ui("Icon workflow"),
             option=self.preferences_config.model.icon_workflow,
             height=constants_config.ui.icon_workflow_height,
             stretch=constants_config.ui.icon_workflow_stretch,

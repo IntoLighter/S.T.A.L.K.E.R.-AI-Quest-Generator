@@ -1,6 +1,6 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
-from PySide6.QtCore import Qt, Slot
+from PySide6.QtCore import QEvent, Qt, Slot
 from PySide6.QtGui import QAction, QCloseEvent, QKeySequence
 from PySide6.QtWidgets import (
     QDialog,
@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QSystemTrayIcon,
 )
+from utils.translation import err, ui
 
 from ui.tray import Tray
 from ui.windows.configurator.main import ConfiguratorDialog
@@ -35,22 +36,40 @@ class MainWindow(QMainWindow):
 
         self.status_label = QLabel()
         self.statusBar().addWidget(self.status_label)
-        self.set_parameters_unspecified_restrictions()
 
         self.set_menubar()
+        self.retranslate_ui()
+
+    def changeEvent(self, event: QEvent) -> None:
+        if event.type() == QEvent.Type.LanguageChange:
+            self.retranslate_ui()
+        super().changeEvent(event)
+
+    def retranslate_ui(self) -> None:
+        self.file_menu.setTitle(ui("File"))
+        self.configurator_action.setText(ui("Configurator"))
+        self.settings_action.setText(ui("Settings"))
+        self.help_menu.setTitle(ui("Help"))
+        self.about_action.setText(ui("About"))
+        self.tray.retranslate_ui()
+        if not self.main_widget.is_generating:
+            self.set_parameters_unspecified_restrictions()
 
     def set_menubar(self) -> None:
         menubar = self.menuBar()
 
-        file_menu = menubar.addMenu("Файл")
-        file_menu.addAction(self.get_configurator())
-        file_menu.addAction(self.get_settings())
+        self.file_menu = menubar.addMenu("")
+        self.configurator_action = self.get_configurator()
+        self.file_menu.addAction(self.configurator_action)
+        self.settings_action = self.get_settings()
+        self.file_menu.addAction(self.settings_action)
 
-        help_menu = menubar.addMenu("Помощь")
-        help_menu.addAction(self.get_about())
+        self.help_menu = menubar.addMenu("")
+        self.about_action = self.get_about()
+        self.help_menu.addAction(self.about_action)
 
     def get_configurator(self) -> QAction:
-        action = QAction("Конфигуратор", self)
+        action = QAction(self)
         action.setShortcut(QKeySequence("Ctrl+s"))
         action.triggered.connect(self.show_configurator)
         return action
@@ -60,8 +79,8 @@ class MainWindow(QMainWindow):
         if not self.preferences_config.model.current_text_model:
             QMessageBox.warning(
                 self,
-                "Ошибка настроек",
-                "Невозможно запустить конфигуратор. Текстовая модель не задана.",
+                ui("Settings error"),
+                err("configurator_text_model_not_set"),
             )
             return
 
@@ -74,7 +93,7 @@ class MainWindow(QMainWindow):
             self.main_widget.generate_quest_configurator(dialog.parameters)
 
     def get_settings(self) -> QAction:
-        action = QAction("Настройки", self)
+        action = QAction(self)
         action.setMenuRole(QAction.MenuRole.PreferencesRole)
         action.setShortcuts((QKeySequence("Ctrl+,"), QKeySequence("Ctrl+б")))
         action.triggered.connect(self.open_settings)
@@ -98,16 +117,16 @@ class MainWindow(QMainWindow):
     def show_generation_complete_tray_message(self) -> None:
         self.tray.showMessage(
             constants_config.app.name,
-            "Квест сгенерирован",
+            ui("Quest generated"),
             QSystemTrayIcon.MessageIcon.Information,
             constants_config.ui.quest_generated_tray_message_msecs,
         )
 
     def set_parameters_unspecified_restrictions(self) -> None:
         if not self.preferences_config.model.current_text_model:
-            self.show_status("Текстовая модель не задана")
+            self.show_status(ui("Text model is not set"))
         elif not self.preferences_config.general.save_path:
-            self.show_status("Путь сохранения не задан")
+            self.show_status(ui("Save path is not set"))
         else:
             self.show_status("")
 
@@ -116,20 +135,23 @@ class MainWindow(QMainWindow):
         self.status_label.setText(status)
 
     def get_about(self) -> QAction:
-        about_action = QAction("О программе", self)
+        about_action = QAction(self)
         about_action.triggered.connect(self.show_about)
         return about_action
 
     @Slot()
     def show_about(self) -> None:
         repo = constants_config.app.repository
+        version = ui("Version")
+        repository = ui("Repository")
+
         QMessageBox.about(
             self,
-            "О программе",
+            ui("About"),
             f"""
 <h3>{constants_config.app.name}</h3>
-<p>Версия {constants_config.app.version}</p>
-<p>Repository: <a href="{repo}">{repo}</a></p>
+<p>{version} {constants_config.app.version}</p>
+<p>{repository}: <a href="{repo}">{repo}</a></p>
             """,
         )
 

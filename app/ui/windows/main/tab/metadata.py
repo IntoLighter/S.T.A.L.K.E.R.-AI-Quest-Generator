@@ -2,6 +2,7 @@ from config.constants.main import constants_config
 from generation.entity import QuestData
 from generation.workers.base import BaseWorker
 from PySide6.QtCore import Slot
+from utils.translation import ui
 
 from ui.windows.main.tab.base import Tab
 
@@ -9,26 +10,31 @@ from ui.windows.main.tab.base import Tab
 class MetadataTab(Tab):
     def __init__(self) -> None:
         super().__init__()
-        self.metadata_editor = self.create_plain_text_editor(
-            "Метаданные",
+        self.metadata_label, self.metadata_editor = self.create_plain_text_editor(
             constants_config.ui.metadata_height,
             constants_config.ui.metadata_stretch,
         )
-        self.task_editor = self.create_plain_text_editor(
-            "Задание",
+        self.task_label, self.task_editor = self.create_plain_text_editor(
             constants_config.ui.editor_height,
             constants_config.ui.editor_stretch,
         )
-        self.article_editor = self.create_plain_text_editor(
-            "Описание",
+        self.article_label, self.article_editor = self.create_plain_text_editor(
             constants_config.ui.editor_height,
             constants_config.ui.editor_stretch,
         )
-        self.infoportions_editor = self.create_plain_text_editor(
-            "Инфопоршни",
-            constants_config.ui.editor_height,
-            constants_config.ui.editor_stretch,
+        self.infoportions_label, self.infoportions_editor = (
+            self.create_plain_text_editor(
+                constants_config.ui.editor_height,
+                constants_config.ui.editor_stretch,
+            )
         )
+        self.retranslate_ui()
+
+    def retranslate_ui(self) -> None:
+        self.metadata_label.setText(ui("Metadata"))
+        self.task_label.setText(ui("Task"))
+        self.article_label.setText(ui("Description"))
+        self.infoportions_label.setText(ui("Info portions"))
 
     def bind_worker(self, worker: BaseWorker) -> None:
         worker.metadata_chunk_ready.connect(self.show_metadata_chunk)

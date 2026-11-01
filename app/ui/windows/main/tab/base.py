@@ -1,4 +1,5 @@
 from generation.workers.base import BaseWorker
+from PySide6.QtCore import QEvent
 from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import QLabel, QPlainTextEdit, QVBoxLayout, QWidget
 
@@ -8,13 +9,21 @@ class Tab(QWidget):
         super().__init__()
         self.main_layout = QVBoxLayout(self)
 
+    def changeEvent(self, event: QEvent) -> None:
+        if event.type() == QEvent.Type.LanguageChange:
+            self.retranslate_ui()
+        super().changeEvent(event)
+
+    def retranslate_ui(self) -> None:
+        pass
+
     def bind_worker(self, worker: BaseWorker) -> None:
         pass
 
     def create_plain_text_editor(
-        self, title: str, height: int, stretch: int
-    ) -> QPlainTextEdit:
-        label = QLabel(title)
+        self, height: int, stretch: int
+    ) -> tuple[QLabel, QPlainTextEdit]:
+        label = QLabel()
         self.main_layout.addWidget(label)
 
         editor = QPlainTextEdit()
@@ -22,16 +31,16 @@ class Tab(QWidget):
         editor.setMinimumHeight(height)
         self.main_layout.addWidget(editor, stretch)
 
-        return editor
+        return label, editor
 
-    def create_label_editor(self, title: str) -> QLabel:
-        label = QLabel(title)
+    def create_label_editor(self) -> tuple[QLabel, QLabel]:
+        label = QLabel()
         self.main_layout.addWidget(label)
 
         editor = QLabel()
         self.main_layout.addWidget(editor)
 
-        return editor
+        return label, editor
 
     @staticmethod
     def append_chunk(editor: QPlainTextEdit, chunk: str) -> None:

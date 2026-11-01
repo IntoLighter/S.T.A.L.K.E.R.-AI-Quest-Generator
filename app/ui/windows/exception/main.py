@@ -4,6 +4,7 @@ from urllib.parse import urlencode
 
 from config.constants.main import constants_config
 from PySide6.QtWidgets import QApplication, QMessageBox, QWidget
+from utils.translation import err, ui
 
 
 class ExceptionDialog:
@@ -12,17 +13,17 @@ class ExceptionDialog:
 
         self.msg = QMessageBox(
             QMessageBox.Icon.Warning,
-            "Ошибка",
-            "Произошла непредвиденная ошибка",
+            ui("Error"),
+            err("unexpected_error"),
             parent=parent,
             detailedText=stacktrace,
             buttons=QMessageBox.StandardButton.Close,
         )
 
-        copy_btn = self.msg.addButton("Копировать", QMessageBox.ButtonRole.ActionRole)
+        copy_btn = self.msg.addButton(ui("Copy"), QMessageBox.ButtonRole.ActionRole)
         copy_btn.clicked.connect(self.copy)
 
-        report_btn = self.msg.addButton("Сообщить", QMessageBox.ButtonRole.ActionRole)
+        report_btn = self.msg.addButton(ui("Report"), QMessageBox.ButtonRole.ActionRole)
         report_btn.clicked.connect(self.report)
 
     def copy(self) -> None:

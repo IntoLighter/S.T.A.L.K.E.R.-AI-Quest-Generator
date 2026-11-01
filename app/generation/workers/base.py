@@ -7,6 +7,7 @@ from loguru import logger
 from PySide6.QtCore import QObject, Signal, Slot
 from utils.error import ErrorInfo
 from utils.logging import log_execution
+from utils.translation import err, ui
 
 from generation.entity import GenerationResult, IconRecords, QuestData
 from generation.errors import ImageGenerationError, MetadataParseError
@@ -54,7 +55,7 @@ class BaseWorker(QObject):
             system_prompt=preferences_config.prompt.concept.value,
             emit_chunk=self.concept_chunk_ready.emit,
             emit_status=self.status_update.emit,
-            status_message="Генерация концепта",
+            status_message=ui("Generating concept"),
         )
         self.metadata_text_stage = MetadataTextStage(
             text_model=text_model,
@@ -63,14 +64,14 @@ class BaseWorker(QObject):
             emit_chunk=self.metadata_chunk_ready.emit,
             emit_metadata_ready=self.metadata_ready.emit,
             emit_status=self.status_update.emit,
-            status_message="Генерация метаданных",
+            status_message=ui("Generating metadata"),
         )
         self.metadata_parse_stage = MetadataParseStage()
         self.id_stage = IdStage(
             text_model=text_model,
             system_prompt=preferences_config.prompt.id.value,
             emit_status=self.status_update.emit,
-            status_message="Генерация ID квеста",
+            status_message=ui("Generating quest ID"),
         )
         self.icon_prompt_stage = IconPromptStage(
             text_model=text_model,
@@ -78,13 +79,13 @@ class BaseWorker(QObject):
             system_prompt=preferences_config.prompt.icon.value,
             emit_chunk=self.icon_prompt_chunk_ready.emit,
             emit_status=self.status_update.emit,
-            status_message="Генерация промпта иконки",
+            status_message=ui("Generating icon prompt"),
         )
         self.icon_records_stage = IconRecordsStage(
             image_model=self.image_model,
             emit_status=self.status_update.emit,
             emit_icon_ready=self.icon_ready.emit,
-            status_message="Генерация иконки",
+            status_message=ui("Generating icon"),
         )
 
     def request_interruption(self) -> None:
@@ -165,9 +166,7 @@ class BaseWorker(QObject):
         try:
             return self.id_stage.create(title)
         except Exception as e:
-            self.handle_exception(
-                e, "Ошибка генерации ID квеста. Используется fallback."
-            )
+            self.handle_exception(e, err("quest_id_generation_failed"))
             return self.id_stage.create_fallback(title)
 
     def handle_stage_exception(self, e: Exception) -> None:
@@ -175,25 +174,20 @@ class BaseWorker(QObject):
             case openai.APIConnectionError():
                 self.handle_exception(
                     e,
-                    "Ошибка подключения."
-                    + "Проверьте запущена ли программа генерации текста.",
+                    err("text_server_connection_failed"),
                 )
             case openai.APIError():
                 self.handle_exception(
                     e,
-                    "Ошибка генерации текста. Проверьте вывод программы генерации.",
+                    err("text_generation_failed"),
                 )
             case MetadataParseError():
                 self.handle_exception(
                     e,
-                    "Невалидный json метаданных."
-                    + "Попробуйте исправить json через соотвествующие сайты "
-                    + "и прогоните его через конфигуратор.",
+                    err("metadata_json_invalid"),
                 )
             case ImageGenerationError():
-                self.handle_exception(
-                    e, "Возникла ошибка генерации изображения.", str(e)
-                )
+                self.handle_exception(e, err("image_generation_failed"), str(e))
             case _:
                 self.handle_unknown_exception(e)
 
@@ -210,7 +204,7 @@ class BaseWorker(QObject):
         self.unknown_error_occurred.emit(traceback.format_exc())
 
     def handle_save_errors(self, errors: list[Exception]) -> None:
-        msg = "Ошибки при сохранении файлов"
+        msg = err("files_saving_failed")
         details = "\n\n".join(f"{e.__class__.__name__}\n{e}" for e in errors)
         self.error_occurred.emit(ErrorInfo(msg=msg, details=details))
 
@@ -221,7 +215,7 @@ class BaseWorker(QObject):
         if not save_path:
             return
 
-        self.status_update.emit("Сохранение данных")
+        self.status_update.emit(ui("Saving data"))
 
         saver = QuestSaver(
             save_path=save_path,

@@ -2,6 +2,8 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
+from config.preferences.sections.types import Language
+
 DEFAULT_PROMPT = """
 Тип: исследование
 Квестодатель: Сидорович
@@ -9,6 +11,7 @@ DEFAULT_PROMPT = """
 
 
 class GeneralConfig(BaseModel):
+    interface_language: Language = Language.EN
     show_notifications: bool = True
 
     should_generate_concept: bool = True
