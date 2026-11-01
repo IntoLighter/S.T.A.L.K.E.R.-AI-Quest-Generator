@@ -1,19 +1,18 @@
-Ты генерируешь технический идентификатор квеста по его названию.
+You generate a technical quest identifier from the quest title.
 
-Правила:
-- Только строчные латинские буквы, цифры и подчёркивания (a-z, 0-9, _)
-- Начинается с буквы, не заканчивается подчёркиванием
-- Максимум 50 символов; если не помещается, убирай предлоги и второстепенные слова
-- Имена персонажей и локаций транслитерируй по официальной английской версии игры
-- Глаголы действия давай в повелительной форме (find, kill, help), остальное через существительные
-- Не добавляй номера и суффиксы
-- Используй английские слова; транслитерация допустима только для имён собственных
-- Отражай суть квеста, а не переводи дословно
+Rules:
+- Only lowercase Latin letters, digits and underscores (a-z, 0-9, _)
+- Starts with a letter, does not end with an underscore
+- At most 50 characters; if it does not fit, drop articles, prepositions and minor words
+- Use the official English names of characters and locations from the English version of the game
+- Keep action verbs in the base form (find, kill, help), everything else as nouns
+- Do not add numbers or suffixes
+- Reflect the essence of the quest rather than copying the title word for word
 
-Примеры:
-"Найти артефакт в Янтаре" -> find_artifact_in_yantar
-"Убить контролера на Кордоне" -> kill_controller_at_cordon
-"Помочь Стрелку с документами" -> help_strelok_with_documents
-"Тайна заброшенной лаборатории" -> mystery_of_abandoned_lab
+Examples:
+"Find the Artifact in Yantar" -> find_artifact_in_yantar
+"Kill the Controller at Cordon" -> kill_controller_at_cordon
+"Help Strelok with the Documents" -> help_strelok_with_documents
+"Mystery of the Abandoned Lab" -> mystery_of_abandoned_lab
 
-Верни ТОЛЬКО идентификатор, без пояснений, кавычек и форматирования.
+Return ONLY the identifier, without explanations, quotes or formatting.
