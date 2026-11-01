@@ -1,12 +1,9 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
-from PySide6.QtWidgets import (
-    QLabel,
-    QPlainTextEdit,
-)
+from PySide6.QtWidgets import QLabel
 from utils.translation import ui
 
-from ui.utils.layout import get_layout_with_scroll
+from ui.utils.layout import add_text_editor, get_layout_with_scroll
 from ui.windows.preferences.tab.base import Tab
 
 
@@ -16,33 +13,30 @@ class ConfiguratorTab(Tab):
         self.preferences_config = preferences_config
         self.main_layout = get_layout_with_scroll(self)
 
-        label = QLabel(ui("Concept"))
-        self.main_layout.addWidget(label)
-        self.concept_editor = QPlainTextEdit()
-        self.concept_editor.setPlainText(self.preferences_config.configurator.concept)
-        self.concept_editor.setMinimumHeight(constants_config.ui.concept_height)
-        self.main_layout.addWidget(
-            self.concept_editor, constants_config.ui.concept_stretch
+        configurator = self.preferences_config.configurator
+
+        self.main_layout.addWidget(QLabel(ui("Concept")))
+        self.concept_editor = add_text_editor(
+            self.main_layout,
+            configurator.concept,
+            constants_config.ui.concept_height,
+            constants_config.ui.concept_stretch,
         )
 
-        label = QLabel(ui("Metadata"))
-        self.main_layout.addWidget(label)
-        self.metadata_editor = QPlainTextEdit()
-        self.metadata_editor.setPlainText(self.preferences_config.configurator.metadata)
-        self.metadata_editor.setMinimumHeight(constants_config.ui.metadata_height)
-        self.main_layout.addWidget(
-            self.metadata_editor, constants_config.ui.metadata_stretch
+        self.main_layout.addWidget(QLabel(ui("Metadata")))
+        self.metadata_editor = add_text_editor(
+            self.main_layout,
+            configurator.metadata,
+            constants_config.ui.metadata_height,
+            constants_config.ui.metadata_stretch,
         )
 
-        label = QLabel(ui("Icon prompt"))
-        self.main_layout.addWidget(label)
-        self.icon_prompt_editor = QPlainTextEdit()
-        self.icon_prompt_editor.setPlainText(
-            self.preferences_config.configurator.icon_prompt
-        )
-        self.icon_prompt_editor.setMinimumHeight(constants_config.ui.icon_prompt_height)
-        self.main_layout.addWidget(
-            self.icon_prompt_editor, constants_config.ui.icon_prompt_stretch
+        self.main_layout.addWidget(QLabel(ui("Icon prompt")))
+        self.icon_prompt_editor = add_text_editor(
+            self.main_layout,
+            configurator.icon_prompt,
+            constants_config.ui.icon_prompt_height,
+            constants_config.ui.icon_prompt_stretch,
         )
 
     def save(self) -> None:

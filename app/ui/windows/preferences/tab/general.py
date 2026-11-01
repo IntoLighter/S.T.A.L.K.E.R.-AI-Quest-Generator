@@ -4,7 +4,7 @@ from config.preferences.main import PreferencesConfig
 from config.preferences.sections.types import Language
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
-    QCheckBox,
+    QBoxLayout,
     QComboBox,
     QFileDialog,
     QGroupBox,
@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
 )
 from utils.translation import ui
 
+from ui.utils.layout import add_checkbox_row
 from ui.windows.preferences.tab.base import Tab
 
 LANGUAGE_NAMES = {
@@ -40,88 +41,64 @@ class GeneralTab(Tab):
         group = QGroupBox(ui("Language"))
         group_layout = QVBoxLayout(group)
 
-        row = QHBoxLayout()
-        group_layout.addLayout(row)
-        label = QLabel(ui("Interface"))
-        row.addWidget(label)
-        self.interface_language_editor = QComboBox()
-        for language, name in LANGUAGE_NAMES.items():
-            self.interface_language_editor.addItem(name, language)
-        self.interface_language_editor.setCurrentIndex(
-            self.interface_language_editor.findData(
-                self.preferences_config.general.interface_language
-            )
+        self.interface_language_editor = self.add_language_row(
+            group_layout,
+            ui("Interface"),
+            self.preferences_config.general.interface_language,
         )
-        row.addWidget(self.interface_language_editor)
-        row.addStretch()
-
-        row = QHBoxLayout()
-        group_layout.addLayout(row)
-        label = QLabel(ui("Generation"))
-        row.addWidget(label)
-        self.generation_language_editor = QComboBox()
-        for language, name in LANGUAGE_NAMES.items():
-            self.generation_language_editor.addItem(name, language)
-        self.generation_language_editor.setCurrentIndex(
-            self.generation_language_editor.findData(
-                self.preferences_config.general.generation_language
-            )
+        self.generation_language_editor = self.add_language_row(
+            group_layout,
+            ui("Generation"),
+            self.preferences_config.general.generation_language,
         )
-        row.addWidget(self.generation_language_editor)
-        row.addStretch()
 
         self.main_layout.addWidget(group)
+
+    @staticmethod
+    def add_language_row(layout: QBoxLayout, text: str, current: Language) -> QComboBox:
+        row = QHBoxLayout()
+        layout.addLayout(row)
+        row.addWidget(QLabel(text))
+
+        editor = QComboBox()
+        for language, name in LANGUAGE_NAMES.items():
+            editor.addItem(name, language)
+        editor.setCurrentIndex(editor.findData(current))
+        row.addWidget(editor)
+        row.addStretch()
+
+        return editor
 
     def add_notifications_editor(self) -> None:
         group = QGroupBox(ui("Notifications"))
         group_layout = QVBoxLayout(group)
 
-        row = QHBoxLayout()
-        group_layout.addLayout(row)
-        label = QLabel(ui("Show notifications"))
-        row.addWidget(label)
-        self.show_notifications_editor = QCheckBox()
-        self.show_notifications_editor.setChecked(
-            self.preferences_config.general.show_notifications
+        self.show_notifications_editor = add_checkbox_row(
+            group_layout,
+            ui("Show notifications"),
+            checked=self.preferences_config.general.show_notifications,
         )
-        row.addWidget(self.show_notifications_editor)
-        row.addStretch()
 
         self.main_layout.addWidget(group)
 
     def add_should_generate_editors(self) -> None:
-        row = QHBoxLayout()
-        self.main_layout.addLayout(row)
-        label = QLabel(ui("Generate concept"))
-        row.addWidget(label)
-        self.should_generate_concept_editor = QCheckBox()
-        self.should_generate_concept_editor.setChecked(
-            self.preferences_config.general.should_generate_concept
-        )
-        row.addWidget(self.should_generate_concept_editor)
-        row.addStretch()
+        general = self.preferences_config.general
 
-        row = QHBoxLayout()
-        self.main_layout.addLayout(row)
-        label = QLabel(ui("Generate metadata"))
-        row.addWidget(label)
-        self.should_generate_metadata_editor = QCheckBox()
-        self.should_generate_metadata_editor.setChecked(
-            self.preferences_config.general.should_generate_metadata
+        self.should_generate_concept_editor = add_checkbox_row(
+            self.main_layout,
+            ui("Generate concept"),
+            checked=general.should_generate_concept,
         )
-        row.addWidget(self.should_generate_metadata_editor)
-        row.addStretch()
-
-        row = QHBoxLayout()
-        self.main_layout.addLayout(row)
-        label = QLabel(ui("Generate icon"))
-        row.addWidget(label)
-        self.should_generate_icon_editor = QCheckBox()
-        self.should_generate_icon_editor.setChecked(
-            self.preferences_config.general.should_generate_icon
+        self.should_generate_metadata_editor = add_checkbox_row(
+            self.main_layout,
+            ui("Generate metadata"),
+            checked=general.should_generate_metadata,
         )
-        row.addWidget(self.should_generate_icon_editor)
-        row.addStretch()
+        self.should_generate_icon_editor = add_checkbox_row(
+            self.main_layout,
+            ui("Generate icon"),
+            checked=general.should_generate_icon,
+        )
 
     def add_save_path_editor(self) -> None:
         row = QHBoxLayout()

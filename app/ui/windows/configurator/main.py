@@ -3,17 +3,15 @@ from config.preferences.main import PreferencesConfig
 from generation.entity import ConfiguratorParameters
 from loguru import logger
 from PySide6.QtWidgets import (
-    QCheckBox,
     QHBoxLayout,
     QLabel,
-    QPlainTextEdit,
     QPushButton,
     QWidget,
 )
 from utils.translation import err, ui
 
 from ui.dialog import BaseDialog
-from ui.utils.layout import get_layout_with_scroll
+from ui.utils.layout import add_checkbox_row, add_text_editor, get_layout_with_scroll
 from ui.utils.message import show_generation_start_error
 from ui.widgets.prompt import PromptEditor
 
@@ -30,63 +28,46 @@ class ConfiguratorDialog(BaseDialog):
         self.prompt_editor = PromptEditor()
         self.main_layout.addWidget(self.prompt_editor)
 
-        label = QLabel(ui("Concept"))
-        self.main_layout.addWidget(label)
-        row = QHBoxLayout()
-        self.main_layout.addLayout(row)
-        label = QLabel(ui("Generate concept"))
-        row.addWidget(label)
-        self.should_generate_concept_editor = QCheckBox()
-        self.should_generate_concept_editor.setChecked(
-            self.preferences_config.general.should_generate_concept
+        general = self.preferences_config.general
+        configurator = self.preferences_config.configurator
+
+        self.main_layout.addWidget(QLabel(ui("Concept")))
+        self.should_generate_concept_editor = add_checkbox_row(
+            self.main_layout,
+            ui("Generate concept"),
+            checked=general.should_generate_concept,
         )
-        row.addWidget(self.should_generate_concept_editor)
-        row.addStretch()
-        self.concept_editor = QPlainTextEdit()
-        self.concept_editor.setPlainText(self.preferences_config.configurator.concept)
-        self.concept_editor.setMinimumHeight(constants_config.ui.concept_height)
-        self.main_layout.addWidget(
-            self.concept_editor, constants_config.ui.concept_stretch
+        self.concept_editor = add_text_editor(
+            self.main_layout,
+            configurator.concept,
+            constants_config.ui.concept_height,
+            constants_config.ui.concept_stretch,
         )
 
-        label = QLabel(ui("Metadata"))
-        self.main_layout.addWidget(label)
-        row = QHBoxLayout()
-        self.main_layout.addLayout(row)
-        label = QLabel(ui("Generate metadata"))
-        row.addWidget(label)
-        self.should_generate_metadata_editor = QCheckBox()
-        self.should_generate_metadata_editor.setChecked(
-            self.preferences_config.general.should_generate_metadata
+        self.main_layout.addWidget(QLabel(ui("Metadata")))
+        self.should_generate_metadata_editor = add_checkbox_row(
+            self.main_layout,
+            ui("Generate metadata"),
+            checked=general.should_generate_metadata,
         )
-        row.addWidget(self.should_generate_metadata_editor)
-        row.addStretch()
-        self.metadata_editor = QPlainTextEdit()
-        self.metadata_editor.setPlainText(self.preferences_config.configurator.metadata)
-        self.metadata_editor.setMinimumHeight(constants_config.ui.metadata_height)
-        self.main_layout.addWidget(
-            self.metadata_editor, constants_config.ui.metadata_stretch
+        self.metadata_editor = add_text_editor(
+            self.main_layout,
+            configurator.metadata,
+            constants_config.ui.metadata_height,
+            constants_config.ui.metadata_stretch,
         )
 
-        label = QLabel(ui("Icon prompt"))
-        self.main_layout.addWidget(label)
-        row = QHBoxLayout()
-        self.main_layout.addLayout(row)
-        label = QLabel(ui("Generate icon"))
-        row.addWidget(label)
-        self.should_generate_icon_editor = QCheckBox()
-        self.should_generate_icon_editor.setChecked(
-            self.preferences_config.general.should_generate_icon
+        self.main_layout.addWidget(QLabel(ui("Icon prompt")))
+        self.should_generate_icon_editor = add_checkbox_row(
+            self.main_layout,
+            ui("Generate icon"),
+            checked=general.should_generate_icon,
         )
-        row.addWidget(self.should_generate_icon_editor)
-        row.addStretch()
-        self.icon_prompt_editor = QPlainTextEdit()
-        self.icon_prompt_editor.setPlainText(
-            self.preferences_config.configurator.icon_prompt
-        )
-        self.icon_prompt_editor.setMinimumHeight(constants_config.ui.icon_prompt_height)
-        self.main_layout.addWidget(
-            self.icon_prompt_editor, constants_config.ui.icon_prompt_stretch
+        self.icon_prompt_editor = add_text_editor(
+            self.main_layout,
+            configurator.icon_prompt,
+            constants_config.ui.icon_prompt_height,
+            constants_config.ui.icon_prompt_stretch,
         )
 
         self.add_close_buttons()

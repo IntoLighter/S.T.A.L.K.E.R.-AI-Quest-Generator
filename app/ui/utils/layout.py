@@ -1,4 +1,13 @@
-from PySide6.QtWidgets import QScrollArea, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (
+    QBoxLayout,
+    QCheckBox,
+    QHBoxLayout,
+    QLabel,
+    QPlainTextEdit,
+    QScrollArea,
+    QVBoxLayout,
+    QWidget,
+)
 
 
 def get_layout_with_scroll(parent: QWidget) -> QVBoxLayout:
@@ -12,3 +21,28 @@ def get_layout_with_scroll(parent: QWidget) -> QVBoxLayout:
     scroll.setWidget(scroll_widget)
 
     return layout
+
+
+def add_checkbox_row(layout: QBoxLayout, text: str, *, checked: bool) -> QCheckBox:
+    row = QHBoxLayout()
+    layout.addLayout(row)
+
+    row.addWidget(QLabel(text))
+
+    checkbox = QCheckBox()
+    checkbox.setChecked(checked)
+    row.addWidget(checkbox)
+    row.addStretch()
+
+    return checkbox
+
+
+def add_text_editor(
+    layout: QBoxLayout, text: str, height: int, stretch: int
+) -> QPlainTextEdit:
+    editor = QPlainTextEdit()
+    editor.setPlainText(text)
+    editor.setMinimumHeight(height)
+    layout.addWidget(editor, stretch)
+
+    return editor
