@@ -1,5 +1,3 @@
-from collections.abc import Callable
-
 from config.preferences.main import PreferencesConfig
 
 from generation.engines.text.main import TextEngine
@@ -69,15 +67,3 @@ class ConfiguratorWorker(BaseWorker):
         return self._build_artifact(
             stage.create, user_content, should_generate=should_generate
         )
-
-    def _build_artifact[T](
-        self,
-        create: Callable[[str], T | None],
-        user_content: str,
-        *,
-        should_generate: bool,
-    ) -> T | None:
-        if should_generate:
-            return create(user_content)
-
-        return None

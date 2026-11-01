@@ -1,5 +1,3 @@
-from collections.abc import Callable
-
 from generation.entity import IconRecords
 from generation.workers.base import BaseWorker
 
@@ -28,15 +26,3 @@ class NormalWorker(BaseWorker):
             icon_prompt,
             should_generate=self.preferences_config.general.should_generate_icon,
         )
-
-    def _build_artifact[T](
-        self,
-        create: Callable[[str], T | None],
-        user_content: str,
-        *,
-        should_generate: bool,
-    ) -> T | None:
-        if should_generate:
-            return create(user_content)
-
-        return None

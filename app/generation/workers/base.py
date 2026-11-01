@@ -1,4 +1,5 @@
 import traceback
+from collections.abc import Callable
 
 import openai
 from config.constants.main import constants_config
@@ -170,6 +171,18 @@ class BaseWorker(QObject):
 
     def build_icon_records(self, icon_prompt: str) -> IconRecords | None:
         raise NotImplementedError
+
+    def _build_artifact[T](
+        self,
+        create: Callable[[str], T | None],
+        user_content: str,
+        *,
+        should_generate: bool,
+    ) -> T | None:
+        if should_generate:
+            return create(user_content)
+
+        return None
 
     def create_quest_id(self, title: str) -> str:
         try:
