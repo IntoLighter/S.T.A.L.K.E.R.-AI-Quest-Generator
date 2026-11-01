@@ -18,26 +18,28 @@ class ImageModel:
         self.kit = ComfyKit(comfyui_url=self.comfyui_url)
 
     def generate(self, prompt: str) -> Image.Image:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
         try:
-            result = loop.run_until_complete(
-                self.kit.execute_json(
-                    json.loads(self.preferences_config.model.icon_workflow.value),
-                    {"prompt": prompt},
-                )
-            )
-        finally:
-            loop.close()
+            workflow = json.loads(self.preferences_config.model.icon_workflow.value)
+        except json.JSONDecodeError as e:
+            msg = f"Invalid icon workflow JSON: {e}"
+            raise ImageGenerationError(msg) from e
+
+        result = asyncio.run(self.kit.execute_json(workflow, {"prompt": prompt}))
 
         if result.status == "error":
             raise ImageGenerationError(result.msg)
 
-        response = requests.get(
-            result.images[0],
-            timeout=constants_config.generation.icon_download_timeout,
-        )
-        response.raise_for_status()
+        if not result.images:
+            msg = "ComfyUI returned no images"
+            raise ImageGenerationError(msg)
 
-        image = Image.open(BytesIO(response.content))
-        return image
+        try:
+            response = requests.get(
+                result.images[0],
+                timeout=constants_config.generation.icon_download_timeout,
+            )
+            response.raise_for_status()
+            return Image.open(BytesIO(response.content))
+        except (requests.RequestException, OSError) as e:
+            msg = f"Failed to download icon: {e}"
+            raise ImageGenerationError(msg) from e
