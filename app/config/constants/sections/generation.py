@@ -1,8 +1,11 @@
+from openai.types.shared import ReasoningEffort
 from PIL import Image
 from pydantic import BaseModel
 
 
 class GenerationConfig(BaseModel):
+    text_reasoning_effort: ReasoningEffort = "none"
+
     icon_game_size: tuple[int, int] = (83, 47)
     icon_game_resampling: Image.Resampling = Image.Resampling.LANCZOS
 

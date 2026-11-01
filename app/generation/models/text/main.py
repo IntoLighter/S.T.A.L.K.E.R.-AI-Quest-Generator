@@ -1,5 +1,6 @@
 from collections.abc import Iterator
 
+from config.constants.main import constants_config
 from loguru import logger
 from openai import Omit, OpenAI, omit
 from openai.types.chat import ChatCompletionMessageParam
@@ -23,7 +24,7 @@ class TextModel:
         ).chat.completions.create(
             model=self.model,
             messages=messages,
-            reasoning_effort="none",
+            reasoning_effort=constants_config.generation.text_reasoning_effort,
             response_format=self._response_format(schema),
         )
 
@@ -39,7 +40,7 @@ class TextModel:
             model=self.model,
             messages=messages,
             stream=True,
-            reasoning_effort="none",
+            reasoning_effort=constants_config.generation.text_reasoning_effort,
             response_format=self._response_format(schema),
         )
 
