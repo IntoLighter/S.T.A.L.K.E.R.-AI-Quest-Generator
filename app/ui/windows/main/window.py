@@ -31,6 +31,7 @@ class MainWindow(QMainWindow):
 
         self.main_widget = MainWidget(preferences_config=self.preferences_config)
         self.main_widget.status_update_signal.connect(self.show_status)
+        self.main_widget.generation_started.connect(self.on_generation_started)
         self.main_widget.generation_completed.connect(self.on_generation_completed)
         self.setCentralWidget(self.main_widget)
 
@@ -109,7 +110,12 @@ class MainWindow(QMainWindow):
             self.set_parameters_unspecified_restrictions()
 
     @Slot()
+    def on_generation_started(self) -> None:
+        self.configurator_action.setEnabled(False)
+
+    @Slot()
     def on_generation_completed(self) -> None:
+        self.configurator_action.setEnabled(True)
         if self.preferences_config.general.show_notifications:
             self.show_generation_complete_tray_message()
         self.set_parameters_unspecified_restrictions()

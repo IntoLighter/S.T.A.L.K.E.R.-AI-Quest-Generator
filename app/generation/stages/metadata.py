@@ -30,7 +30,6 @@ class MetadataTextStage(TextStreamingStage):
     def __init__(
         self,
         text_model: TextModel,
-        is_interrupted: Callable[[], bool],
         system_prompt: str,
         emit_chunk: Callable[[str], None],
         emit_metadata_ready: Callable[[str], None],
@@ -39,7 +38,6 @@ class MetadataTextStage(TextStreamingStage):
     ) -> None:
         super().__init__(
             text_model,
-            is_interrupted,
             system_prompt,
             emit_chunk,
             emit_status,
@@ -47,11 +45,8 @@ class MetadataTextStage(TextStreamingStage):
         )
         self.emit_metadata_ready = emit_metadata_ready
 
-    def create(self, concept: str, /) -> str | None:
+    def create(self, concept: str, /) -> str:
         metadata = super().create(concept)
-
-        if metadata is None:
-            return None
 
         formatted = self._format(metadata)
 

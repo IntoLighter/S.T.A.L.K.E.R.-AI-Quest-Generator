@@ -54,7 +54,6 @@ class BaseWorker(QObject):
 
         self.concept_stage = ConceptStage(
             text_model=text_model,
-            is_interrupted=self._is_interrupted,
             system_prompt=add_generation_language(
                 preferences_config.prompt.concept.value, generation_language
             ),
@@ -64,7 +63,6 @@ class BaseWorker(QObject):
         )
         self.metadata_text_stage = MetadataTextStage(
             text_model=text_model,
-            is_interrupted=self._is_interrupted,
             system_prompt=add_generation_language(
                 preferences_config.prompt.metadata.value, generation_language
             ),
@@ -82,7 +80,6 @@ class BaseWorker(QObject):
         )
         self.icon_prompt_stage = IconPromptStage(
             text_model=text_model,
-            is_interrupted=self._is_interrupted,
             system_prompt=add_generation_language(
                 preferences_config.prompt.icon.value, generation_language
             ),
@@ -132,13 +129,10 @@ class BaseWorker(QObject):
         try:
             result.metadata_text = self.build_metadata_text(concept)
 
-            if self._is_interrupted():
-                return result
-
             if result.metadata_text is not None:
                 result.metadata = self.metadata_parse_stage.parse(result.metadata_text)
 
-            if result.metadata:
+            if result.metadata and not self._is_interrupted():
                 quest_id = self.create_quest_id(result.metadata.title)
                 result.quest_data = QuestBuilder.create_quest_data(
                     result.metadata, quest_id
@@ -146,6 +140,9 @@ class BaseWorker(QObject):
                 self.quest_data_ready.emit(result.quest_data)
         except Exception as e:
             self.handle_stage_exception(e)
+
+        if self._is_interrupted():
+            return result
 
         try:
             result.icon_prompt = self.build_icon_prompt(concept)

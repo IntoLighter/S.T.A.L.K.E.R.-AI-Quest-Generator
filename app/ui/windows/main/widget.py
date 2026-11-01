@@ -38,12 +38,13 @@ if TYPE_CHECKING:
 
 class MainWidget(QWidget):
     status_update_signal = Signal(str)
+    generation_started = Signal()
     generation_completed = Signal()
 
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
-        self.is_generating = False
+        self.worker: BaseWorker | None = None
 
         self.main_layout = get_layout_with_scroll(self)
 
@@ -51,7 +52,7 @@ class MainWidget(QWidget):
         self.main_layout.addWidget(self.prompt_editor)
 
         self.generate_button = QPushButton()
-        self.generate_button.clicked.connect(self.generate_quest_normal)
+        self.generate_button.clicked.connect(self.on_generate_button_clicked)
         self.main_layout.addWidget(self.generate_button)
 
         self.add_tabs()
@@ -72,6 +73,10 @@ class MainWidget(QWidget):
         )
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.icon_tab), ui("Icon"))
 
+    @property
+    def is_generating(self) -> bool:
+        return self.worker is not None
+
     def update_generate_button_text(self) -> None:
         if self.is_generating:
             self.generate_button.setText(ui("Stop quest generation"))
@@ -79,6 +84,12 @@ class MainWidget(QWidget):
             self.generate_button.setText(ui("Generate quest"))
 
     @Slot()
+    def on_generate_button_clicked(self) -> None:
+        if self.is_generating:
+            self.stop_generate()
+        else:
+            self.generate_quest_normal()
+
     def generate_quest_normal(self) -> None:
         if not self.preferences_config.model.current_text_model:
             show_generation_start_error(
@@ -126,7 +137,12 @@ class MainWidget(QWidget):
         return type_to_value[self.preferences_config.model.text_model_type]
 
     def generate_quest(self, worker: BaseWorker) -> None:
-        self.set_generate_button_stop(worker)
+        if self.is_generating:
+            return
+
+        self.worker = worker
+        self.update_generate_button_text()
+        self.generation_started.emit()
         for tab in self.tabs:
             tab.clear()
 
@@ -147,21 +163,12 @@ class MainWidget(QWidget):
 
         worker_thread.start()
 
-    def set_generate_button_stop(self, worker: BaseWorker) -> None:
-        self.is_generating = True
-        self.update_generate_button_text()
-        self.generate_button.clicked.disconnect()
-        self.generate_button.clicked.connect(lambda: self.stop_generate(worker))
+    def stop_generate(self) -> None:
+        if self.worker is None:
+            return
 
-    def stop_generate(self, worker: BaseWorker) -> None:
-        worker.request_interruption()
-        self.set_generate_button_generate()
-
-    def set_generate_button_generate(self) -> None:
-        self.is_generating = False
-        self.update_generate_button_text()
-        self.generate_button.clicked.disconnect()
-        self.generate_button.clicked.connect(self.generate_quest_normal)
+        self.worker.request_interruption()
+        self.generate_button.setEnabled(False)
 
     @Slot(ErrorInfo)
     def show_generation_error(self, error_result: ErrorInfo) -> None:
@@ -182,7 +189,9 @@ class MainWidget(QWidget):
     @Slot()
     def thread_complete(self) -> None:
         logger.info("Generation completed")
-        self.set_generate_button_generate()
+        self.worker = None
+        self.generate_button.setEnabled(True)
+        self.update_generate_button_text()
         self.generation_completed.emit()
 
     def add_tabs(self) -> None:
