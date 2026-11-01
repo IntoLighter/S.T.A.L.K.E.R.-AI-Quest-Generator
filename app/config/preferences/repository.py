@@ -17,6 +17,3 @@ class PreferencesRepository:
 
     def save(self, preferences: PreferencesConfig) -> None:
         self._path.write_text(preferences.model_dump_json(indent=2), encoding="utf-8")
-
-
-preferences_repository = PreferencesRepository(Path("preferences.json"))
