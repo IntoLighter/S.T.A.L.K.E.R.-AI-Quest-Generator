@@ -1,7 +1,6 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
-from typing import TYPE_CHECKING
+from pathlib import Path
+from typing import Self
 
 from config.constants.main import constants_config
 from utils.path import (
@@ -10,10 +9,7 @@ from utils.path import (
     sanitize_filename,
 )
 
-if TYPE_CHECKING:
-    from pathlib import Path
-
-    from generation.entity import GenerationResult
+from generation.entity import GenerationResult
 
 
 @dataclass
@@ -30,7 +26,7 @@ class QuestPaths:
     resource: Path
 
     @classmethod
-    def create(cls, quest: Path) -> QuestPaths:
+    def create(cls, quest: Path) -> Self:
         return cls(
             quest=quest,
             generation=quest / "generation",
