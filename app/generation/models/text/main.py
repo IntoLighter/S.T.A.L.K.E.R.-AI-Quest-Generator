@@ -44,7 +44,8 @@ class TextModel:
         )
 
         for response in stream:
-            yield response.choices[0].delta.content or ""
+            if response.choices:
+                yield response.choices[0].delta.content or ""
 
     @staticmethod
     def _response_format(
