@@ -130,7 +130,7 @@ class ConfiguratorDialog(BaseDialog):
             show_generation_start_error(self, err("icon_prompt_without_concept"))
             return
 
-        logger.info("Window 'Settings' accepted")
+        logger.info("Window 'Configurator' accepted")
         super().accept()
 
     @property
@@ -146,5 +146,5 @@ class ConfiguratorDialog(BaseDialog):
         )
 
     def reject(self) -> None:
-        logger.info("Window 'Settings' rejected")
+        logger.info("Window 'Configurator' rejected")
         super().reject()
