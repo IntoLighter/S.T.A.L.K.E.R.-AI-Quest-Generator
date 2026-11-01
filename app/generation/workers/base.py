@@ -9,10 +9,10 @@ from utils.error import ErrorInfo
 from utils.logging import log_execution
 from utils.translation import err, ui
 
+from generation.engines.image.main import ImageEngine
+from generation.engines.text.main import TextEngine
 from generation.entity import GenerationResult, IconRecords, QuestData
 from generation.errors import ImageGenerationError, MetadataParseError
-from generation.models.image.main import ImageModel
-from generation.models.text.main import TextModel
 from generation.services.building import QuestBuilder
 from generation.services.language import add_generation_language
 from generation.services.saving import QuestSaver
@@ -38,12 +38,15 @@ class BaseWorker(QObject):
     finished = Signal()
 
     def __init__(
-        self, preferences_config: PreferencesConfig, text_model: TextModel, prompt: str
+        self,
+        preferences_config: PreferencesConfig,
+        text_engine: TextEngine,
+        prompt: str,
     ) -> None:
         super().__init__()
         self.preferences_config = preferences_config
-        self.text_model = text_model
-        self.image_model = ImageModel(
+        self.text_engine = text_engine
+        self.image_engine = ImageEngine(
             preferences_config,
             comfyui_url=constants_config.endpoints.comfyui_base_url,
         )
@@ -53,7 +56,7 @@ class BaseWorker(QObject):
         generation_language = preferences_config.general.generation_language
 
         self.concept_stage = ConceptStage(
-            text_model=text_model,
+            text_engine=text_engine,
             system_prompt=add_generation_language(
                 preferences_config.prompt.concept.value, generation_language
             ),
@@ -62,7 +65,7 @@ class BaseWorker(QObject):
             status_message=ui("Generating concept"),
         )
         self.metadata_text_stage = MetadataTextStage(
-            text_model=text_model,
+            text_engine=text_engine,
             system_prompt=add_generation_language(
                 preferences_config.prompt.metadata.value, generation_language
             ),
@@ -73,13 +76,13 @@ class BaseWorker(QObject):
         )
         self.metadata_parse_stage = MetadataParseStage()
         self.id_stage = IdStage(
-            text_model=text_model,
+            text_engine=text_engine,
             system_prompt=preferences_config.prompt.id.value,
             emit_status=self.status_update.emit,
             status_message=ui("Generating quest ID"),
         )
         self.icon_prompt_stage = IconPromptStage(
-            text_model=text_model,
+            text_engine=text_engine,
             system_prompt=add_generation_language(
                 preferences_config.prompt.icon.value, generation_language
             ),
@@ -88,7 +91,7 @@ class BaseWorker(QObject):
             status_message=ui("Generating icon prompt"),
         )
         self.icon_records_stage = IconRecordsStage(
-            image_model=self.image_model,
+            image_engine=self.image_engine,
             emit_status=self.status_update.emit,
             emit_icon_ready=self.icon_ready.emit,
             status_message=ui("Generating icon"),

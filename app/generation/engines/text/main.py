@@ -8,7 +8,7 @@ from openai.types.shared_params import ResponseFormatJSONSchema
 from pydantic import BaseModel
 
 
-class TextModel:
+class TextEngine:
     def __init__(self, model: str, base_url: str, api_key: str) -> None:
         self.client = OpenAI(api_key=api_key, base_url=base_url)
         self.model = model

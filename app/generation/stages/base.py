@@ -4,7 +4,7 @@ from openai.types.chat import ChatCompletionMessageParam
 from pydantic import BaseModel
 from utils.logging import log_execution
 
-from generation.models.text.main import TextModel
+from generation.engines.text.main import TextEngine
 
 
 class TextStage:
@@ -12,12 +12,12 @@ class TextStage:
 
     def __init__(
         self,
-        text_model: TextModel,
+        text_engine: TextEngine,
         system_prompt: str,
         emit_status: Callable[[str], None],
         status_message: str,
     ) -> None:
-        self.text_model = text_model
+        self.text_engine = text_engine
         self.system_prompt = system_prompt
         self.emit_status = emit_status
         self.status_message = status_message
@@ -32,13 +32,13 @@ class TextStage:
 class TextStreamingStage(TextStage):
     def __init__(
         self,
-        text_model: TextModel,
+        text_engine: TextEngine,
         system_prompt: str,
         emit_chunk: Callable[[str], None],
         emit_status: Callable[[str], None],
         status_message: str,
     ) -> None:
-        super().__init__(text_model, system_prompt, emit_status, status_message)
+        super().__init__(text_engine, system_prompt, emit_status, status_message)
         self.emit_chunk = emit_chunk
 
     @log_execution
@@ -47,7 +47,7 @@ class TextStreamingStage(TextStage):
 
         text = ""
 
-        for token in self.text_model.stream(
+        for token in self.text_engine.stream(
             self._build_messages(user_content), schema=self.schema
         ):
             text += token
@@ -61,6 +61,6 @@ class TextGenerationStage(TextStage):
     def create(self, user_content: str, /) -> str:
         self.emit_status(self.status_message)
 
-        return self.text_model.generate(
+        return self.text_engine.generate(
             self._build_messages(user_content), schema=self.schema
         )

@@ -4,9 +4,9 @@ from collections.abc import Callable
 
 from config.constants.main import constants_config
 
+from generation.engines.text.main import TextEngine
 from generation.entity import Metadata
 from generation.errors import InvalidQuestIdError, MetadataParseError
-from generation.models.text.main import TextModel
 from generation.stages.base import TextGenerationStage, TextStreamingStage
 
 ID_PATTERN = re.compile(r"[a-z](?:[a-z0-9_]*[a-z0-9])?")
@@ -29,7 +29,7 @@ class MetadataTextStage(TextStreamingStage):
 
     def __init__(
         self,
-        text_model: TextModel,
+        text_engine: TextEngine,
         system_prompt: str,
         emit_chunk: Callable[[str], None],
         emit_metadata_ready: Callable[[str], None],
@@ -37,7 +37,7 @@ class MetadataTextStage(TextStreamingStage):
         status_message: str,
     ) -> None:
         super().__init__(
-            text_model,
+            text_engine,
             system_prompt,
             emit_chunk,
             emit_status,

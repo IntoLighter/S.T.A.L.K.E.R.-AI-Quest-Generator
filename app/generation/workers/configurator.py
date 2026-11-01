@@ -2,8 +2,8 @@ from collections.abc import Callable
 
 from config.preferences.main import PreferencesConfig
 
+from generation.engines.text.main import TextEngine
 from generation.entity import ConfiguratorParameters, IconRecords
-from generation.models.text.main import TextModel
 from generation.stages.base import TextStreamingStage
 from generation.workers.base import BaseWorker
 
@@ -12,12 +12,14 @@ class ConfiguratorWorker(BaseWorker):
     def __init__(
         self,
         preferences_config: PreferencesConfig,
-        text_model: TextModel,
+        text_engine: TextEngine,
         prompt: str,
         parameters: ConfiguratorParameters,
     ) -> None:
         super().__init__(
-            preferences_config=preferences_config, text_model=text_model, prompt=prompt
+            preferences_config=preferences_config,
+            text_engine=text_engine,
+            prompt=prompt,
         )
         self.parameters = parameters
 

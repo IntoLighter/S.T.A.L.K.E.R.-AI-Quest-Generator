@@ -1,10 +1,10 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 
-from generation.models.text.main import TextModel
+from generation.engines.text.main import TextEngine
 
 
-class LocalTextModel(TextModel):
+class LocalTextEngine(TextEngine):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__(
             model=preferences_config.model.text_model_local,

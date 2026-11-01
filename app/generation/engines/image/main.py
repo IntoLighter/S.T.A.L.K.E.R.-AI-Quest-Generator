@@ -11,7 +11,7 @@ from PIL import Image
 from generation.errors import ImageGenerationError
 
 
-class ImageModel:
+class ImageEngine:
     def __init__(self, preferences_config: PreferencesConfig, comfyui_url: str) -> None:
         self.preferences_config = preferences_config
         self.comfyui_url = comfyui_url

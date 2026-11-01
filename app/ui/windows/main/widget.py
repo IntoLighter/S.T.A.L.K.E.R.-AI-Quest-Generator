@@ -1,9 +1,9 @@
 from config.preferences.main import PreferencesConfig
 from config.preferences.sections.types import ModelType
+from generation.engines.text.local import LocalTextEngine
+from generation.engines.text.main import TextEngine
+from generation.engines.text.remote import RemoteTextEngine
 from generation.entity import ConfiguratorParameters
-from generation.models.text.local import LocalTextModel
-from generation.models.text.main import TextModel
-from generation.models.text.remote import RemoteTextModel
 from generation.workers.base import BaseWorker
 from generation.workers.configurator import ConfiguratorWorker
 from generation.workers.normal import NormalWorker
@@ -103,7 +103,7 @@ class MainWidget(QWidget):
 
         worker = NormalWorker(
             preferences_config=self.preferences_config,
-            text_model=self.model,
+            text_engine=self.text_engine,
             prompt=self.prompt_editor.prompt,
         )
         self.generate_quest(worker)
@@ -113,17 +113,19 @@ class MainWidget(QWidget):
 
         worker = ConfiguratorWorker(
             preferences_config=self.preferences_config,
-            text_model=self.model,
+            text_engine=self.text_engine,
             prompt=parameters.prompt,
             parameters=parameters,
         )
         self.generate_quest(worker)
 
     @property
-    def model(self) -> TextModel:
+    def text_engine(self) -> TextEngine:
         type_to_value = {
-            ModelType.Local: LocalTextModel(preferences_config=self.preferences_config),
-            ModelType.Remote: RemoteTextModel(
+            ModelType.Local: LocalTextEngine(
+                preferences_config=self.preferences_config
+            ),
+            ModelType.Remote: RemoteTextEngine(
                 preferences_config=self.preferences_config
             ),
         }
