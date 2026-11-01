@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
 from utils.translation import ui
 
 from ui.utils.layout import add_checkbox_row
-from ui.windows.preferences.tab.base import Tab
+from ui.windows.preferences.tab.base import PreferencesTab
 
 LANGUAGE_NAMES = {
     Language.EN: "English",
@@ -25,7 +25,7 @@ LANGUAGE_NAMES = {
 }
 
 
-class GeneralTab(Tab):
+class GeneralTab(PreferencesTab):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config

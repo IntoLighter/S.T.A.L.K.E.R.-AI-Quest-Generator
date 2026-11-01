@@ -5,10 +5,10 @@ from PySide6.QtCore import Slot
 from utils.translation import ui
 
 from ui.utils.image import get_pixmap
-from ui.windows.main.tab.base import Tab
+from ui.windows.main.tab.base import GenerationTab
 
 
-class IconTab(Tab):
+class IconTab(GenerationTab):
     def __init__(self) -> None:
         super().__init__()
         self.icon_prompt_label, self.icon_prompt_editor = self.create_plain_text_editor(

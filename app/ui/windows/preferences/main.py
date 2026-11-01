@@ -3,8 +3,6 @@ from config.preferences.main import PreferencesConfig
 from config.preferences.repository import PreferencesRepository
 from loguru import logger
 from PySide6.QtWidgets import (
-    QHBoxLayout,
-    QPushButton,
     QTabWidget,
     QVBoxLayout,
     QWidget,
@@ -12,7 +10,8 @@ from PySide6.QtWidgets import (
 from utils.translation import set_language, ui
 
 from ui.dialog import BaseDialog
-from ui.windows.preferences.tab.base import Tab
+from ui.utils.tabs import get_tabs
+from ui.windows.preferences.tab.base import PreferencesTab
 from ui.windows.preferences.tab.configurator import ConfiguratorTab
 from ui.windows.preferences.tab.general import GeneralTab
 from ui.windows.preferences.tab.model import ModelTab
@@ -42,23 +41,11 @@ class PreferencesDialog(BaseDialog):
         self.configurator_tab = ConfiguratorTab(self.preferences_config)
         self.tab_widget.addTab(self.configurator_tab, ui("Configurator"))
 
-        self.add_close_buttons()
-
-    def add_close_buttons(self) -> None:
-        row = QHBoxLayout()
-        self.main_layout.addLayout(row)
-
-        ok_btn = QPushButton(ui("OK"))
-        ok_btn.clicked.connect(self.accept)
-        row.addWidget(ok_btn, stretch=1)
-
-        cancel_btn = QPushButton(ui("Cancel"))
-        cancel_btn.clicked.connect(self.reject)
-        row.addWidget(cancel_btn, stretch=1)
+        self.add_close_buttons(self.main_layout, ui("OK"))
 
     def accept(self) -> None:
         previous_interface_language = self.preferences_config.general.interface_language
-        for tab in self.tabs:
+        for tab in get_tabs(self.tab_widget, PreferencesTab):
             tab.save()
 
         repository = PreferencesRepository(constants_config.paths.preferences_path)
@@ -71,14 +58,6 @@ class PreferencesDialog(BaseDialog):
             != previous_interface_language
         ):
             set_language(self.preferences_config.general.interface_language)
-
-    @property
-    def tabs(self) -> list[Tab]:
-        return [
-            tab
-            for i in range(self.tab_widget.count())
-            if isinstance(tab := self.tab_widget.widget(i), Tab)
-        ]
 
     def reject(self) -> None:
         logger.info("Window 'Settings' rejected")

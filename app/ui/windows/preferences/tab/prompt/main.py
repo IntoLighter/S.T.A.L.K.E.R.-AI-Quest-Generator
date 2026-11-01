@@ -3,13 +3,13 @@ from PySide6.QtWidgets import QTabWidget
 from utils.translation import ui
 
 from ui.utils.layout import get_layout_with_scroll
-from ui.windows.preferences.tab.base import Tab
+from ui.windows.preferences.tab.base import PreferencesTab
 from ui.windows.preferences.tab.prompt.tabs.concept import ConceptTab
 from ui.windows.preferences.tab.prompt.tabs.icon import IconTab
 from ui.windows.preferences.tab.prompt.tabs.metadata import MetadataTab
 
 
-class PromptTab(Tab):
+class PromptTab(PreferencesTab):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config

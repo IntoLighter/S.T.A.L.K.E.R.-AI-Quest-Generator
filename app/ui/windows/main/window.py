@@ -1,6 +1,6 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
-from PySide6.QtCore import QEvent, Qt, Slot
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QAction, QCloseEvent, QKeySequence
 from PySide6.QtWidgets import (
     QDialog,
@@ -12,12 +12,13 @@ from PySide6.QtWidgets import (
 from utils.translation import err, ui
 
 from ui.tray import Tray
+from ui.utils.retranslate import RetranslateMixin
 from ui.windows.configurator.main import ConfiguratorDialog
 from ui.windows.main.widget import MainWidget
 from ui.windows.preferences.main import PreferencesDialog
 
 
-class MainWindow(QMainWindow):
+class MainWindow(RetranslateMixin, QMainWindow):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.resize(*constants_config.ui.window_size)
@@ -40,11 +41,6 @@ class MainWindow(QMainWindow):
 
         self.set_menubar()
         self.retranslate_ui()
-
-    def changeEvent(self, event: QEvent) -> None:
-        if event.type() == QEvent.Type.LanguageChange:
-            self.retranslate_ui()
-        super().changeEvent(event)
 
     def retranslate_ui(self) -> None:
         self.file_menu.setTitle(ui("File"))

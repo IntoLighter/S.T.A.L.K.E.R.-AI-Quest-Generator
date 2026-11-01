@@ -6,7 +6,7 @@ from generation.workers.base import BaseWorker
 from generation.workers.configurator import ConfiguratorWorker
 from generation.workers.normal import NormalWorker
 from loguru import logger
-from PySide6.QtCore import QEvent, QThread, Signal, Slot
+from PySide6.QtCore import QThread, Signal, Slot
 from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
@@ -20,15 +20,17 @@ from utils.translation import err, ui
 
 from ui.utils.layout import get_layout_with_scroll
 from ui.utils.message import show_generation_start_error
+from ui.utils.retranslate import RetranslateMixin
+from ui.utils.tabs import get_tabs
 from ui.widgets.prompt import PromptEditor
 from ui.windows.exception.main import ExceptionDialog
-from ui.windows.main.tab.base import Tab
+from ui.windows.main.tab.base import GenerationTab
 from ui.windows.main.tab.concept import ConceptTab
 from ui.windows.main.tab.icon import IconTab
 from ui.windows.main.tab.metadata import MetadataTab
 
 
-class MainWidget(QWidget):
+class MainWidget(RetranslateMixin, QWidget):
     status_update_signal = Signal(str)
     generation_started = Signal()
     generation_completed = Signal()
@@ -49,11 +51,6 @@ class MainWidget(QWidget):
 
         self.add_tabs()
         self.retranslate_ui()
-
-    def changeEvent(self, event: QEvent) -> None:
-        if event.type() == QEvent.Type.LanguageChange:
-            self.retranslate_ui()
-        super().changeEvent(event)
 
     def retranslate_ui(self) -> None:
         self.update_generate_button_text()
@@ -130,13 +127,13 @@ class MainWidget(QWidget):
         self.worker = worker
         self.update_generate_button_text()
         self.generation_started.emit()
-        for tab in self.tabs:
+        for tab in get_tabs(self.tab_widget, GenerationTab):
             tab.clear()
 
         worker_thread = QThread(self)
         worker.moveToThread(worker_thread)
 
-        for tab in self.tabs:
+        for tab in get_tabs(self.tab_widget, GenerationTab):
             tab.bind_worker(worker)
         worker.status_update.connect(self.status_update_signal)
         worker.error_occurred.connect(self.show_generation_error)
@@ -193,11 +190,3 @@ class MainWidget(QWidget):
 
         self.icon_tab = IconTab()
         self.tab_widget.addTab(self.icon_tab, "")
-
-    @property
-    def tabs(self) -> list[Tab]:
-        return [
-            tab
-            for i in range(self.tab_widget.count())
-            if isinstance(tab := self.tab_widget.widget(i), Tab)
-        ]

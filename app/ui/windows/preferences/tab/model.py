@@ -14,10 +14,10 @@ from utils.translation import ui
 
 from ui.utils.layout import get_layout_with_scroll
 from ui.widgets.text_option import TextOptionEditor
-from ui.windows.preferences.tab.base import Tab
+from ui.windows.preferences.tab.base import PreferencesTab
 
 
-class ModelTab(Tab):
+class ModelTab(PreferencesTab):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config

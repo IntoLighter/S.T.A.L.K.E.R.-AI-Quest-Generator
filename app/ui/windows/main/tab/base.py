@@ -1,22 +1,15 @@
 from config.constants.sections.ui import EditorSize
 from generation.workers.base import BaseWorker
-from PySide6.QtCore import QEvent
 from PySide6.QtGui import QTextCursor
 from PySide6.QtWidgets import QLabel, QPlainTextEdit, QVBoxLayout, QWidget
 
+from ui.utils.retranslate import RetranslateMixin
 
-class Tab(QWidget):
+
+class GenerationTab(RetranslateMixin, QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.main_layout = QVBoxLayout(self)
-
-    def changeEvent(self, event: QEvent) -> None:
-        if event.type() == QEvent.Type.LanguageChange:
-            self.retranslate_ui()
-        super().changeEvent(event)
-
-    def retranslate_ui(self) -> None:
-        pass
 
     def bind_worker(self, worker: BaseWorker) -> None:
         pass

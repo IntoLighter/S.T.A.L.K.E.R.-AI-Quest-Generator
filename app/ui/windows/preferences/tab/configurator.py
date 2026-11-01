@@ -4,10 +4,10 @@ from PySide6.QtWidgets import QLabel
 from utils.translation import ui
 
 from ui.utils.layout import add_text_editor, get_layout_with_scroll
-from ui.windows.preferences.tab.base import Tab
+from ui.windows.preferences.tab.base import PreferencesTab
 
 
-class ConfiguratorTab(Tab):
+class ConfiguratorTab(PreferencesTab):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config

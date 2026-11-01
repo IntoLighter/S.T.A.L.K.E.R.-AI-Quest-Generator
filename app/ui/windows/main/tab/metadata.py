@@ -4,10 +4,10 @@ from generation.workers.base import BaseWorker
 from PySide6.QtCore import Slot
 from utils.translation import ui
 
-from ui.windows.main.tab.base import Tab
+from ui.windows.main.tab.base import GenerationTab
 
 
-class MetadataTab(Tab):
+class MetadataTab(GenerationTab):
     def __init__(self) -> None:
         super().__init__()
         self.metadata_label, self.metadata_editor = self.create_plain_text_editor(

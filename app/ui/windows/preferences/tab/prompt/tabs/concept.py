@@ -4,10 +4,10 @@ from PySide6.QtWidgets import QVBoxLayout
 from utils.translation import ui
 
 from ui.widgets.text_option import TextOptionEditor
-from ui.windows.preferences.tab.base import Tab
+from ui.windows.preferences.tab.base import PreferencesTab
 
 
-class ConceptTab(Tab):
+class ConceptTab(PreferencesTab):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config

@@ -3,9 +3,7 @@ from config.preferences.main import PreferencesConfig
 from generation.entity import ConfiguratorParameters
 from loguru import logger
 from PySide6.QtWidgets import (
-    QHBoxLayout,
     QLabel,
-    QPushButton,
     QWidget,
 )
 from utils.translation import err, ui
@@ -67,19 +65,7 @@ class ConfiguratorDialog(BaseDialog):
             constants_config.ui.icon_prompt_editor_size,
         )
 
-        self.add_close_buttons()
-
-    def add_close_buttons(self) -> None:
-        row = QHBoxLayout()
-        self.main_layout.addLayout(row)
-
-        ok_btn = QPushButton(ui("Generate"))
-        ok_btn.clicked.connect(self.accept)
-        row.addWidget(ok_btn, stretch=1)
-
-        cancel_btn = QPushButton(ui("Cancel"))
-        cancel_btn.clicked.connect(self.reject)
-        row.addWidget(cancel_btn, stretch=1)
+        self.add_close_buttons(self.main_layout, ui("Generate"))
 
     def accept(self) -> None:
         parameters = self.parameters
