@@ -1,18 +1,18 @@
 from dataclasses import dataclass
 
 from PIL import Image
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class Objective(BaseModel):
-    title: str = Field(alias="название")
-    description: str = Field(alias="описание")
+    title: str
+    description: str
 
 
 class Metadata(BaseModel):
-    title: str = Field(alias="название")
-    description: str = Field(alias="описание")
-    objectives: list[Objective] = Field(alias="задачи")
+    title: str
+    description: str
+    objectives: list[Objective]
 
 
 @dataclass
