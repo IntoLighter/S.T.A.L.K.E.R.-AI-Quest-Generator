@@ -1,5 +1,3 @@
 {
-  "python.analysis.extraPaths": [
-    "${workspaceFolder}/app"
-  ]
+  "python.languageServer": "None"
 }
