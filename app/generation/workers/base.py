@@ -13,6 +13,7 @@ from generation.entity import GenerationResult, IconRecords, QuestData
 from generation.errors import ImageGenerationError, MetadataParseError
 from generation.models.image.main import ImageModel
 from generation.models.text.main import TextModel
+from generation.services.language import add_generation_language
 from generation.services.quest_builder import QuestBuilder
 from generation.services.saving import QuestSaver
 from generation.stages.concept import ConceptStage
@@ -49,10 +50,14 @@ class BaseWorker(QObject):
         self.quest_prompt = prompt
         self._is_interruption_requested = False
 
+        generation_language = preferences_config.general.generation_language
+
         self.concept_stage = ConceptStage(
             text_model=text_model,
             is_interrupted=self._is_interrupted,
-            system_prompt=preferences_config.prompt.concept.value,
+            system_prompt=add_generation_language(
+                preferences_config.prompt.concept.value, generation_language
+            ),
             emit_chunk=self.concept_chunk_ready.emit,
             emit_status=self.status_update.emit,
             status_message=ui("Generating concept"),
@@ -60,7 +65,9 @@ class BaseWorker(QObject):
         self.metadata_text_stage = MetadataTextStage(
             text_model=text_model,
             is_interrupted=self._is_interrupted,
-            system_prompt=preferences_config.prompt.metadata.value,
+            system_prompt=add_generation_language(
+                preferences_config.prompt.metadata.value, generation_language
+            ),
             emit_chunk=self.metadata_chunk_ready.emit,
             emit_metadata_ready=self.metadata_ready.emit,
             emit_status=self.status_update.emit,
@@ -76,7 +83,9 @@ class BaseWorker(QObject):
         self.icon_prompt_stage = IconPromptStage(
             text_model=text_model,
             is_interrupted=self._is_interrupted,
-            system_prompt=preferences_config.prompt.icon.value,
+            system_prompt=add_generation_language(
+                preferences_config.prompt.icon.value, generation_language
+            ),
             emit_chunk=self.icon_prompt_chunk_ready.emit,
             emit_status=self.status_update.emit,
             status_message=ui("Generating icon prompt"),

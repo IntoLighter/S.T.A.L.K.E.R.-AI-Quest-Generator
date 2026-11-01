@@ -19,7 +19,7 @@ The prompt must:
 - not mention interface elements, frames, text, inscriptions, numbers or letters — the model handles negations poorly, and merely mentioning them can make them appear; instead, describe surfaces as clean and unmarked
 
 # Response format
-Output only the prompt text itself — a single paragraph of 40–80 words, in English, without quotes, without markdown, without introductory phrases or explanations.
+Output only the prompt text itself — a single paragraph of 40–80 words, without quotes, without markdown, without introductory phrases or explanations.
 
 Example:
 A battered Soviet field radio with a cracked bakelite case and a bent antenna, its clean unmarked surfaces covered in rust and scuffs, lying beside a single glowing artifact. Dim cold side light carves a sharp silhouette. Behind it, a dark void filled with drifting ash and faint specks of light. Grim realism, post-Soviet aesthetic, muted desaturated colors, cinematic high-contrast photograph.

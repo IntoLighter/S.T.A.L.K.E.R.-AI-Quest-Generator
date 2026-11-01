@@ -58,6 +58,21 @@ class GeneralTab(Tab):
         row.addWidget(self.interface_language_editor)
         row.addStretch()
 
+        row = QHBoxLayout()
+        group_layout.addLayout(row)
+        label = QLabel(ui("Generation"))
+        row.addWidget(label)
+        self.generation_language_editor = QComboBox()
+        for language, name in LANGUAGE_NAMES.items():
+            self.generation_language_editor.addItem(name, language)
+        self.generation_language_editor.setCurrentIndex(
+            self.generation_language_editor.findData(
+                self.preferences_config.general.generation_language
+            )
+        )
+        row.addWidget(self.generation_language_editor)
+        row.addStretch()
+
         self.main_layout.addWidget(group)
 
     def add_notifications_editor(self) -> None:
@@ -175,6 +190,9 @@ class GeneralTab(Tab):
     def save(self) -> None:
         self.preferences_config.general.interface_language = Language(
             self.interface_language_editor.currentData()
+        )
+        self.preferences_config.general.generation_language = Language(
+            self.generation_language_editor.currentData()
         )
 
         self.preferences_config.general.show_notifications = (

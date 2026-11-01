@@ -12,6 +12,7 @@ DEFAULT_PROMPT = """
 
 class GeneralConfig(BaseModel):
     interface_language: Language = Language.EN
+    generation_language: Language = Language.EN
     show_notifications: bool = True
 
     should_generate_concept: bool = True

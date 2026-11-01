@@ -1,0 +1,2 @@
+# Output language
+Write all output text in {language}, regardless of the language of these instructions and examples. Use the official names of locations, factions, characters, mutants, anomalies and artifacts from the {language} version of the games. Keep section headings and JSON keys exactly as specified above.

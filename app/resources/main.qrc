@@ -7,6 +7,7 @@
         <file alias="metadata.txt">files/prompt/metadata.txt</file>
         <file alias="icon.txt">files/prompt/icon.txt</file>
         <file alias="id.txt">files/prompt/id.txt</file>
+        <file alias="language.txt">files/prompt/language.txt</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="ui_ru.qm">files/translations/ui_ru.qm</file>

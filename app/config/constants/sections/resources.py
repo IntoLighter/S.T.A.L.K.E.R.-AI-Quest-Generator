@@ -7,6 +7,7 @@ class ResourcesConfig(BaseModel):
     default_metadata_prompt: str = read_resource(":/prompt/metadata.txt")
     default_id_prompt: str = read_resource(":/prompt/id.txt")
     default_icon_prompt: str = read_resource(":/prompt/icon.txt")
+    generation_language_prompt: str = read_resource(":/prompt/language.txt")
 
     icon_path: str = ":/icon/icon.ico"
 
