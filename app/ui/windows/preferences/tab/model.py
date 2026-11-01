@@ -1,8 +1,7 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from config.preferences.sections.types import ModelType
-from generation.engines.text.local import LocalTextEngine
-from generation.engines.text.remote import RemoteTextEngine
+from generation.engines.text.factory import create_text_engine
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -43,7 +42,7 @@ class ModelTab(Tab):
         row.addWidget(self.remote_model_button)
 
         self.local_model_dropdown = QComboBox()
-        engine = LocalTextEngine(preferences_config=preferences_config)
+        engine = create_text_engine(ModelType.Local, preferences_config)
         self.local_model_dropdown.addItems(engine.get_models())
         index = self.local_model_dropdown.findText(
             preferences_config.model.text_model_local
@@ -52,7 +51,7 @@ class ModelTab(Tab):
         self.main_layout.addWidget(self.local_model_dropdown)
 
         self.remote_model_dropdown = QComboBox()
-        engine = RemoteTextEngine(preferences_config=preferences_config)
+        engine = create_text_engine(ModelType.Remote, preferences_config)
         self.remote_model_dropdown.addItems(engine.get_models())
         index = self.remote_model_dropdown.findText(
             preferences_config.model.text_model_remote
