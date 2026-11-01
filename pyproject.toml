@@ -74,11 +74,7 @@ sub_table_spacing = "\n"
 datas = "datas"
 
 [tool.ty.src]
-include = [ "app" ]
 exclude = [ "app/resources/rc_main.py" ]
-
-[tool.ty.environment]
-extra-paths = [ "app" ]
 
 [tool.commitizen]
 name = "cz_conventional_commits"

@@ -1,12 +1,19 @@
 import shlex
 import subprocess
 from pathlib import Path
+from typing import TypedDict
+
+
+class GroupSettings(TypedDict):
+    function: str
+    languages: list[str]
+
 
 SOURCE_DIR = Path("app")
 TS_DIR = Path("app/resources/translations")
 QM_DIR = Path("app/resources/files/translations")
 
-GROUPS = {
+GROUPS: dict[str, GroupSettings] = {
     "ui": {"function": "ui", "languages": ["ru"]},
     "errors": {"function": "err", "languages": ["ru", "en"]},
 }
