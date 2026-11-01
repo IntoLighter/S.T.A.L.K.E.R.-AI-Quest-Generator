@@ -27,7 +27,7 @@ class ConfiguratorDialog(BaseDialog):
 
         self.main_layout = get_layout_with_scroll(self)
 
-        self.prompt_editor = PromptEditor(preferences_config)
+        self.prompt_editor = PromptEditor()
         self.main_layout.addWidget(self.prompt_editor)
 
         label = QLabel(ui("Concept"))

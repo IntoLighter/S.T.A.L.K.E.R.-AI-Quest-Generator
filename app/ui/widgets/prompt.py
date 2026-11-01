@@ -1,5 +1,4 @@
 from config.constants.main import constants_config
-from config.preferences.main import PreferencesConfig
 from PySide6.QtCore import QEvent
 from PySide6.QtWidgets import (
     QLabel,
@@ -11,9 +10,8 @@ from utils.translation import ui
 
 
 class PromptEditor(QWidget):
-    def __init__(self, preferences_config: PreferencesConfig) -> None:
+    def __init__(self) -> None:
         super().__init__()
-        self.preferences_config = preferences_config
         self.main_layout = QVBoxLayout(self)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
 
@@ -32,7 +30,6 @@ class PromptEditor(QWidget):
         self.prompt_label = QLabel()
         self.main_layout.addWidget(self.prompt_label)
         self.prompt_editor = QPlainTextEdit()
-        self.prompt_editor.setPlainText(self.preferences_config.general.prompt_message)
         self.prompt_editor.setMinimumHeight(constants_config.ui.editor_height)
         self.main_layout.addWidget(
             self.prompt_editor, constants_config.ui.editor_stretch

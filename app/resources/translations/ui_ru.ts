@@ -27,7 +27,7 @@
     </message>
     <message>
         <location filename="../../ui/windows/configurator/main.py" line="37"/>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="96"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="93"/>
         <source>Generate concept</source>
         <translation>Генерировать концепт</translation>
     </message>
@@ -43,7 +43,7 @@
     </message>
     <message>
         <location filename="../../ui/windows/configurator/main.py" line="56"/>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="107"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="104"/>
         <source>Generate metadata</source>
         <translation>Генерировать метаданные</translation>
     </message>
@@ -55,7 +55,7 @@
     </message>
     <message>
         <location filename="../../ui/windows/configurator/main.py" line="75"/>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="118"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="115"/>
         <source>Generate icon</source>
         <translation>Генерировать иконку</translation>
     </message>
@@ -168,7 +168,7 @@
         <translation>Ошибка запуска генерации</translation>
     </message>
     <message>
-        <location filename="../../ui/widgets/prompt.py" line="29"/>
+        <location filename="../../ui/widgets/prompt.py" line="27"/>
         <location filename="../../ui/windows/main/tab/icon.py" line="23"/>
         <source>Prompt</source>
         <translation>Промпт</translation>
@@ -262,53 +262,47 @@
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="43"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="40"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="48"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="45"/>
         <source>Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="61"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="58"/>
         <source>Generation</source>
         <translation>Генерация</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="77"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="74"/>
         <source>Notifications</source>
         <translation>Уведомления</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="82"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="79"/>
         <source>Show notifications</source>
         <translation>Показывать уведомления</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="131"/>
-        <source>Prompt template</source>
-        <translation>Шаблон промпта</translation>
-    </message>
-    <message>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="140"/>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="169"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="145"/>
         <source>Reset</source>
         <translation>Сбросить</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="152"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="128"/>
         <source>Save path</source>
         <translation>Путь сохранения</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="165"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="141"/>
         <source>Browse...</source>
         <translation>Выбрать...</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/general.py" line="181"/>
+        <location filename="../../ui/windows/preferences/tab/general.py" line="157"/>
         <source>Select folder</source>
         <translation>Выберите папку</translation>
     </message>

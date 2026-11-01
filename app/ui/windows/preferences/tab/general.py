@@ -1,7 +1,6 @@
 import pathlib
 
 from config.preferences.main import PreferencesConfig
-from config.preferences.sections.general import DEFAULT_PROMPT
 from config.preferences.sections.types import Language
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
@@ -12,7 +11,6 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QLineEdit,
-    QPlainTextEdit,
     QPushButton,
     QVBoxLayout,
 )
@@ -36,7 +34,6 @@ class GeneralTab(Tab):
         self.add_language_editor()
         self.add_notifications_editor()
         self.add_should_generate_editors()
-        self.add_prompt_template_editor()
         self.add_save_path_editor()
 
     def add_language_editor(self) -> None:
@@ -126,27 +123,6 @@ class GeneralTab(Tab):
         row.addWidget(self.should_generate_icon_editor)
         row.addStretch()
 
-    def add_prompt_template_editor(self) -> None:
-        row = QHBoxLayout()
-        self.main_layout.addLayout(row)
-
-        label = QLabel(ui("Prompt template"))
-        row.addWidget(label)
-
-        self.prompt_template_editor = QPlainTextEdit()
-        self.prompt_template_editor.setPlainText(
-            self.preferences_config.general.prompt_message
-        )
-        row.addWidget(self.prompt_template_editor, stretch=1)
-
-        reset_button = QPushButton(ui("Reset"))
-        reset_button.clicked.connect(self.reset_prompt_template)
-        row.addWidget(reset_button)
-
-    @Slot()
-    def reset_prompt_template(self) -> None:
-        self.prompt_template_editor.setPlainText(DEFAULT_PROMPT)
-
     def add_save_path_editor(self) -> None:
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
@@ -207,10 +183,6 @@ class GeneralTab(Tab):
         )
         self.preferences_config.general.should_generate_icon = (
             self.should_generate_icon_editor.isChecked()
-        )
-
-        self.preferences_config.general.prompt_message = (
-            self.prompt_template_editor.toPlainText()
         )
 
         save_path_str = self.save_path_editor.text()
