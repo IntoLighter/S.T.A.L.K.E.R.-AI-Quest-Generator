@@ -4,7 +4,11 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from config.constants.main import constants_config
-from utils.path import get_unique_counter_name_path, get_unique_name_path
+from utils.path import (
+    get_unique_counter_name_path,
+    get_unique_name_path,
+    sanitize_filename,
+)
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -66,7 +70,12 @@ class QuestSaver:
 
     def create_quest_path(self, result: GenerationResult) -> Path:
         if result.metadata:
-            return get_unique_name_path(self.save_path / result.metadata.title)
+            name = sanitize_filename(
+                result.metadata.title,
+                constants_config.generation.quest_dir_name_max_length,
+            )
+            if name:
+                return get_unique_name_path(self.save_path / name)
 
         return get_unique_counter_name_path(self.save_path)
 

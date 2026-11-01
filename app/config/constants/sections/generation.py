@@ -16,3 +16,5 @@ class GenerationConfig(BaseModel):
 
     quest_id_max_length: int = 50
     quest_id_fallback: str = "quest"
+
+    quest_dir_name_max_length: int = 100
