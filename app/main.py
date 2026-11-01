@@ -26,8 +26,8 @@ def exception_hook(
 ) -> None:
     stacktrace = "".join(traceback.format_exception(exc_type, exc_value, exc_traceback))
     logger.exception(stacktrace)
-    dialog = ExceptionDialog(stacktrace=stacktrace)
-    dialog.show()
+    dialog = ExceptionDialog(stacktrace=stacktrace, parent=QApplication.activeWindow())
+    dialog.exec()
 
 
 def on_app_stopped() -> None:
