@@ -13,8 +13,8 @@ from generation.entity import GenerationResult, IconRecords, QuestData
 from generation.errors import ImageGenerationError, MetadataParseError
 from generation.models.image.main import ImageModel
 from generation.models.text.main import TextModel
+from generation.services.building import QuestBuilder
 from generation.services.language import add_generation_language
-from generation.services.quest_builder import QuestBuilder
 from generation.services.saving import QuestSaver
 from generation.stages.concept import ConceptStage
 from generation.stages.icon import IconPromptStage, IconRecordsStage
