@@ -4,6 +4,7 @@ from io import BytesIO
 
 import requests
 from comfykit import ComfyKit
+from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from PIL import Image
 
@@ -32,7 +33,10 @@ class ImageModel:
         if result.status == "error":
             raise ImageGenerationError(result.msg)
 
-        response = requests.get(result.images[0])
+        response = requests.get(
+            result.images[0],
+            timeout=constants_config.generation.icon_download_timeout,
+        )
         response.raise_for_status()
 
         image = Image.open(BytesIO(response.content))

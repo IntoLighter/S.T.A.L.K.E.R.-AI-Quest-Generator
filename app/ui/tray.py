@@ -9,8 +9,8 @@ from utils.translation import ui
 
 
 class Tray(QSystemTrayIcon):
-    openRequested = Signal()
-    quitRequested = Signal()
+    open_requested = Signal()
+    quit_requested = Signal()
 
     def __init__(self) -> None:
         super().__init__()
@@ -20,10 +20,10 @@ class Tray(QSystemTrayIcon):
         menu = QMenu()
 
         self.open_action = QAction(self)
-        self.open_action.triggered.connect(self.openRequested)
+        self.open_action.triggered.connect(self.open_requested)
 
         self.quit_action = QAction(self)
-        self.quit_action.triggered.connect(self.quitRequested)
+        self.quit_action.triggered.connect(self.quit_requested)
 
         menu.addAction(self.open_action)
         menu.addSeparator()
@@ -43,4 +43,4 @@ class Tray(QSystemTrayIcon):
     @Slot(QSystemTrayIcon.ActivationReason)
     def on_activated(self, reason: QSystemTrayIcon.ActivationReason) -> None:
         if reason == QSystemTrayIcon.ActivationReason.Trigger:
-            self.openRequested.emit()
+            self.open_requested.emit()

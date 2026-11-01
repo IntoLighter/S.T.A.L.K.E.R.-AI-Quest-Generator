@@ -20,14 +20,14 @@ from ui.windows.preferences.main import PreferencesDialog
 class MainWindow(QMainWindow):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
-        self.resize(*constants_config.ui.window_size)  # noqa
+        self.resize(*constants_config.ui.window_size)
         self.setWindowTitle(constants_config.app.name)
         self.preferences_config = preferences_config
         self.close_requested = False
 
         self.tray = Tray()
-        self.tray.openRequested.connect(self.open)
-        self.tray.quitRequested.connect(self.quit)
+        self.tray.open_requested.connect(self.open)
+        self.tray.quit_requested.connect(self.quit)
 
         self.main_widget = MainWidget(preferences_config=self.preferences_config)
         self.main_widget.status_update_signal.connect(self.show_status)

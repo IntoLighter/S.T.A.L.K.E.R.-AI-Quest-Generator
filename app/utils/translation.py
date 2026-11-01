@@ -18,7 +18,8 @@ def err(error_id: str) -> str:
 def set_language(language: str) -> None:
     app = QCoreApplication.instance()
     if app is None:
-        raise RuntimeError("QCoreApplication is not created")
+        msg = "QCoreApplication is not created"
+        raise RuntimeError(msg)
 
     for translator in _translators:
         app.removeTranslator(translator)

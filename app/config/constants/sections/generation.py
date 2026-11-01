@@ -6,6 +6,8 @@ from pydantic import BaseModel
 class GenerationConfig(BaseModel):
     text_reasoning_effort: ReasoningEffort = "none"
 
+    icon_download_timeout: float = 60
+
     icon_game_size: tuple[int, int] = (83, 47)
     icon_game_resampling: Image.Resampling = Image.Resampling.LANCZOS
 

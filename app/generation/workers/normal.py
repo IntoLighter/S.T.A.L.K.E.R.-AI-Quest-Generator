@@ -10,30 +10,31 @@ class NormalWorker(BaseWorker):
 
     def build_metadata_text(self, concept: str) -> str | None:
         return self._build_artifact(
-            self.preferences_config.general.should_generate_metadata,
             self.metadata_text_stage.create,
             concept,
+            should_generate=self.preferences_config.general.should_generate_metadata,
         )
 
     def build_icon_prompt(self, concept: str) -> str | None:
         return self._build_artifact(
-            self.preferences_config.general.should_generate_icon,
             self.icon_prompt_stage.create,
             concept,
+            should_generate=self.preferences_config.general.should_generate_icon,
         )
 
     def build_icon_records(self, icon_prompt: str) -> IconRecords | None:
         return self._build_artifact(
-            self.preferences_config.general.should_generate_icon,
             self.icon_records_stage.create,
             icon_prompt,
+            should_generate=self.preferences_config.general.should_generate_icon,
         )
 
     def _build_artifact[T](
         self,
-        should_generate: bool,
         create: Callable[[str], T | None],
         user_content: str,
+        *,
+        should_generate: bool,
     ) -> T | None:
         if should_generate:
             return create(user_content)

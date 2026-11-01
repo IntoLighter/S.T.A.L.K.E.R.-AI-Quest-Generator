@@ -1,4 +1,3 @@
-import os
 import pathlib
 
 from config.preferences.main import PreferencesConfig
@@ -167,7 +166,7 @@ class GeneralTab(Tab):
         folder = QFileDialog.getExistingDirectory(
             self,
             ui("Select folder"),
-            os.path.expanduser("~"),
+            str(pathlib.Path.home()),
             QFileDialog.Option.ShowDirsOnly,
         )
         if folder:

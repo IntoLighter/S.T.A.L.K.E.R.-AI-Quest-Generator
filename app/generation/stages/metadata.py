@@ -82,7 +82,8 @@ class IdStage(TextGenerationStage):
         quest_id = super().create(title).strip()
 
         if not self._is_valid(quest_id):
-            raise InvalidQuestIdError(f"Invalid quest ID: {quest_id!r}")
+            msg = f"Invalid quest ID: {quest_id!r}"
+            raise InvalidQuestIdError(msg)
 
         return quest_id
 

@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from config.constants.main import constants_config
 from utils.path import get_unique_counter_name_path, get_unique_name_path
 
-from generation.entity import GenerationResult
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from generation.entity import GenerationResult
 
 
 @dataclass

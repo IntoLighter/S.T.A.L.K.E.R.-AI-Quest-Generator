@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from config.preferences.main import PreferencesConfig
+from typing import TYPE_CHECKING
+
 from config.preferences.sections.types import ModelType
-from generation.entity import ConfiguratorParameters
 from generation.models.text.local import LocalTextModel
-from generation.models.text.main import TextModel
 from generation.models.text.remote import RemoteTextModel
-from generation.workers.base import BaseWorker
 from generation.workers.configurator import ConfiguratorWorker
 from generation.workers.normal import NormalWorker
 from loguru import logger
@@ -30,6 +28,12 @@ from ui.windows.main.tab.base import Tab
 from ui.windows.main.tab.concept import ConceptTab
 from ui.windows.main.tab.icon import IconTab
 from ui.windows.main.tab.metadata import MetadataTab
+
+if TYPE_CHECKING:
+    from config.preferences.main import PreferencesConfig
+    from generation.entity import ConfiguratorParameters
+    from generation.models.text.main import TextModel
+    from generation.workers.base import BaseWorker
 
 
 class MainWidget(QWidget):

@@ -24,52 +24,56 @@ class ConfiguratorWorker(BaseWorker):
     def build_concept(self) -> str | None:
         return self._build_text(
             self.parameters.concept,
-            self.parameters.should_generate_concept,
             self.concept_stage,
             self.quest_prompt,
+            should_generate=self.parameters.should_generate_concept,
         )
 
     def build_metadata_text(self, concept: str) -> str | None:
         return self._build_text(
             self.parameters.metadata,
-            self.parameters.should_generate_metadata,
             self.metadata_text_stage,
             concept,
+            should_generate=self.parameters.should_generate_metadata,
         )
 
     def build_icon_prompt(self, concept: str) -> str | None:
         return self._build_text(
             self.parameters.icon_prompt,
-            self.parameters.should_generate_icon,
             self.icon_prompt_stage,
             concept,
+            should_generate=self.parameters.should_generate_icon,
         )
 
     def build_icon_records(self, icon_prompt: str) -> IconRecords | None:
         return self._build_artifact(
-            self.parameters.should_generate_icon,
             self.icon_records_stage.create,
             icon_prompt,
+            should_generate=self.parameters.should_generate_icon,
         )
 
     def _build_text(
         self,
         value: str,
-        should_generate: bool,
         stage: TextStreamingStage,
         user_content: str,
+        *,
+        should_generate: bool,
     ) -> str | None:
         if value:
             stage.emit_chunk(value)
             return value
 
-        return self._build_artifact(should_generate, stage.create, user_content)
+        return self._build_artifact(
+            stage.create, user_content, should_generate=should_generate
+        )
 
     def _build_artifact[T](
         self,
-        should_generate: bool,
         create: Callable[[str], T | None],
         user_content: str,
+        *,
+        should_generate: bool,
     ) -> T | None:
         if should_generate:
             return create(user_content)
