@@ -168,12 +168,7 @@
         <translation>Ошибка запуска генерации</translation>
     </message>
     <message>
-        <location filename="../../ui/widgets/prompt.py" line="34"/>
-        <source>Add</source>
-        <translation>Добавить</translation>
-    </message>
-    <message>
-        <location filename="../../ui/widgets/prompt.py" line="35"/>
+        <location filename="../../ui/widgets/prompt.py" line="29"/>
         <location filename="../../ui/windows/main/tab/icon.py" line="23"/>
         <source>Prompt</source>
         <translation>Промпт</translation>
