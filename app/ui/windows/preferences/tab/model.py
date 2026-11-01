@@ -65,8 +65,7 @@ class ModelTab(Tab):
         self.icon_workflow_editor = TextOptionEditor(
             label=ui("Icon workflow"),
             option=self.preferences_config.model.icon_workflow,
-            height=constants_config.ui.icon_workflow_height,
-            stretch=constants_config.ui.icon_workflow_stretch,
+            size=constants_config.ui.icon_workflow_editor_size,
         )
         self.main_layout.addWidget(self.icon_workflow_editor)
 

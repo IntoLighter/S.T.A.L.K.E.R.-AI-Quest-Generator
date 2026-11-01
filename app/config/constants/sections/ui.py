@@ -1,22 +1,24 @@
 from pydantic import BaseModel
 
+EDITOR_BASE_HEIGHT = 100
+
+
+class EditorSize(BaseModel):
+    stretch: int
+
+    @property
+    def height(self) -> int:
+        return EDITOR_BASE_HEIGHT * self.stretch
+
 
 class UIConfig(BaseModel):
     window_size: tuple[int, int] = (1280, 720)
     dialog_size: tuple[int, int] = (1024, 576)
     quest_generated_tray_message_msecs: int = 5000
 
-    editor_stretch: int = 1
-    concept_stretch: int = 4
-    metadata_stretch: int = 2
-    id_stretch: int = 2
-    icon_prompt_stretch: int = 2
-
-    editor_height: int = 100
-    concept_height: int = editor_height * concept_stretch
-    metadata_height: int = editor_height * metadata_stretch
-    id_height: int = editor_height * id_stretch
-    icon_prompt_height: int = editor_height * icon_prompt_stretch
-
-    icon_workflow_stretch: int = 4
-    icon_workflow_height: int = editor_height * icon_workflow_stretch
+    editor_size: EditorSize = EditorSize(stretch=1)
+    concept_editor_size: EditorSize = EditorSize(stretch=4)
+    metadata_editor_size: EditorSize = EditorSize(stretch=2)
+    id_editor_size: EditorSize = EditorSize(stretch=2)
+    icon_prompt_editor_size: EditorSize = EditorSize(stretch=2)
+    icon_workflow_editor_size: EditorSize = EditorSize(stretch=4)

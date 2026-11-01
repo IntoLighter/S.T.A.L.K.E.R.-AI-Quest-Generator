@@ -12,8 +12,7 @@ class IconTab(Tab):
     def __init__(self) -> None:
         super().__init__()
         self.icon_prompt_label, self.icon_prompt_editor = self.create_plain_text_editor(
-            constants_config.ui.icon_prompt_height,
-            constants_config.ui.icon_prompt_stretch,
+            constants_config.ui.icon_prompt_editor_size,
         )
         self.icon_game_label, self.icon_game_editor = self.create_label_editor()
         self.icon_label, self.icon_editor = self.create_label_editor()

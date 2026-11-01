@@ -40,8 +40,7 @@ class ConfiguratorDialog(BaseDialog):
         self.concept_editor = add_text_editor(
             self.main_layout,
             configurator.concept,
-            constants_config.ui.concept_height,
-            constants_config.ui.concept_stretch,
+            constants_config.ui.concept_editor_size,
         )
 
         self.main_layout.addWidget(QLabel(ui("Metadata")))
@@ -53,8 +52,7 @@ class ConfiguratorDialog(BaseDialog):
         self.metadata_editor = add_text_editor(
             self.main_layout,
             configurator.metadata,
-            constants_config.ui.metadata_height,
-            constants_config.ui.metadata_stretch,
+            constants_config.ui.metadata_editor_size,
         )
 
         self.main_layout.addWidget(QLabel(ui("Icon prompt")))
@@ -66,8 +64,7 @@ class ConfiguratorDialog(BaseDialog):
         self.icon_prompt_editor = add_text_editor(
             self.main_layout,
             configurator.icon_prompt,
-            constants_config.ui.icon_prompt_height,
-            constants_config.ui.icon_prompt_stretch,
+            constants_config.ui.icon_prompt_editor_size,
         )
 
         self.add_close_buttons()

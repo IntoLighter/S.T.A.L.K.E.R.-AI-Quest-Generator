@@ -11,21 +11,17 @@ class MetadataTab(Tab):
     def __init__(self) -> None:
         super().__init__()
         self.metadata_label, self.metadata_editor = self.create_plain_text_editor(
-            constants_config.ui.metadata_height,
-            constants_config.ui.metadata_stretch,
+            constants_config.ui.metadata_editor_size,
         )
         self.task_label, self.task_editor = self.create_plain_text_editor(
-            constants_config.ui.editor_height,
-            constants_config.ui.editor_stretch,
+            constants_config.ui.editor_size,
         )
         self.article_label, self.article_editor = self.create_plain_text_editor(
-            constants_config.ui.editor_height,
-            constants_config.ui.editor_stretch,
+            constants_config.ui.editor_size,
         )
         self.infoportions_label, self.infoportions_editor = (
             self.create_plain_text_editor(
-                constants_config.ui.editor_height,
-                constants_config.ui.editor_stretch,
+                constants_config.ui.editor_size,
             )
         )
         self.retranslate_ui()

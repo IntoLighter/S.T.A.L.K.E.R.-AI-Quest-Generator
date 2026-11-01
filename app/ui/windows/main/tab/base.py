@@ -1,3 +1,4 @@
+from config.constants.sections.ui import EditorSize
 from generation.workers.base import BaseWorker
 from PySide6.QtCore import QEvent
 from PySide6.QtGui import QTextCursor
@@ -21,15 +22,15 @@ class Tab(QWidget):
         pass
 
     def create_plain_text_editor(
-        self, height: int, stretch: int
+        self, size: EditorSize
     ) -> tuple[QLabel, QPlainTextEdit]:
         label = QLabel()
         self.main_layout.addWidget(label)
 
         editor = QPlainTextEdit()
         editor.setReadOnly(True)
-        editor.setMinimumHeight(height)
-        self.main_layout.addWidget(editor, stretch)
+        editor.setMinimumHeight(size.height)
+        self.main_layout.addWidget(editor, size.stretch)
 
         return label, editor
 

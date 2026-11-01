@@ -1,4 +1,5 @@
 from config.constants.main import constants_config
+from config.constants.sections.ui import EditorSize
 from config.preferences.sections.types import TextOption, ValueSource
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import (
@@ -18,8 +19,7 @@ class TextOptionEditor(QWidget):
         self,
         label: str,
         option: TextOption,
-        height: int = constants_config.ui.editor_height,
-        stretch: int = constants_config.ui.editor_stretch,
+        size: EditorSize = constants_config.ui.editor_size,
     ) -> None:
         super().__init__()
         self.option = option
@@ -48,10 +48,10 @@ class TextOptionEditor(QWidget):
             ValueSource.CUSTOM: self.option.custom,
         }
         self.editor.setPlainText(mode_to_content[self.option.source])
-        self.editor.setMinimumHeight(height)
+        self.editor.setMinimumHeight(size.height)
         self.editor.setReadOnly(self.option.source == ValueSource.SYSTEM)
         self.editor.textChanged.connect(self.on_text_changed)
-        self.main_layout.addWidget(self.editor, stretch)
+        self.main_layout.addWidget(self.editor, size.stretch)
 
         self.group.buttonToggled.connect(self.on_source_changed)
         source_to_button = {

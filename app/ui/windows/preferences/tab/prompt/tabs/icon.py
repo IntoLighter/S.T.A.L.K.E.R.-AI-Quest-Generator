@@ -16,7 +16,6 @@ class IconTab(Tab):
         self.editor = TextOptionEditor(
             label=ui("Icon"),
             option=self.preferences_config.prompt.icon,
-            height=constants_config.ui.icon_prompt_height,
-            stretch=constants_config.ui.icon_prompt_stretch,
+            size=constants_config.ui.icon_prompt_editor_size,
         )
         self.main_layout.addWidget(self.editor)

@@ -16,15 +16,13 @@ class MetadataTab(Tab):
         self.metadata_editor = TextOptionEditor(
             label=ui("Metadata"),
             option=self.preferences_config.prompt.metadata,
-            height=constants_config.ui.metadata_height,
-            stretch=constants_config.ui.metadata_stretch,
+            size=constants_config.ui.metadata_editor_size,
         )
         self.main_layout.addWidget(self.metadata_editor)
 
         self.id_editor = TextOptionEditor(
             label="ID",
             option=self.preferences_config.prompt.id,
-            height=constants_config.ui.id_height,
-            stretch=constants_config.ui.id_stretch,
+            size=constants_config.ui.id_editor_size,
         )
         self.main_layout.addWidget(self.id_editor)

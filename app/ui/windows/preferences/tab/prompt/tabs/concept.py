@@ -16,7 +16,6 @@ class ConceptTab(Tab):
         self.editor = TextOptionEditor(
             label=ui("Concept"),
             option=self.preferences_config.prompt.concept,
-            height=constants_config.ui.concept_height,
-            stretch=constants_config.ui.concept_stretch,
+            size=constants_config.ui.concept_editor_size,
         )
         self.main_layout.addWidget(self.editor)

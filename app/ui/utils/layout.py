@@ -1,3 +1,4 @@
+from config.constants.sections.ui import EditorSize
 from PySide6.QtWidgets import (
     QBoxLayout,
     QCheckBox,
@@ -37,12 +38,10 @@ def add_checkbox_row(layout: QBoxLayout, text: str, *, checked: bool) -> QCheckB
     return checkbox
 
 
-def add_text_editor(
-    layout: QBoxLayout, text: str, height: int, stretch: int
-) -> QPlainTextEdit:
+def add_text_editor(layout: QBoxLayout, text: str, size: EditorSize) -> QPlainTextEdit:
     editor = QPlainTextEdit()
     editor.setPlainText(text)
-    editor.setMinimumHeight(height)
-    layout.addWidget(editor, stretch)
+    editor.setMinimumHeight(size.height)
+    layout.addWidget(editor, size.stretch)
 
     return editor

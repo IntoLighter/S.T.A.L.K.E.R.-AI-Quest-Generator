@@ -30,9 +30,9 @@ class PromptEditor(QWidget):
         self.prompt_label = QLabel()
         self.main_layout.addWidget(self.prompt_label)
         self.prompt_editor = QPlainTextEdit()
-        self.prompt_editor.setMinimumHeight(constants_config.ui.editor_height)
+        self.prompt_editor.setMinimumHeight(constants_config.ui.editor_size.height)
         self.main_layout.addWidget(
-            self.prompt_editor, constants_config.ui.editor_stretch
+            self.prompt_editor, constants_config.ui.editor_size.stretch
         )
 
     @property
