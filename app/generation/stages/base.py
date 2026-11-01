@@ -2,13 +2,12 @@ from collections.abc import Callable
 
 from openai.types.chat import ChatCompletionMessageParam
 from pydantic import BaseModel
-from PySide6.QtCore import QObject
 from utils.logging import log_execution
 
 from generation.models.text.main import TextModel
 
 
-class TextStreamingStage(QObject):
+class TextStreamingStage:
     schema: type[BaseModel] | None = None
 
     def __init__(
@@ -20,7 +19,6 @@ class TextStreamingStage(QObject):
         emit_status: Callable[[str], None],
         status_message: str,
     ) -> None:
-        super().__init__()
         self.text_model = text_model
         self.is_interrupted = is_interrupted
         self.system_prompt = system_prompt
@@ -49,7 +47,7 @@ class TextStreamingStage(QObject):
         return text
 
 
-class TextGenerationStage(QObject):
+class TextGenerationStage:
     schema: type[BaseModel] | None = None
 
     def __init__(
@@ -59,7 +57,6 @@ class TextGenerationStage(QObject):
         emit_status: Callable[[str], None],
         status_message: str,
     ) -> None:
-        super().__init__()
         self.text_model = text_model
         self.system_prompt = system_prompt
         self.emit_status = emit_status

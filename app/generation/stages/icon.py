@@ -1,7 +1,6 @@
 from collections.abc import Callable
 
 from config.constants.main import constants_config
-from PySide6.QtCore import QObject
 from utils.logging import log_execution
 
 from generation.entity import IconRecords
@@ -13,7 +12,7 @@ class IconPromptStage(TextStreamingStage):
     pass
 
 
-class IconRecordsStage(QObject):
+class IconRecordsStage:
     def __init__(
         self,
         image_model: ImageModel,
@@ -21,7 +20,6 @@ class IconRecordsStage(QObject):
         emit_icon_ready: Callable[[IconRecords], None],
         status_message: str,
     ) -> None:
-        super().__init__()
         self.image_model = image_model
         self.emit_status = emit_status
         self.emit_icon_ready = emit_icon_ready
