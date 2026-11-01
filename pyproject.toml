@@ -36,8 +36,32 @@ default-groups = [ "dev", "build" ]
 exclude = [
     "app/resources/rc_main.py",
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"app/main.py" = [ "INP001" ]
+"scripts/**" = [ "INP001", "T201" ]
+
 [tool.ruff.lint]
-select = [ "ANN", "B", "C4", "E", "F", "I", "SIM", "UP", "W" ]
+select = [ "ALL" ]
+ignore = [
+    "ANN401",
+    "BLE001",
+    "COM812",
+    "D1",
+    "D200",
+    "D202",
+    "D203",
+    "D212",
+    "N802",
+    "N803",
+    "N815",
+    "PLR0913",
+    "RET504",
+    "RUF001",
+    "RUF002",
+    "RUF003",
+    "S603",
+]
 
 [tool.pyproject-fmt]
 indent = 4
