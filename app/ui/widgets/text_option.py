@@ -33,11 +33,11 @@ class TextOptionEditor(QWidget):
         self.main_layout.addLayout(row)
         self.group = QButtonGroup(self)
 
-        self.system_button = QRadioButton(self.tr("Системный"))
+        self.system_button = QRadioButton("Системный")
         self.group.addButton(self.system_button)
         row.addWidget(self.system_button)
 
-        self.custom_button = QRadioButton(self.tr("Собственный"))
+        self.custom_button = QRadioButton("Собственный")
         self.group.addButton(self.custom_button)
         row.addWidget(self.custom_button)
 

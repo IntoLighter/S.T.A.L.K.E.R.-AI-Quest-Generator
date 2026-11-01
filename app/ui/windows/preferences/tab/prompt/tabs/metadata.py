@@ -13,7 +13,7 @@ class MetadataTab(Tab):
         self.main_layout = QVBoxLayout(self)
 
         self.metadata_editor = TextOptionEditor(
-            label=self.tr("Метаданные"),
+            label="Метаданные",
             option=self.preferences_config.prompt.metadata,
             height=constants_config.ui.metadata_height,
             stretch=constants_config.ui.metadata_stretch,
@@ -21,7 +21,7 @@ class MetadataTab(Tab):
         self.main_layout.addWidget(self.metadata_editor)
 
         self.id_editor = TextOptionEditor(
-            label=self.tr("ID"),
+            label="ID",
             option=self.preferences_config.prompt.id,
             height=constants_config.ui.id_height,
             stretch=constants_config.ui.id_stretch,

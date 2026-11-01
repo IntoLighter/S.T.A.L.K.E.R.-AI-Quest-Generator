@@ -13,7 +13,7 @@ class IconTab(Tab):
         self.main_layout = QVBoxLayout(self)
 
         self.editor = TextOptionEditor(
-            label=self.tr("Иконка"),
+            label="Иконка",
             option=self.preferences_config.prompt.icon,
             height=constants_config.ui.icon_prompt_height,
             stretch=constants_config.ui.icon_prompt_stretch,

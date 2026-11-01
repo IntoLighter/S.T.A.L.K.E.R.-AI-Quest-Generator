@@ -32,12 +32,12 @@ class GeneralTab(Tab):
         self.add_save_path_editor()
 
     def add_notifications_editor(self) -> None:
-        group = QGroupBox(self.tr("Уведомления"))
+        group = QGroupBox("Уведомления")
         group_layout = QVBoxLayout(group)
 
         row = QHBoxLayout()
         group_layout.addLayout(row)
-        label = QLabel(self.tr("Показывать уведомления"))
+        label = QLabel("Показывать уведомления")
         row.addWidget(label)
         self.show_notifications_editor = QCheckBox()
         self.show_notifications_editor.setChecked(
@@ -51,7 +51,7 @@ class GeneralTab(Tab):
     def add_should_generate_editors(self) -> None:
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
-        label = QLabel(self.tr("Генерировать концепт"))
+        label = QLabel("Генерировать концепт")
         row.addWidget(label)
         self.should_generate_concept_editor = QCheckBox()
         self.should_generate_concept_editor.setChecked(
@@ -62,7 +62,7 @@ class GeneralTab(Tab):
 
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
-        label = QLabel(self.tr("Генерировать метаданные"))
+        label = QLabel("Генерировать метаданные")
         row.addWidget(label)
         self.should_generate_metadata_editor = QCheckBox()
         self.should_generate_metadata_editor.setChecked(
@@ -73,7 +73,7 @@ class GeneralTab(Tab):
 
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
-        label = QLabel(self.tr("Генерировать иконку"))
+        label = QLabel("Генерировать иконку")
         row.addWidget(label)
         self.should_generate_icon_editor = QCheckBox()
         self.should_generate_icon_editor.setChecked(
@@ -86,7 +86,7 @@ class GeneralTab(Tab):
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
 
-        label = QLabel(self.tr("Шаблон промпта"))
+        label = QLabel("Шаблон промпта")
         row.addWidget(label)
 
         self.prompt_template_editor = QPlainTextEdit()
@@ -95,7 +95,7 @@ class GeneralTab(Tab):
         )
         row.addWidget(self.prompt_template_editor, stretch=1)
 
-        reset_button = QPushButton(self.tr("Сбросить"))
+        reset_button = QPushButton("Сбросить")
         reset_button.clicked.connect(self.reset_prompt_template)
         row.addWidget(reset_button)
 
@@ -107,7 +107,7 @@ class GeneralTab(Tab):
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
 
-        label = QLabel(self.tr("Путь сохранения"))
+        label = QLabel("Путь сохранения")
         row.addWidget(label)
 
         self.save_path_editor = QLineEdit()
@@ -120,11 +120,11 @@ class GeneralTab(Tab):
 
         row.addWidget(self.save_path_editor, stretch=1)
 
-        browse_btn = QPushButton(self.tr("Выбрать..."))
+        browse_btn = QPushButton("Выбрать...")
         browse_btn.clicked.connect(self.select_save_path)
         row.addWidget(browse_btn)
 
-        reset_button = QPushButton(self.tr("Сбросить"))
+        reset_button = QPushButton("Сбросить")
         reset_button.clicked.connect(self.reset_save_path)
         row.addWidget(reset_button)
 
@@ -136,7 +136,7 @@ class GeneralTab(Tab):
     def select_save_path(self) -> None:
         folder = QFileDialog.getExistingDirectory(
             self,
-            self.tr("Выберите папку"),
+            "Выберите папку",
             os.path.expanduser("~"),
             QFileDialog.Option.ShowDirsOnly,
         )

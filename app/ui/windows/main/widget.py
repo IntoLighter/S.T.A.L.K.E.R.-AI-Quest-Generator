@@ -44,7 +44,7 @@ class MainWidget(QWidget):
         self.prompt_editor = PromptEditor(preferences_config)
         self.main_layout.addWidget(self.prompt_editor)
 
-        self.generate_button = QPushButton(self.tr("Сгенерировать квест"))
+        self.generate_button = QPushButton("Сгенерировать квест")
         self.generate_button.clicked.connect(self.generate_quest_normal)
         self.main_layout.addWidget(self.generate_button)
 
@@ -55,16 +55,14 @@ class MainWidget(QWidget):
         if not self.preferences_config.model.current_text_model:
             show_generation_start_error(
                 self,
-                self.tr("Невозможно запустить генерацию. Текстовая модель не задана."),
+                "Невозможно запустить генерацию. Текстовая модель не задана.",
             )
             return
 
         if not self.preferences_config.general.should_generate_concept:
             show_generation_start_error(
                 self,
-                self.tr(
-                    "Невозможно запустить генерацию. Отключенна генерация концепта."
-                ),
+                "Невозможно запустить генерацию. Отключенна генерация концепта.",
             )
             return
 
@@ -122,7 +120,7 @@ class MainWidget(QWidget):
         worker_thread.start()
 
     def set_generate_button_stop(self, worker: BaseWorker) -> None:
-        self.generate_button.setText(self.tr("Остановить генерацию квеста"))
+        self.generate_button.setText("Остановить генерацию квеста")
         self.generate_button.clicked.disconnect()
         self.generate_button.clicked.connect(lambda: self.stop_generate(worker))
 
@@ -131,7 +129,7 @@ class MainWidget(QWidget):
         self.set_generate_button_generate()
 
     def set_generate_button_generate(self) -> None:
-        self.generate_button.setText(self.tr("Сгенерировать квест"))
+        self.generate_button.setText("Сгенерировать квест")
         self.generate_button.clicked.disconnect()
         self.generate_button.clicked.connect(self.generate_quest_normal)
 
@@ -139,7 +137,7 @@ class MainWidget(QWidget):
     def show_generation_error(self, error_result: ErrorInfo) -> None:
         dialog = QMessageBox(
             QMessageBox.Icon.Warning,
-            self.tr("Ошибка"),
+            "Ошибка",
             error_result.msg,
             parent=self,
             detailedText=error_result.details,
@@ -162,13 +160,13 @@ class MainWidget(QWidget):
         self.main_layout.addWidget(self.tab_widget)
 
         self.concept_tab = ConceptTab()
-        self.tab_widget.addTab(self.concept_tab, self.tr("Концепт"))
+        self.tab_widget.addTab(self.concept_tab, "Концепт")
 
         self.metadata_tab = MetadataTab()
-        self.tab_widget.addTab(self.metadata_tab, self.tr("Метаданные"))
+        self.tab_widget.addTab(self.metadata_tab, "Метаданные")
 
         self.icon_tab = IconTab()
-        self.tab_widget.addTab(self.icon_tab, self.tr("Иконка"))
+        self.tab_widget.addTab(self.icon_tab, "Иконка")
 
     @property
     def tabs(self) -> list[Tab]:

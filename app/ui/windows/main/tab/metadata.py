@@ -10,22 +10,22 @@ class MetadataTab(Tab):
     def __init__(self) -> None:
         super().__init__()
         self.metadata_editor = self.create_plain_text_editor(
-            self.tr("Метаданные"),
+            "Метаданные",
             constants_config.ui.metadata_height,
             constants_config.ui.metadata_stretch,
         )
         self.task_editor = self.create_plain_text_editor(
-            self.tr("Задание"),
+            "Задание",
             constants_config.ui.editor_height,
             constants_config.ui.editor_stretch,
         )
         self.article_editor = self.create_plain_text_editor(
-            self.tr("Описание"),
+            "Описание",
             constants_config.ui.editor_height,
             constants_config.ui.editor_stretch,
         )
         self.infoportions_editor = self.create_plain_text_editor(
-            self.tr("Инфопоршни"),
+            "Инфопоршни",
             constants_config.ui.editor_height,
             constants_config.ui.editor_stretch,
         )

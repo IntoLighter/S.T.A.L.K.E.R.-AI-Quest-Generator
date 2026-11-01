@@ -1,6 +1,6 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
-from PySide6.QtCore import Qt, Slot, qtTrId
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QAction, QCloseEvent, QKeySequence
 from PySide6.QtWidgets import (
     QDialog,
@@ -42,15 +42,15 @@ class MainWindow(QMainWindow):
     def set_menubar(self) -> None:
         menubar = self.menuBar()
 
-        file_menu = menubar.addMenu(qtTrId("File"))
+        file_menu = menubar.addMenu("Файл")
         file_menu.addAction(self.get_configurator())
         file_menu.addAction(self.get_settings())
 
-        help_menu = menubar.addMenu(self.tr("Помощь"))
+        help_menu = menubar.addMenu("Помощь")
         help_menu.addAction(self.get_about())
 
     def get_configurator(self) -> QAction:
-        action = QAction(self.tr("Конфигуратор"), self)
+        action = QAction("Конфигуратор", self)
         action.setShortcut(QKeySequence("Ctrl+s"))
         action.triggered.connect(self.show_configurator)
         return action
@@ -60,10 +60,8 @@ class MainWindow(QMainWindow):
         if not self.preferences_config.model.current_text_model:
             QMessageBox.warning(
                 self,
-                self.tr("Ошибка настроек"),
-                self.tr(
-                    "Невозможно запустить конфигуратор. Текстовая модель не задана."
-                ),
+                "Ошибка настроек",
+                "Невозможно запустить конфигуратор. Текстовая модель не задана.",
             )
             return
 
@@ -76,7 +74,7 @@ class MainWindow(QMainWindow):
             self.main_widget.generate_quest_configurator(dialog.parameters)
 
     def get_settings(self) -> QAction:
-        action = QAction(self.tr("Настройки"), self)
+        action = QAction("Настройки", self)
         action.setMenuRole(QAction.MenuRole.PreferencesRole)
         action.setShortcuts((QKeySequence("Ctrl+,"), QKeySequence("Ctrl+б")))
         action.triggered.connect(self.open_settings)
@@ -107,9 +105,9 @@ class MainWindow(QMainWindow):
 
     def set_parameters_unspecified_restrictions(self) -> None:
         if not self.preferences_config.model.current_text_model:
-            self.show_status(self.tr("Текстовая модель не задана"))
+            self.show_status("Текстовая модель не задана")
         elif not self.preferences_config.general.save_path:
-            self.show_status(self.tr("Путь сохранения не задан"))
+            self.show_status("Путь сохранения не задан")
         else:
             self.show_status("")
 
@@ -118,7 +116,7 @@ class MainWindow(QMainWindow):
         self.status_label.setText(status)
 
     def get_about(self) -> QAction:
-        about_action = QAction(self.tr("О программе"), self)
+        about_action = QAction("О программе", self)
         about_action.triggered.connect(self.show_about)
         return about_action
 
@@ -127,11 +125,11 @@ class MainWindow(QMainWindow):
         repo = constants_config.app.repository
         QMessageBox.about(
             self,
-            self.tr("О программе"),
+            "О программе",
             f"""
 <h3>{constants_config.app.name}</h3>
-<p>{self.tr("Версия")} {constants_config.app.version}</p>
-<p>{self.tr("Repository")}: <a href="{repo}">{repo}</a></p>
+<p>Версия {constants_config.app.version}</p>
+<p>Repository: <a href="{repo}">{repo}</a></p>
             """,
         )
 

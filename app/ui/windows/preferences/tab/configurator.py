@@ -15,7 +15,7 @@ class ConfiguratorTab(Tab):
         self.preferences_config = preferences_config
         self.main_layout = get_layout_with_scroll(self)
 
-        label = QLabel(self.tr("Концепт"))
+        label = QLabel("Концепт")
         self.main_layout.addWidget(label)
         self.concept_editor = QPlainTextEdit()
         self.concept_editor.setPlainText(self.preferences_config.configurator.concept)
@@ -24,7 +24,7 @@ class ConfiguratorTab(Tab):
             self.concept_editor, constants_config.ui.concept_stretch
         )
 
-        label = QLabel(self.tr("Метаданные"))
+        label = QLabel("Метаданные")
         self.main_layout.addWidget(label)
         self.metadata_editor = QPlainTextEdit()
         self.metadata_editor.setPlainText(self.preferences_config.configurator.metadata)
@@ -33,7 +33,7 @@ class ConfiguratorTab(Tab):
             self.metadata_editor, constants_config.ui.metadata_stretch
         )
 
-        label = QLabel(self.tr("Промпт иконки"))
+        label = QLabel("Промпт иконки")
         self.main_layout.addWidget(label)
         self.icon_prompt_editor = QPlainTextEdit()
         self.icon_prompt_editor.setPlainText(

@@ -18,10 +18,10 @@ class PromptTab(Tab):
         self.main_layout.addWidget(self.tab_widget)
 
         self.concept_tab = ConceptTab(preferences_config)
-        self.tab_widget.addTab(self.concept_tab, self.tr("Концепт"))
+        self.tab_widget.addTab(self.concept_tab, "Концепт")
 
         self.metadata_tab = MetadataTab(preferences_config)
-        self.tab_widget.addTab(self.metadata_tab, self.tr("Метаданные"))
+        self.tab_widget.addTab(self.metadata_tab, "Метаданные")
 
         self.icon_tab = IconTab(preferences_config)
-        self.tab_widget.addTab(self.icon_tab, self.tr("Иконка"))
+        self.tab_widget.addTab(self.icon_tab, "Иконка")

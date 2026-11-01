@@ -23,14 +23,14 @@ class ModelTab(Tab):
         self.preferences_config = preferences_config
         self.main_layout = get_layout_with_scroll(self)
 
-        label = QLabel(self.tr("Текст"))
+        label = QLabel("Текст")
         self.main_layout.addWidget(label)
 
         self.group = QButtonGroup(self)
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
-        self.local_model_button = QRadioButton(self.tr("Локальная"))
-        self.remote_model_button = QRadioButton(self.tr("Удаленная"))
+        self.local_model_button = QRadioButton("Локальная")
+        self.remote_model_button = QRadioButton("Удаленная")
         self.group.addButton(self.local_model_button)
         self.group.addButton(self.remote_model_button)
         type_to_button = {
@@ -63,7 +63,7 @@ class ModelTab(Tab):
         self.update_text_model_dropdown()
 
         self.icon_workflow_editor = TextOptionEditor(
-            label=self.tr("Workflow иконки"),
+            label="Workflow иконки",
             option=self.preferences_config.model.icon_workflow,
             height=constants_config.ui.icon_workflow_height,
             stretch=constants_config.ui.icon_workflow_stretch,

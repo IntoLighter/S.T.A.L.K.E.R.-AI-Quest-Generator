@@ -21,7 +21,7 @@ from ui.windows.preferences.tab.prompt.main import PromptTab
 class PreferencesDialog(BaseDialog):
     def __init__(self, parent: QWidget, preferences_config: PreferencesConfig) -> None:
         super().__init__(parent)
-        self.setWindowTitle(self.tr("Настройки"))
+        self.setWindowTitle("Настройки")
         self.preferences_config = preferences_config
         logger.info("Window 'Settings' opened")
 
@@ -30,16 +30,16 @@ class PreferencesDialog(BaseDialog):
         self.main_layout.addWidget(self.tab_widget)
 
         self.general_tab = GeneralTab(self.preferences_config)
-        self.tab_widget.addTab(self.general_tab, self.tr("Основные"))
+        self.tab_widget.addTab(self.general_tab, "Основные")
 
         self.model_tab = ModelTab(self.preferences_config)
-        self.tab_widget.addTab(self.model_tab, self.tr("Модели"))
+        self.tab_widget.addTab(self.model_tab, "Модели")
 
         self.prompt_tab = PromptTab(self.preferences_config)
-        self.tab_widget.addTab(self.prompt_tab, self.tr("Промпты"))
+        self.tab_widget.addTab(self.prompt_tab, "Промпты")
 
         self.configurator_tab = ConfiguratorTab(self.preferences_config)
-        self.tab_widget.addTab(self.configurator_tab, self.tr("Конфигуратор"))
+        self.tab_widget.addTab(self.configurator_tab, "Конфигуратор")
 
         self.add_close_buttons()
 
@@ -47,11 +47,11 @@ class PreferencesDialog(BaseDialog):
         row = QHBoxLayout()
         self.main_layout.addLayout(row)
 
-        ok_btn = QPushButton(self.tr("ОК"))
+        ok_btn = QPushButton("ОК")
         ok_btn.clicked.connect(self.accept)
         row.addWidget(ok_btn, stretch=1)
 
-        cancel_btn = QPushButton(self.tr("Отмена"))
+        cancel_btn = QPushButton("Отмена")
         cancel_btn.clicked.connect(self.reject)
         row.addWidget(cancel_btn, stretch=1)
 

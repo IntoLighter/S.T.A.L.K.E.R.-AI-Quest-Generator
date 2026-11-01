@@ -11,12 +11,12 @@ class IconTab(Tab):
     def __init__(self) -> None:
         super().__init__()
         self.icon_prompt_editor = self.create_plain_text_editor(
-            self.tr("Промпт"),
+            "Промпт",
             constants_config.ui.icon_prompt_height,
             constants_config.ui.icon_prompt_stretch,
         )
-        self.icon_game_editor = self.create_label_editor(self.tr("Игра"))
-        self.icon_editor = self.create_label_editor(self.tr("Оригинал"))
+        self.icon_game_editor = self.create_label_editor("Игра")
+        self.icon_editor = self.create_label_editor("Оригинал")
 
     def bind_worker(self, worker: BaseWorker) -> None:
         worker.icon_prompt_chunk_ready.connect(self.show_icon_prompt_chunk)

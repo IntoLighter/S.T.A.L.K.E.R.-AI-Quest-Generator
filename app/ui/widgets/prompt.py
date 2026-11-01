@@ -40,7 +40,7 @@ class PromptEditor(QWidget):
         )
         row.addWidget(self.parameter_values_combo, stretch=1)
 
-        self.add_parameter_button = QPushButton(self.tr("Добавить"))
+        self.add_parameter_button = QPushButton("Добавить")
         self.add_parameter_button.clicked.connect(self.add_parameter)
         row.addWidget(self.add_parameter_button)
 
@@ -58,7 +58,7 @@ class PromptEditor(QWidget):
         self.prompt_editor.appendPlainText(f"{name}: {value}")
 
     def add_prompt_editor(self) -> None:
-        label = QLabel(self.tr("Промпт"))
+        label = QLabel("Промпт")
         self.main_layout.addWidget(label)
         self.prompt_editor = QPlainTextEdit()
         self.prompt_editor.setPlainText(self.preferences_config.general.prompt_message)

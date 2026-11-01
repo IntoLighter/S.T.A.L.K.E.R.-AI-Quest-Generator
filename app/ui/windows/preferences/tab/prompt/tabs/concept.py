@@ -13,7 +13,7 @@ class ConceptTab(Tab):
         self.main_layout = QVBoxLayout(self)
 
         self.editor = TextOptionEditor(
-            label=self.tr("Концепт"),
+            label="Концепт",
             option=self.preferences_config.prompt.concept,
             height=constants_config.ui.concept_height,
             stretch=constants_config.ui.concept_stretch,

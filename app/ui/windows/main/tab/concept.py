@@ -9,7 +9,7 @@ class ConceptTab(Tab):
     def __init__(self) -> None:
         super().__init__()
         self.concept_editor = self.create_plain_text_editor(
-            self.tr("Концепт"),
+            "Концепт",
             constants_config.ui.concept_height,
             constants_config.ui.concept_stretch,
         )
