@@ -1,5 +1,6 @@
 import asyncio
 import json
+import random
 from io import BytesIO
 
 import requests
@@ -24,7 +25,10 @@ class ImageEngine:
             msg = f"Invalid icon workflow JSON: {e}"
             raise ImageGenerationError(msg) from e
 
-        result = asyncio.run(self.kit.execute_json(workflow, {"prompt": prompt}))
+        seed = random.randrange(constants_config.generation.icon_seed_limit)
+        result = asyncio.run(
+            self.kit.execute_json(workflow, {"prompt": prompt, "seed": seed})
+        )
 
         if result.status == "error":
             raise ImageGenerationError(result.msg)

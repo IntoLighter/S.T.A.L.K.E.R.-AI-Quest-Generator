@@ -1,6 +1,7 @@
 from collections.abc import Callable
 
 from config.constants.main import constants_config
+from PIL import ImageOps
 from utils.logging import log_execution
 
 from generation.engines.image.main import ImageEngine
@@ -29,10 +30,11 @@ class IconRecordsStage:
     def create(self, icon_prompt: str) -> IconRecords | None:
         self.emit_status(self.status_message)
         icon = self.image_engine.generate(icon_prompt)
-        icon_game = icon.resize(
+        icon_game = ImageOps.fit(
+            icon,
             constants_config.generation.icon_game_size,
             constants_config.generation.icon_game_resampling,
-        )
+        ).filter(constants_config.generation.icon_game_sharpen)
         icon_records = IconRecords(icon=icon, icon_game=icon_game)
         self.emit_icon_ready(icon_records)
         return icon_records

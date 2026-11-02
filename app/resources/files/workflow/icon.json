@@ -1,15 +1,14 @@
 {
   "9": {
     "inputs": {
-      "filename_prefix": "S.T.A.L.K.E.R. AI Quest Generator Icon",
       "images": [
         "75:65",
         0
       ]
     },
-    "class_type": "SaveImage",
+    "class_type": "PreviewImage",
     "_meta": {
-      "title": "Save Image"
+      "title": "Preview Image"
     }
   },
   "75:64": {
@@ -75,7 +74,7 @@
   },
   "75:68": {
     "inputs": {
-      "value": 640
+      "value": 704
     },
     "class_type": "PrimitiveInt",
     "_meta": {
@@ -84,7 +83,7 @@
   },
   "75:69": {
     "inputs": {
-      "value": 352
+      "value": 400
     },
     "class_type": "PrimitiveInt",
     "_meta": {
@@ -128,7 +127,7 @@
   },
   "75:62": {
     "inputs": {
-      "steps": 5,
+      "steps": 4,
       "width": [
         "75:68",
         0
@@ -170,7 +169,7 @@
     },
     "class_type": "RandomNoise",
     "_meta": {
-      "title": "RandomNoise"
+      "title": "$seed.noise_seed"
     }
   },
   "75:61": {
@@ -184,7 +183,7 @@
   },
   "75:63": {
     "inputs": {
-      "cfg": 3,
+      "cfg": 1,
       "model": [
         "75:70",
         0
