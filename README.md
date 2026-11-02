@@ -91,29 +91,31 @@ Icons are generated locally using [ComfyUI](https://www.comfy.org/download).
 
 **1. Install ComfyUI**
 
-Download and install it from [comfy.org/download](https://www.comfy.org/download).
+Download and install it from [comfy.org/download](https://www.comfy.org/download). Version **0.41.0** or later is required.
 
 **2. Download the models**
+
+The models are gated: sign in to Hugging Face and accept the license on [black-forest-labs/flux-3-image-klein-comfy](https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy) first.
 
 Put each file into the matching folder:
 
 | Type | Folder | File |
 |---|---|---|
-| Diffusion model | `ComfyUI/models/diffusion_models/` | [flux-2-klein-9b-fp8.safetensors](https://huggingface.co/black-forest-labs/FLUX.2-klein-9b-fp8/resolve/main/flux-2-klein-9b-fp8.safetensors) |
-| Text encoder | `ComfyUI/models/text_encoders/` | [qwen_3_8b_fp8mixed.safetensors](https://huggingface.co/Comfy-Org/flux2-klein-9B/resolve/main/split_files/text_encoders/qwen_3_8b_fp8mixed.safetensors) |
-| VAE | `ComfyUI/models/vae/` | [full_encoder_small_decoder.safetensors](https://huggingface.co/black-forest-labs/FLUX.2-small-decoder/resolve/main/full_encoder_small_decoder.safetensors) |
+| Diffusion model | `ComfyUI/models/diffusion_models/` | [flux3-image-klein-int8-convrot.safetensors](https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy/resolve/main/diffusion_models/flux3-image-klein-int8-convrot.safetensors) |
+| Text encoder | `ComfyUI/models/text_encoders/` | [qwen3vl_4b_int8_convrot.safetensors](https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy/resolve/main/text_encoders/qwen3vl_4b_int8_convrot.safetensors) |
+| VAE | `ComfyUI/models/vae/` | [flux2-vae.safetensors](https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy/resolve/main/vae/flux2-vae.safetensors) |
 
 Expected structure:
 
-```
+```text
 📂 ComfyUI/
 └── 📂 models/
     ├── 📂 diffusion_models/
-    │   └── flux-2-klein-9b-fp8.safetensors
+    │   └── flux3-image-klein-int8-convrot.safetensors
     ├── 📂 text_encoders/
-    │   └── qwen_3_8b_fp8mixed.safetensors
+    │   └── qwen3vl_4b_int8_convrot.safetensors
     └── 📂 vae/
-        └── full_encoder_small_decoder.safetensors
+        └── flux2-vae.safetensors
 ```
 
 **3. Add startup arguments**
