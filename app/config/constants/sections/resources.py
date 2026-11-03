@@ -9,7 +9,7 @@ class ResourcesConfig(BaseModel):
     default_icon_prompt: str = read_resource(":/prompt/icon.txt")
     generation_language_prompt: str = read_resource(":/prompt/language.txt")
 
-    icon_path: str = ":/icon/icon.ico"
+    icon_path: str = ":/icon.ico"
 
     default_icon_workflow: str = read_resource(":/workflow/icon.json")
 

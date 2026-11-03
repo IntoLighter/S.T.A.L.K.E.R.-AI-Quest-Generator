@@ -66,6 +66,15 @@ types = ["markdown"]
 exclude = '^CHANGELOG\.md$'
 
 [[repos.hooks]]
+id = "pyside6-rcc"
+name = "pyside6-rcc"
+entry = "uv run scripts/generate_resources.py"
+language = "system"
+# Deleted files are not passed to hooks, so a filter would miss removals
+always_run = true
+pass_filenames = false
+
+[[repos.hooks]]
 id = "ruff-check"
 name = "ruff check"
 entry = "uv run ruff check --force-exclude --fix"
