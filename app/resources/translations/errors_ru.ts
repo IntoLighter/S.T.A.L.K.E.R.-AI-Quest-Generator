@@ -4,37 +4,37 @@
 <context>
     <name></name>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="80"/>
+        <location filename="../../ui/windows/main/window.py" line="90"/>
         <source>configurator_text_model_not_set</source>
         <translation>Невозможно запустить конфигуратор. Текстовая модель не задана.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="191"/>
+        <location filename="../../generation/workers/base.py" line="187"/>
         <source>quest_id_generation_failed</source>
         <translation>Ошибка генерации ID квеста. Используется fallback.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="199"/>
+        <location filename="../../generation/workers/base.py" line="195"/>
         <source>text_server_connection_failed</source>
         <translation>Ошибка подключения. Проверьте, запущена ли программа генерации текста.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="204"/>
+        <location filename="../../generation/workers/base.py" line="200"/>
         <source>text_generation_failed</source>
         <translation>Ошибка генерации текста. Проверьте вывод программы генерации.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="209"/>
+        <location filename="../../generation/workers/base.py" line="205"/>
         <source>metadata_json_invalid</source>
         <translation>Невалидный json метаданных. Попробуйте исправить json через соответствующие сайты и прогоните его через конфигуратор.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="212"/>
+        <location filename="../../generation/workers/base.py" line="208"/>
         <source>image_generation_failed</source>
         <translation>Возникла ошибка генерации изображения.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="229"/>
+        <location filename="../../generation/workers/base.py" line="225"/>
         <source>files_saving_failed</source>
         <translation>Ошибки при сохранении файлов</translation>
     </message>
@@ -59,12 +59,12 @@
         <translation>Произошла непредвиденная ошибка</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/widget.py" line="86"/>
+        <location filename="../../ui/windows/main/widget.py" line="90"/>
         <source>generation_text_model_not_set</source>
         <translation>Невозможно запустить генерацию. Текстовая модель не задана.</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/widget.py" line="93"/>
+        <location filename="../../ui/windows/main/widget.py" line="97"/>
         <source>generation_concept_disabled</source>
         <translation>Невозможно запустить генерацию. Отключена генерация концепта.</translation>
     </message>

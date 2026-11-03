@@ -4,37 +4,37 @@
 <context>
     <name></name>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="80"/>
+        <location filename="../../ui/windows/main/window.py" line="90"/>
         <source>configurator_text_model_not_set</source>
         <translation>Cannot start the configurator. Text model is not set.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="191"/>
+        <location filename="../../generation/workers/base.py" line="187"/>
         <source>quest_id_generation_failed</source>
         <translation>Failed to generate quest ID. Using fallback.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="199"/>
+        <location filename="../../generation/workers/base.py" line="195"/>
         <source>text_server_connection_failed</source>
         <translation>Connection error. Check that the text generation program is running.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="204"/>
+        <location filename="../../generation/workers/base.py" line="200"/>
         <source>text_generation_failed</source>
         <translation>Text generation error. Check the generation program output.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="209"/>
+        <location filename="../../generation/workers/base.py" line="205"/>
         <source>metadata_json_invalid</source>
         <translation>Invalid metadata JSON. Try to fix the JSON with an online tool and run it through the configurator.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="212"/>
+        <location filename="../../generation/workers/base.py" line="208"/>
         <source>image_generation_failed</source>
         <translation>Image generation error.</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="229"/>
+        <location filename="../../generation/workers/base.py" line="225"/>
         <source>files_saving_failed</source>
         <translation>Errors while saving files</translation>
     </message>
@@ -59,12 +59,12 @@
         <translation>An unexpected error occurred</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/widget.py" line="86"/>
+        <location filename="../../ui/windows/main/widget.py" line="90"/>
         <source>generation_text_model_not_set</source>
         <translation>Cannot start generation. Text model is not set.</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/widget.py" line="93"/>
+        <location filename="../../ui/windows/main/widget.py" line="97"/>
         <source>generation_concept_disabled</source>
         <translation>Cannot start generation. Concept generation is disabled.</translation>
     </message>

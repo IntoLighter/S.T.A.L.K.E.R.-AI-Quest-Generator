@@ -4,21 +4,21 @@
 <context>
     <name></name>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="46"/>
+        <location filename="../../ui/windows/main/window.py" line="56"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
         <location filename="../../ui/windows/configurator/main.py" line="20"/>
-        <location filename="../../ui/windows/main/window.py" line="47"/>
-        <location filename="../../ui/windows/preferences/main.py" line="42"/>
+        <location filename="../../ui/windows/main/window.py" line="57"/>
+        <location filename="../../ui/windows/preferences/main.py" line="47"/>
         <source>Configurator</source>
         <translation>Конфигуратор</translation>
     </message>
     <message>
         <location filename="../../ui/windows/configurator/main.py" line="32"/>
         <location filename="../../ui/windows/main/tab/concept.py" line="18"/>
-        <location filename="../../ui/windows/main/widget.py" line="58"/>
+        <location filename="../../ui/windows/main/widget.py" line="62"/>
         <location filename="../../ui/windows/preferences/tab/configurator.py" line="18"/>
         <location filename="../../ui/windows/preferences/tab/prompt/main.py" line="22"/>
         <location filename="../../ui/windows/preferences/tab/prompt/tabs/concept.py" line="17"/>
@@ -34,7 +34,7 @@
     <message>
         <location filename="../../ui/windows/configurator/main.py" line="44"/>
         <location filename="../../ui/windows/main/tab/metadata.py" line="30"/>
-        <location filename="../../ui/windows/main/widget.py" line="61"/>
+        <location filename="../../ui/windows/main/widget.py" line="65"/>
         <location filename="../../ui/windows/preferences/tab/configurator.py" line="25"/>
         <location filename="../../ui/windows/preferences/tab/prompt/main.py" line="25"/>
         <location filename="../../ui/windows/preferences/tab/prompt/tabs/metadata.py" line="17"/>
@@ -70,84 +70,89 @@
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="48"/>
-        <location filename="../../ui/windows/preferences/main.py" line="24"/>
+        <location filename="../../ui/windows/main/window.py" line="58"/>
+        <location filename="../../ui/windows/preferences/main.py" line="28"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="49"/>
+        <location filename="../../ui/windows/main/window.py" line="59"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="50"/>
-        <location filename="../../ui/windows/main/window.py" line="152"/>
+        <location filename="../../ui/windows/main/window.py" line="60"/>
+        <location filename="../../ui/windows/main/window.py" line="177"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="79"/>
+        <location filename="../../ui/windows/main/window.py" line="89"/>
         <source>Settings error</source>
         <translation>Ошибка настроек</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="122"/>
+        <location filename="../../ui/windows/main/window.py" line="141"/>
         <source>Quest generated</source>
         <translation>Квест сгенерирован</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="129"/>
+        <location filename="../../ui/windows/main/window.py" line="143"/>
+        <source>Quest generated. Click to open the folder</source>
+        <translation>Квест сгенерирован. Нажмите, чтобы открыть папку</translation>
+    </message>
+    <message>
+        <location filename="../../ui/windows/main/window.py" line="154"/>
         <source>Text model is not set</source>
         <translation>Текстовая модель не задана</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="131"/>
+        <location filename="../../ui/windows/main/window.py" line="156"/>
         <source>Save path is not set</source>
         <translation>Путь сохранения не задан</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="147"/>
+        <location filename="../../ui/windows/main/window.py" line="172"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/window.py" line="148"/>
+        <location filename="../../ui/windows/main/window.py" line="173"/>
         <source>Repository</source>
         <translation>Репозиторий</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="66"/>
+        <location filename="../../generation/workers/base.py" line="65"/>
         <source>Generating concept</source>
         <translation>Генерация концепта</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="76"/>
+        <location filename="../../generation/workers/base.py" line="75"/>
         <source>Generating metadata</source>
         <translation>Генерация метаданных</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="83"/>
+        <location filename="../../generation/workers/base.py" line="81"/>
         <source>Generating quest ID</source>
         <translation>Генерация ID квеста</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="92"/>
+        <location filename="../../generation/workers/base.py" line="90"/>
         <source>Generating icon prompt</source>
         <translation>Генерация промпта иконки</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="98"/>
+        <location filename="../../generation/workers/base.py" line="96"/>
         <source>Generating icon</source>
         <translation>Генерация иконки</translation>
     </message>
     <message>
-        <location filename="../../generation/workers/base.py" line="240"/>
+        <location filename="../../generation/workers/base.py" line="236"/>
         <source>Saving data</source>
         <translation>Сохранение данных</translation>
     </message>
     <message>
-        <location filename="../../main.py" line="53"/>
+        <location filename="../../main.py" line="52"/>
         <source>Preferences file error</source>
         <translation>Ошибка файла настроек</translation>
     </message>
@@ -184,7 +189,7 @@
     </message>
     <message>
         <location filename="../../ui/windows/exception/main.py" line="15"/>
-        <location filename="../../ui/windows/main/widget.py" line="161"/>
+        <location filename="../../ui/windows/main/widget.py" line="169"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -224,39 +229,39 @@
         <translation>Инфопоршни</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/widget.py" line="73"/>
+        <location filename="../../ui/windows/main/widget.py" line="77"/>
         <source>Generate quest</source>
         <translation>Сгенерировать квест</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/widget.py" line="71"/>
+        <location filename="../../ui/windows/main/widget.py" line="75"/>
         <source>Stop quest generation</source>
         <translation>Остановить генерацию квеста</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/main/widget.py" line="63"/>
+        <location filename="../../ui/windows/main/widget.py" line="67"/>
         <location filename="../../ui/windows/preferences/tab/prompt/main.py" line="28"/>
         <location filename="../../ui/windows/preferences/tab/prompt/tabs/icon.py" line="17"/>
         <source>Icon</source>
         <translation>Иконка</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/main.py" line="33"/>
+        <location filename="../../ui/windows/preferences/main.py" line="38"/>
         <source>General</source>
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/main.py" line="36"/>
+        <location filename="../../ui/windows/preferences/main.py" line="41"/>
         <source>Models</source>
         <translation>Модели</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/main.py" line="39"/>
+        <location filename="../../ui/windows/preferences/main.py" line="44"/>
         <source>Prompts</source>
         <translation>Промпты</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/main.py" line="44"/>
+        <location filename="../../ui/windows/preferences/main.py" line="49"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
@@ -306,27 +311,27 @@
         <translation>Выберите папку</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/model.py" line="57"/>
+        <location filename="../../ui/windows/preferences/tab/model.py" line="56"/>
         <source>Text</source>
         <translation>Текст</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/model.py" line="63"/>
+        <location filename="../../ui/windows/preferences/tab/model.py" line="62"/>
         <source>Local</source>
         <translation>Локальная</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/model.py" line="64"/>
+        <location filename="../../ui/windows/preferences/tab/model.py" line="63"/>
         <source>Remote</source>
         <translation>Удаленная</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/model.py" line="85"/>
+        <location filename="../../ui/windows/preferences/tab/model.py" line="84"/>
         <source>Icon workflow</source>
         <translation>Workflow иконки</translation>
     </message>
     <message>
-        <location filename="../../ui/windows/preferences/tab/model.py" line="102"/>
+        <location filename="../../ui/windows/preferences/tab/model.py" line="101"/>
         <source>Loading models...</source>
         <translation>Загрузка моделей...</translation>
     </message>

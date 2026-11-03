@@ -1,8 +1,10 @@
+from pathlib import Path
+
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from config.preferences.repository import PreferencesRepository
-from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QAction, QCloseEvent, QKeySequence
+from PySide6.QtCore import Qt, QUrl, Slot
+from PySide6.QtGui import QAction, QCloseEvent, QDesktopServices, QKeySequence
 from PySide6.QtWidgets import (
     QDialog,
     QLabel,
@@ -35,6 +37,8 @@ class MainWindow(RetranslateMixin, QMainWindow):
         self.tray = Tray()
         self.tray.open_requested.connect(self.open)
         self.tray.quit_requested.connect(self.quit)
+        self.tray.messageClicked.connect(self.on_tray_message_clicked)
+        self.tray_message_quest_path: Path | None = None
 
         self.main_widget = MainWidget(preferences_config=self.preferences_config)
         self.main_widget.status_update_signal.connect(self.show_status)
@@ -117,17 +121,30 @@ class MainWindow(RetranslateMixin, QMainWindow):
     def on_generation_started(self) -> None:
         self.configurator_action.setEnabled(False)
 
-    @Slot()
-    def on_generation_completed(self) -> None:
+    @Slot(object)
+    def on_generation_completed(self, quest_path: Path | None) -> None:
         self.configurator_action.setEnabled(True)
+        self.tray_message_quest_path = quest_path
         if self.preferences_config.general.show_notifications:
             self.show_generation_complete_tray_message()
         self.set_parameters_unspecified_restrictions()
 
+    @Slot()
+    def on_tray_message_clicked(self) -> None:
+        if self.tray_message_quest_path is None:
+            return
+
+        QDesktopServices.openUrl(QUrl.fromLocalFile(str(self.tray_message_quest_path)))
+
     def show_generation_complete_tray_message(self) -> None:
+        if self.tray_message_quest_path is None:
+            message = ui("Quest generated")
+        else:
+            message = ui("Quest generated. Click to open the folder")
+
         self.tray.showMessage(
             constants_config.app.name,
-            ui("Quest generated"),
+            message,
             QSystemTrayIcon.MessageIcon.Information,
             constants_config.ui.quest_generated_tray_message_msecs,
         )

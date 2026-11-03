@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from config.preferences.main import PreferencesConfig
 from generation.engines.image.factory import create_image_engine
 from generation.engines.text.factory import create_text_engine
@@ -34,12 +36,13 @@ from ui.windows.main.tab.metadata import MetadataTab
 class MainWidget(RetranslateMixin, QWidget):
     status_update_signal = Signal(str)
     generation_started = Signal()
-    generation_completed = Signal()
+    generation_completed = Signal(object)  # Path | None
 
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
         self.worker: BaseWorker | None = None
+        self.saved_quest_path: Path | None = None
 
         self.main_layout = get_layout_with_scroll(self)
 
@@ -128,6 +131,7 @@ class MainWidget(RetranslateMixin, QWidget):
             return
 
         self.worker = worker
+        self.saved_quest_path = None
         self.update_generate_button_text()
         self.generation_started.emit()
         for tab in get_tabs(self.tab_widget, GenerationTab):
@@ -141,6 +145,7 @@ class MainWidget(RetranslateMixin, QWidget):
         worker.status_update.connect(self.status_update_signal)
         worker.error_occurred.connect(self.show_generation_error)
         worker.unknown_error_occurred.connect(self.show_generation_unknown_error)
+        worker.quest_saved.connect(self.on_quest_saved)
 
         worker_thread.started.connect(worker.run)
         worker.finished.connect(worker_thread.quit)
@@ -173,13 +178,17 @@ class MainWidget(RetranslateMixin, QWidget):
         dialog = ExceptionDialog(stacktrace=stacktrace, parent=self)
         dialog.show()
 
+    @Slot(Path)
+    def on_quest_saved(self, path: Path) -> None:
+        self.saved_quest_path = path
+
     @Slot()
     def thread_complete(self) -> None:
         logger.info("Generation completed")
         self.worker = None
         self.generate_button.setEnabled(True)
         self.update_generate_button_text()
-        self.generation_completed.emit()
+        self.generation_completed.emit(self.saved_quest_path)
 
     def add_tabs(self) -> None:
         self.tab_widget = QTabWidget()

@@ -47,15 +47,19 @@ class QuestSaver:
         self.save_path = save_path
         self.quest_prompt = quest_prompt
         self.errors: list[Exception] = []
+        self.quest_path: Path | None = None
 
     def save(self, result: GenerationResult) -> list[Exception]:
         self.errors = []
+        self.quest_path = None
         try:
             paths = QuestPaths.create(self.create_quest_path(result))
             paths.create_dirs()
         except Exception as e:
             self.errors.append(e)
             return self.errors
+
+        self.quest_path = paths.quest
 
         for file in self.collect_text_files(result, paths):
             self.save_text_file(file)

@@ -1,5 +1,6 @@
 import traceback
 from collections.abc import Callable
+from pathlib import Path
 
 import openai
 from config.preferences.main import PreferencesConfig
@@ -35,6 +36,7 @@ class BaseWorker(QObject):
     status_update = Signal(str)
     error_occurred = Signal(ErrorInfo)
     unknown_error_occurred = Signal(str)
+    quest_saved = Signal(Path)
     finished = Signal()
 
     def __init__(
@@ -238,6 +240,9 @@ class BaseWorker(QObject):
             quest_prompt=self.quest_prompt,
         )
         errors = saver.save(result)
+
+        if saver.quest_path is not None:
+            self.quest_saved.emit(saver.quest_path)
 
         if errors:
             self.handle_save_errors(errors)
