@@ -14,6 +14,7 @@ class EditorSize(BaseModel):
 class UIConfig(BaseModel):
     window_size: tuple[int, int] = (1280, 720)
     dialog_size: tuple[int, int] = (1024, 576)
+    loader_width: int = 300
     quest_generated_tray_message_msecs: int = 5000
 
     editor_size: EditorSize = EditorSize(stretch=1)

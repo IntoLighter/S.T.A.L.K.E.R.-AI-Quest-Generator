@@ -68,7 +68,10 @@ class TextEngine:
         try:
             return [
                 model.id
-                for model in self.client.with_options(max_retries=retries)
+                for model in self.client.with_options(
+                    max_retries=retries,
+                    timeout=constants_config.generation.text_models_list_timeout,
+                )
                 .models.list()
                 .data
             ]

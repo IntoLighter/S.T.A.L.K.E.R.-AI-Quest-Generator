@@ -7,6 +7,7 @@ class GenerationConfig(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     text_reasoning_effort: ReasoningEffort = "none"
+    text_models_list_timeout: float = 5
 
     icon_download_timeout: float = 60
     icon_seed_limit: int = 2**63
