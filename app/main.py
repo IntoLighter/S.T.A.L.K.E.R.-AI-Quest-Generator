@@ -44,8 +44,7 @@ def setup_logging() -> None:
     )
 
 
-def create_preferences_config() -> PreferencesConfig:
-    repository = PreferencesRepository(constants_config.paths.preferences_path)
+def create_preferences_config(repository: PreferencesRepository) -> PreferencesConfig:
     try:
         preferences_config = repository.load()
     except Exception as e:
@@ -66,14 +65,20 @@ if __name__ == "__main__":
 
     setup_logging()
 
-    preferences_config = create_preferences_config()
+    preferences_repository = PreferencesRepository(
+        constants_config.paths.preferences_path
+    )
+    preferences_config = create_preferences_config(preferences_repository)
     set_language(preferences_config.general.interface_language)
 
     logger.debug(f"preferences path: {constants_config.paths.preferences_path}")
     logger.debug(f"log path: {constants_config.paths.log_path}")
     logger.debug(f"save path: {preferences_config.general.save_path}")
 
-    window = MainWindow(preferences_config=preferences_config)
+    window = MainWindow(
+        preferences_config=preferences_config,
+        preferences_repository=preferences_repository,
+    )
     window.show()
 
     logger.info("Application started")

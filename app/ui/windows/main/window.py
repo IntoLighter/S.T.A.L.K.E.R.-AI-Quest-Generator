@@ -1,5 +1,6 @@
 from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
+from config.preferences.repository import PreferencesRepository
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QAction, QCloseEvent, QKeySequence
 from PySide6.QtWidgets import (
@@ -19,11 +20,16 @@ from ui.windows.preferences.main import PreferencesDialog
 
 
 class MainWindow(RetranslateMixin, QMainWindow):
-    def __init__(self, preferences_config: PreferencesConfig) -> None:
+    def __init__(
+        self,
+        preferences_config: PreferencesConfig,
+        preferences_repository: PreferencesRepository,
+    ) -> None:
         super().__init__()
         self.resize(*constants_config.ui.window_size)
         self.setWindowTitle(constants_config.app.name)
         self.preferences_config = preferences_config
+        self.preferences_repository = preferences_repository
         self.close_requested = False
 
         self.tray = Tray()
@@ -99,7 +105,9 @@ class MainWindow(RetranslateMixin, QMainWindow):
     @Slot()
     def open_settings(self) -> None:
         dialog = PreferencesDialog(
-            parent=self, preferences_config=self.preferences_config
+            parent=self,
+            preferences_config=self.preferences_config,
+            preferences_repository=self.preferences_repository,
         )
         result = dialog.exec()
         if result == QDialog.DialogCode.Accepted:

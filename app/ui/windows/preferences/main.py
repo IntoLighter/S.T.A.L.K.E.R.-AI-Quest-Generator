@@ -1,4 +1,3 @@
-from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from config.preferences.repository import PreferencesRepository
 from loguru import logger
@@ -19,10 +18,16 @@ from ui.windows.preferences.tab.prompt.main import PromptTab
 
 
 class PreferencesDialog(BaseDialog):
-    def __init__(self, parent: QWidget, preferences_config: PreferencesConfig) -> None:
+    def __init__(
+        self,
+        parent: QWidget,
+        preferences_config: PreferencesConfig,
+        preferences_repository: PreferencesRepository,
+    ) -> None:
         super().__init__(parent)
         self.setWindowTitle(ui("Settings"))
         self.preferences_config = preferences_config
+        self.preferences_repository = preferences_repository
         logger.info("Window 'Settings' opened")
 
         self.main_layout = QVBoxLayout(self)
@@ -48,8 +53,7 @@ class PreferencesDialog(BaseDialog):
         for tab in get_tabs(self.tab_widget, PreferencesTab):
             tab.save()
 
-        repository = PreferencesRepository(constants_config.paths.preferences_path)
-        repository.save(self.preferences_config)
+        self.preferences_repository.save(self.preferences_config)
         logger.info("Window 'Settings' accepted")
         super().accept()
 
