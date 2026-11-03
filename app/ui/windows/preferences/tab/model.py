@@ -42,7 +42,6 @@ class ModelTab(PreferencesTab):
     def __init__(self, preferences_config: PreferencesConfig) -> None:
         super().__init__()
         self.preferences_config = preferences_config
-        self.is_models_loaded = False
 
         self.stack = QStackedWidget()
         QVBoxLayout(self).addWidget(self.stack)
@@ -129,7 +128,6 @@ class ModelTab(PreferencesTab):
             remote_models,
             self.preferences_config.model.text_model_remote,
         )
-        self.is_models_loaded = True
         self.stack.setCurrentWidget(self.content)
 
     @staticmethod
@@ -148,12 +146,16 @@ class ModelTab(PreferencesTab):
             ModelType.Local if self.local_model_button.isChecked() else ModelType.Remote
         )
 
-        if not self.is_models_loaded:
-            return
+        self.preferences_config.model.text_model_local = self.get_selected_model(
+            self.local_model_dropdown, self.preferences_config.model.text_model_local
+        )
+        self.preferences_config.model.text_model_remote = self.get_selected_model(
+            self.remote_model_dropdown, self.preferences_config.model.text_model_remote
+        )
 
-        self.preferences_config.model.text_model_local = (
-            self.local_model_dropdown.currentText()
-        )
-        self.preferences_config.model.text_model_remote = (
-            self.remote_model_dropdown.currentText()
-        )
+    @staticmethod
+    def get_selected_model(dropdown: QComboBox, current: str) -> str:
+        if dropdown.currentIndex() == -1:
+            return current
+
+        return dropdown.currentText()
