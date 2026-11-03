@@ -1,5 +1,6 @@
 from config.preferences.main import PreferencesConfig
 
+from generation.engines.image.main import ImageEngine
 from generation.engines.text.main import TextEngine
 from generation.entity import ConfiguratorParameters, IconRecords
 from generation.stages.base import TextStreamingStage
@@ -11,12 +12,14 @@ class ConfiguratorWorker(BaseWorker):
         self,
         preferences_config: PreferencesConfig,
         text_engine: TextEngine,
+        image_engine: ImageEngine,
         prompt: str,
         parameters: ConfiguratorParameters,
     ) -> None:
         super().__init__(
             preferences_config=preferences_config,
             text_engine=text_engine,
+            image_engine=image_engine,
             prompt=prompt,
         )
         self.parameters = parameters

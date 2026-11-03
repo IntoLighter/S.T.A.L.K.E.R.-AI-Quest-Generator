@@ -1,4 +1,5 @@
 from config.preferences.main import PreferencesConfig
+from generation.engines.image.factory import create_image_engine
 from generation.engines.text.factory import create_text_engine
 from generation.engines.text.main import TextEngine
 from generation.entity import ConfiguratorParameters
@@ -99,6 +100,7 @@ class MainWidget(RetranslateMixin, QWidget):
         worker = NormalWorker(
             preferences_config=self.preferences_config,
             text_engine=self.text_engine,
+            image_engine=create_image_engine(self.preferences_config),
             prompt=self.prompt_editor.prompt,
         )
         self.generate_quest(worker)
@@ -109,6 +111,7 @@ class MainWidget(RetranslateMixin, QWidget):
         worker = ConfiguratorWorker(
             preferences_config=self.preferences_config,
             text_engine=self.text_engine,
+            image_engine=create_image_engine(self.preferences_config),
             prompt=parameters.prompt,
             parameters=parameters,
         )

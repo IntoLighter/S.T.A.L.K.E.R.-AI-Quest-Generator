@@ -2,7 +2,6 @@ import traceback
 from collections.abc import Callable
 
 import openai
-from config.constants.main import constants_config
 from config.preferences.main import PreferencesConfig
 from loguru import logger
 from PySide6.QtCore import QObject, Signal, Slot
@@ -42,15 +41,13 @@ class BaseWorker(QObject):
         self,
         preferences_config: PreferencesConfig,
         text_engine: TextEngine,
+        image_engine: ImageEngine,
         prompt: str,
     ) -> None:
         super().__init__()
         self.preferences_config = preferences_config
         self.text_engine = text_engine
-        self.image_engine = ImageEngine(
-            workflow=preferences_config.model.icon_workflow.value,
-            comfyui_url=constants_config.endpoints.comfyui_base_url,
-        )
+        self.image_engine = image_engine
         self.quest_prompt = prompt
         self._is_interruption_requested = False
 
