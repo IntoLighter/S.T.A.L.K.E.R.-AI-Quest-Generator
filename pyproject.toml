@@ -1,7 +1,7 @@
 [project]
 name = "stalker-ai-quest-generator"
-version = "1.0.0"
-description = "Add your description here"
+version = "1.2.0"
+description = "AI-powered quest generator for S.T.A.L.K.E.R."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -81,6 +81,10 @@ exclude = [ "app/resources/rc_main.py" ]
 name = "cz_conventional_commits"
 version_scheme = "semver2"
 version_provider = "scm"
+version_files = [
+    "app/config/constants/sections/app.py:version",
+    "pyproject.toml:^version",
+]
 tag_format = "$version"
 changelog_incremental = true
 update_changelog_on_bump = true
