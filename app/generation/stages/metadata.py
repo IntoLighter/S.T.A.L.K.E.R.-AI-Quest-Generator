@@ -64,12 +64,11 @@ class MetadataTextStage(TextStreamingStage):
             return None
 
 
-class MetadataParseStage:
-    def parse(self, metadata_text: str) -> Metadata:
-        try:
-            return Metadata.model_validate_json(metadata_text)
-        except Exception as e:
-            raise MetadataParseError(e) from e
+def parse_metadata(metadata_text: str) -> Metadata:
+    try:
+        return Metadata.model_validate_json(metadata_text)
+    except Exception as e:
+        raise MetadataParseError(e) from e
 
 
 class IdStage(TextGenerationStage):

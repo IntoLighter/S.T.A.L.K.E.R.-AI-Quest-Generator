@@ -14,15 +14,15 @@ from generation.engines.image.main import ImageEngine
 from generation.engines.text.main import TextEngine
 from generation.entity import GenerationResult, IconRecords, QuestData
 from generation.errors import ImageGenerationError, MetadataParseError
-from generation.services.building import QuestBuilder
+from generation.services.building import create_quest_data
 from generation.services.language import add_generation_language
 from generation.services.saving import QuestSaver
 from generation.stages.concept import ConceptStage
 from generation.stages.icon import IconPromptStage, IconRecordsStage
 from generation.stages.metadata import (
     IdStage,
-    MetadataParseStage,
     MetadataTextStage,
+    parse_metadata,
 )
 
 
@@ -75,7 +75,6 @@ class BaseWorker(QObject):
             emit_status=self.status_update.emit,
             status_message=ui("Generating metadata"),
         )
-        self.metadata_parse_stage = MetadataParseStage()
         self.id_stage = IdStage(
             text_engine=text_engine,
             system_prompt=preferences_config.prompt.id.value,
@@ -134,13 +133,11 @@ class BaseWorker(QObject):
             result.metadata_text = self.build_metadata_text(concept)
 
             if result.metadata_text is not None:
-                result.metadata = self.metadata_parse_stage.parse(result.metadata_text)
+                result.metadata = parse_metadata(result.metadata_text)
 
             if result.metadata and not self._is_interrupted():
                 quest_id = self.create_quest_id(result.metadata.title)
-                result.quest_data = QuestBuilder.create_quest_data(
-                    result.metadata, quest_id
-                )
+                result.quest_data = create_quest_data(result.metadata, quest_id)
                 self.quest_data_ready.emit(result.quest_data)
         except Exception as e:
             self.handle_stage_exception(e)
