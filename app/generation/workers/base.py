@@ -48,7 +48,7 @@ class BaseWorker(QObject):
         self.preferences_config = preferences_config
         self.text_engine = text_engine
         self.image_engine = ImageEngine(
-            preferences_config,
+            workflow=preferences_config.model.icon_workflow.value,
             comfyui_url=constants_config.endpoints.comfyui_base_url,
         )
         self.quest_prompt = prompt

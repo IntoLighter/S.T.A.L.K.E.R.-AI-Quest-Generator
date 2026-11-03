@@ -6,21 +6,20 @@ from io import BytesIO
 import requests
 from comfykit import ComfyKit
 from config.constants.main import constants_config
-from config.preferences.main import PreferencesConfig
 from PIL import Image
 
 from generation.errors import ImageGenerationError
 
 
 class ImageEngine:
-    def __init__(self, preferences_config: PreferencesConfig, comfyui_url: str) -> None:
-        self.preferences_config = preferences_config
+    def __init__(self, workflow: str, comfyui_url: str) -> None:
+        self.workflow = workflow
         self.comfyui_url = comfyui_url
         self.kit = ComfyKit(comfyui_url=self.comfyui_url)
 
     def generate(self, prompt: str) -> Image.Image:
         try:
-            workflow = json.loads(self.preferences_config.model.icon_workflow.value)
+            workflow = json.loads(self.workflow)
         except json.JSONDecodeError as e:
             msg = f"Invalid icon workflow JSON: {e}"
             raise ImageGenerationError(msg) from e
